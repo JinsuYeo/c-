@@ -54,19 +54,33 @@ int main(int argc, const char * argv[]) {
                 break;
             }
             case 's':
-            case 'S':
-            
+            case 'S': {
+                int small {};
+                cout << "The smallest number is: ";
+                for(auto number: numbers) {
+                    if(number < small) small = number;
+                }
+                cout << small << endl;
+                break;
+            }
             case 'l':
-            case 'L':
-                
+            case 'L': {
+                int large {};
+                cout << "The smallest number is: ";
+                for(auto number: numbers) {
+                    if(number > large) large = number;
+                }
+                cout << large << endl;
+                break;
+            }
             case 'q':
-            case 'Q':
-                
+            case 'Q': cout << "Good bye...\n";
+                break;
             default: cout << "Unknown selection, please try again\n";
                 break;
         }
         printf("\n\n");
-    } while(choice != 'q' || choice != 'Q');
+    } while(choice != 'q' && choice != 'Q');
     
     
 

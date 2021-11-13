@@ -4,29 +4,41 @@
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    string input {};
-    cin >> input;
+    string alphabet {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+    string key {"XZNLWEBGJHQDYVTKFUOMPCIASRxznlwebgjhqdyvtkfuompciasr"};
     
-    int temp = 1;
-    size_t ts = input.length() - 1;
-    while(1){
-        for(size_t i = ts; i > 0; i--) {
-            cout << " ";
+    string decrypted_message {};
+    string decrypting_message {};
+    
+    getline(cin, decrypted_message);
+    for(auto message: decrypted_message) {
+        size_t index = alphabet.find(message);
+        if(index != string::npos){
+            decrypting_message.push_back(key.at(index));
+        } else {
+            decrypting_message.push_back(message);
         }
-        for(size_t j = 0; j < temp; j++) {
-            cout << input.at(j);
+        
+    };
+    
+    cout << decrypting_message << endl;
+    
+    decrypted_message.clear();
+    for(auto message: decrypting_message) {
+        size_t index = key.find(message);
+        if(index != string::npos){
+            decrypted_message += alphabet.at(index);
+        } else {
+            decrypted_message += message;
         }
-        if(temp > 1) {
-            for(int k = temp - 2; k >= 0; k--) {
-                cout << input.at(k);
-            }
-        }
-        temp += 1;
-        cout << endl;
-        ts--;
-        if(temp > input.length()) break;
-    }
+    };
+    
+    cout << decrypted_message << endl;
+    
+    decrypted_message.at(0) = 'P';
+    cout << decrypted_message << endl;
 
+    
     return 0;
 }
 

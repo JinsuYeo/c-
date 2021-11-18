@@ -1,27 +1,24 @@
 #include <iostream>
-#include <vector>
-
-enum day {SUN, MON, TUE, WED, THU, FRI, SAT};
 
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    enum day days;
-    char* day[] = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
-    int mon {}, date {};
-    cin >> mon >> date;
-    int sum{};
-    int d{};
-    vector<int> mondate {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    for(int i{}; i < mon; i++){
-        sum += mondate[i];
+    int n{};
+    cin >> n;
+    
+    for(int i{}; i < n; i++){
+        for(int k{}; k < n-i-1; k++) {
+            cout << " ";
+        }
+        for(int j{}; j < 2*i + 1; j++) {
+            if(i == 0 || i == n - 1 || j == 0 || j == 2*i) cout << "*";
+            else cout << " ";
+        }
+        cout << '\n';
     }
-    d = (sum + date)%7;
-    
-    cout << day[d] << '\n';
-    
         
     return 0;
 }
 
  
+

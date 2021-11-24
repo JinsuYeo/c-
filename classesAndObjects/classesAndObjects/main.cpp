@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 class Deep {
 private:
@@ -9,6 +10,7 @@ public:
     int get_data_value(){return *data;}
     Deep(int d);
     Deep(const Deep &source);
+    Deep(Deep &&source) noexcept;
     ~Deep();
 };
 
@@ -18,28 +20,37 @@ Deep::Deep(int d) {
 }
 
 Deep::~Deep(){
+    if(data != nullptr) {
+        std::cout << "Destructor freeing data for: " << *data << '\n';
+    } else {
+        std::cout << "Destructor freeing data for nullptr" << '\n';
+    }
     delete data;
-    std::cout << "Destructor freeing data" << '\n';
 }
 
 Deep::Deep(const Deep &source)
     : Deep(*source.data) {
-    std::cout << "Copy constructor - deep\n";
+    std::cout << "Copy constructor - Deep: " << *data << '\n';
 }
 
-void display_deep(Deep s){
-    std::cout << s.get_data_value() << std::endl;
+Deep::Deep(Deep &&source) noexcept
+    :data {source.data} {
+        source.data = nullptr;
 }
-
 
 int main(int argc, const char * argv[]) {
-    Deep obj1 {100};
-    display_deep(obj1);
+    std::vector<Deep> vec;
     
+    Deep obj1 {100};
     Deep obj2 {obj1};
     
-    obj2.set_data_value(1000);
-    display_deep(obj2);
+    vec.push_back(obj1);
+    
+    vec.push_back(obj2);
+    
+    vec.push_back(Deep{200});
+    
+    vec.push_back(Deep{300});
 
     return 0;
 }

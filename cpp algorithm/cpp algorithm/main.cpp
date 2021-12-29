@@ -1,24 +1,21 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
-int main(int argc, const char * argv[]) {
-    int n{};
-    cin >> n;
-    
-    for(int i{}; i < n; i++){
-        for(int k{}; k < n-i-1; k++) {
-            cout << " ";
-        }
-        for(int j{}; j < 2*i + 1; j++) {
-            if(i == 0 || i == n - 1 || j == 0 || j == 2*i) cout << "*";
-            else cout << " ";
-        }
-        cout << '\n';
-    }
-        
-    return 0;
+int arr[1000001];
+
+int main() {
+	long a{};
+
+	cin >> a;
+
+	for (int i = 2; i <= a; i++) {
+		arr[i] = arr[i - 1] + 1;
+		if (i % 3 == 0) arr[i] = min(arr[i], arr[i / 3] + 1);
+		if (i % 2 == 0) arr[i] = min(arr[i], arr[i / 2] + 1);
+	}
+
+	cout << arr[a];
+	return 0;
 }
-
- 
-

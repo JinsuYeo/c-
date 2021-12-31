@@ -1,25 +1,26 @@
 #include <iostream>
-#include <string>
 
 using namespace std;
 
-string arr[5];
+int main(int argc, const char* argv[]) {
+    int n[3][4]{}, count[3]{};
+    char result[5] = { 'D', 'C', 'B', 'A', 'E' };
 
-int main() {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++)
+            cin >> n[i][j];
+    }
 
-	for (int i = 0; i < 5; i++) {
-		cin >> arr[i];
-	}
 
-	for (int i = 0; i < 15; i++) {
-		for (int j = 0; j < 5; j++) {
-			if (i < arr[j].length()) {
-				cout << arr[j][i];
-			}
-		}
-	}
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 4; j++)
+            if (n[i][j]) {
+                count[i]++;
+            }
+        cout << result[count[i]] << endl;
+    }
 
-	cout << endl;
 
-	return 0;
+
+    return 0;
 }

@@ -3,26 +3,20 @@
 
 using namespace std;
 
-long long dp[91][2]{};
-
 int main(int argc, const char * argv[]) {
-    int n{};
-    cin >> n;
+    int h{}, m{};
+    cin >> h >> m;
     
-    dp[1][1] = 1;
-    
-    for(int i = 2; i <= n; i++) {
-        for(int j = 0; j < 2; j++) {
-            if(j == 0) {
-                dp[i][j] = dp[i-1][0] + dp[i-1][1];
-            }
-            if(j == 1) {
-                dp[i][j] = dp[i-1][0];
-            }
-        }
+    if(m < 45) {
+        m = 15 + m;
+        if(h == 0)
+            h = 23;
+        else h--;
+    } else {
+        m -= 45;
     }
     
-    cout << dp[n][0] + dp[n][1] << endl;
+    cout << h << " " << m << endl;
     
     return 0;
 }

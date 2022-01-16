@@ -49,13 +49,25 @@ const char* Mystring::get_str() const {
 }
 
 Mystring& Mystring::operator=(const Mystring &rhs){
+    std::cout << "Using copy assignment" << std::endl;
+    
     if(this == &rhs)
         return *this;
-    
     delete [] this->str;
     str = new char[std::strlen(rhs.str) + 1];
     std::strcpy(str, rhs.str);
     std::cout << "Copy assignment\n";
     
+    return *this;
+}
+
+Mystring& Mystring::operator=(Mystring &&rhs) {
+    std::cout << "Using move assignment" << std::endl;
+    
+    if(this == &rhs)
+        return *this;
+    delete [] str;
+    str = rhs.str;
+    rhs.str = nullptr;
     return *this;
 }

@@ -22,6 +22,7 @@ public:
     size_t get_length() const;
     const char *get_str() const;
     Mystring& operator=(const Mystring &rhs);
+    Mystring& operator=(Mystring &&rhs);
 };
 
 

@@ -5,47 +5,27 @@
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    Mystring a {"Hello"};
-    a = Mystring{"Hola"};
-    a = "Bonjour";
-    Mystring b;
-    b = a;
-    b.display();
-
-    b = "This is a test";
-    b.display();
-
-    Mystring empty;
+    cout << boolalpha << endl;
+    
     Mystring larry{"Larry"};
-    Mystring stooge {larry};
-    Mystring stooges;
-
-    empty = stooge;
-
-    empty.display();
+    Mystring moe{"Moe"};
+    
+    Mystring stooge = larry;
     larry.display();
-    stooge.display();
-    empty.display();
-
-    stooges = "Larry, Moe, and Curly";
-    stooges.display();
-
-    vector<Mystring> stooges_vec;
-    stooges_vec.push_back("Larry");
-    stooges_vec.push_back("Moe");
-    stooges_vec.push_back("Curly");
-
-    cout << "=== Loop 1 ============" << endl;
-    for(const Mystring &s: stooges_vec)
-        s.display();
-
-    cout << "=== Loop 2 ============" << endl;
-    for(Mystring &s: stooges_vec)
-        s = "Changed";
-
-    cout << "=== Loop 3 ============" << endl;
-    for(Mystring &s: stooges_vec)
-        s.display();
+    moe.display();
+    
+    cout << (larry == moe) << endl;
+    cout << (larry == stooge) << endl;
+    
+    larry.display();
+    Mystring larry2 = -larry;
+    larry.display();
+    
+    Mystring stooges = larry + "Moe";
+    
+    Mystring two_stooges = moe + " " + "Larry";
+    two_stooges.display();
+    
 
     return 0;
 }

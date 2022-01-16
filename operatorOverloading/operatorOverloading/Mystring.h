@@ -5,8 +5,8 @@
 //  Created by 여진수 on 2021/11/28.
 //
 
-#ifndef Mystring_hpp
-#define Mystring_hpp
+#ifndef Mystring_h
+#define Mystring_h
 
 #include <iostream>
 
@@ -23,7 +23,10 @@ public:
     const char *get_str() const;
     Mystring& operator=(const Mystring &rhs);
     Mystring& operator=(Mystring &&rhs);
+    Mystring operator-() const;
+    Mystring operator+(const Mystring &rhs) const;
+    bool operator==(const Mystring &rhs) const;
 };
 
 
-#endif /* Mystring_hpp */
+#endif /* Mystring_h */

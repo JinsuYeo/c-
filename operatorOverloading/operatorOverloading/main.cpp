@@ -9,6 +9,7 @@ int main(int argc, const char * argv[]) {
     
     Mystring larry{"Larry"};
     Mystring moe{"Moe"};
+    Mystring curly;
     
     Mystring stooge = larry;
     larry.display();
@@ -26,6 +27,10 @@ int main(int argc, const char * argv[]) {
     Mystring two_stooges = moe + " " + "Larry";
     two_stooges.display();
     
+    cout << "Enter the third stooge's first name: ";
+    cin >> curly;
+    
+    cout << "The three stooges are " << larry << ", " << moe << ", " << curly << endl;
 
     return 0;
 }

@@ -94,3 +94,17 @@ Mystring operator+(const Mystring &lhs, const Mystring &rhs){
 bool operator==(const Mystring &lhs, const Mystring &rhs){
     return (std::strcmp(lhs.str, rhs.str) == 0);
 }
+
+std::ostream& operator<<(std::ostream &os, const Mystring &obj){
+    os << obj.str;
+    return os;
+}
+
+std::istream& operator>>(std::istream &is, Mystring &obj){
+    char* buffer = new char[1000];
+    is >> buffer;
+    obj = Mystring{buffer};
+    delete [] buffer;
+    
+    return is;
+}

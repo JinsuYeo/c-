@@ -14,6 +14,8 @@ class Mystring {
     friend bool operator==(const Mystring &lhs, const Mystring &rhs);
     friend Mystring operator-(const Mystring &obj);
     friend Mystring operator+(const Mystring &lhs, const Mystring &rhs);
+    friend std::ostream& operator<<(std::ostream &os, const Mystring &obj);
+    friend std::istream& operator>>(std::istream &is, Mystring &obj);
 private:
     char* str;
 public:

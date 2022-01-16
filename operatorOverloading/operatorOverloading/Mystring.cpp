@@ -61,7 +61,7 @@ Mystring& Mystring::operator=(const Mystring &rhs){
     return *this;
 }
 
-Mystring& Mystring::operator=(Mystring &&rhs) {
+Mystring& Mystring::operator=(Mystring &&rhs) { //r-value가 인자로 들어올 때 실핼됨.
     std::cout << "Using move assignment" << std::endl;
     
     if(this == &rhs)

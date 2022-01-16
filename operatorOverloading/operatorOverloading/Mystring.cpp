@@ -72,9 +72,9 @@ Mystring& Mystring::operator=(Mystring &&rhs) { //r-value가 인자로 들어올
     return *this;
 }
 
-Mystring Mystring::operator-() const{
-    char* buffer = new char[std::strlen(str) + 1];
-    std::strcpy(buffer, str);
+Mystring operator-(const Mystring &obj){
+    char* buffer = new char[std::strlen(obj.str) + 1];
+    std::strcpy(buffer, obj.str);
     for(size_t i {}; i < std::strlen(buffer); i++)
         buffer[i] = tolower(buffer[i]);
     Mystring temp {buffer};
@@ -82,15 +82,15 @@ Mystring Mystring::operator-() const{
     return temp;
 }
 
-Mystring Mystring::operator+(const Mystring &rhs) const{
-    char* buffer = new char[std::strlen(str) + std::strlen(rhs.str) + 1];
-    std::strcpy(buffer, str);
+Mystring operator+(const Mystring &lhs, const Mystring &rhs){
+    char* buffer = new char[std::strlen(lhs.str) + std::strlen(rhs.str) + 1];
+    std::strcpy(buffer, lhs.str);
     std::strcat(buffer, rhs.str);
     Mystring temp {buffer};
     delete [] buffer;
     return temp;
 }
 
-bool Mystring::operator==(const Mystring &rhs) const{
-    return (std::strcmp(str, rhs.str) == 0);
+bool operator==(const Mystring &lhs, const Mystring &rhs){
+    return (std::strcmp(lhs.str, rhs.str) == 0);
 }

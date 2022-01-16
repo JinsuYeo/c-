@@ -11,6 +11,9 @@
 #include <iostream>
 
 class Mystring {
+    friend bool operator==(const Mystring &lhs, const Mystring &rhs);
+    friend Mystring operator-(const Mystring &obj);
+    friend Mystring operator+(const Mystring &lhs, const Mystring &rhs);
 private:
     char* str;
 public:
@@ -23,9 +26,9 @@ public:
     const char *get_str() const;
     Mystring& operator=(const Mystring &rhs);
     Mystring& operator=(Mystring &&rhs);
-    Mystring operator-() const;
-    Mystring operator+(const Mystring &rhs) const;
-    bool operator==(const Mystring &rhs) const;
+//    Mystring operator-() const;
+//    Mystring operator+(const Mystring &rhs) const;
+//    bool operator==(const Mystring &rhs) const;
 };
 
 

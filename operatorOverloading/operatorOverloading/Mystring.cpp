@@ -56,7 +56,6 @@ Mystring& Mystring::operator=(const Mystring &rhs){
     delete [] this->str;
     str = new char[std::strlen(rhs.str) + 1];
     std::strcpy(str, rhs.str);
-    std::cout << "Copy assignment\n";
     
     return *this;
 }

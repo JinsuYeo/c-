@@ -31,6 +31,10 @@ int main(int argc, const char * argv[]) {
     cin >> curly;
     
     cout << "The three stooges are " << larry << ", " << moe << ", " << curly << endl;
+    
+    Mystring temp{"abc"};
+    Mystring temp2 = temp * 3;
+    cout << temp2 << endl;
 
     return 0;
 }

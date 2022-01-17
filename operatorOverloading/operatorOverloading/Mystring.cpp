@@ -108,3 +108,14 @@ std::istream& operator>>(std::istream &is, Mystring &obj){
     
     return is;
 }
+
+Mystring Mystring::operator*(int num){
+    char* buffer = new char[std::strlen(str) * num + 1];
+    strcpy(buffer, str);
+    for(int i{}; i < num-1; i++) {
+        std::strcat(buffer, str);
+    }
+    Mystring temp {buffer};
+    delete [] buffer;
+    return temp;
+}

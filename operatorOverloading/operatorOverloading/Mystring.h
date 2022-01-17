@@ -31,6 +31,7 @@ public:
 //    Mystring operator-() const;
 //    Mystring operator+(const Mystring &rhs) const;
 //    bool operator==(const Mystring &rhs) const;
+    Mystring operator*(int num);
 };
 
 

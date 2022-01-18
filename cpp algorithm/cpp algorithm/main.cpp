@@ -3,20 +3,21 @@
 
 using namespace std;
 
-int dp[10001], arr[10001];
+int dp[100001];
 
 int main(int argc, const char * argv[]) {
-    int n{300};
+    int n{};
     cin >> n;
-    for (int i {1}; i <= n; i++) {
-        cin >> arr[i];
-    }
+   
+    dp[1] = 1;
+    dp[2] = 2;
+    dp[3] = 3;
     
-    dp[1] = arr[1];
-    dp[2] = dp[1] + arr[2];
-    
-    for(int i{3}; i <= n; i++){
-        dp[i] = max(dp[i-2] + arr[i], dp[i-3] + arr[i-1] + arr[i]);
+    for(int i{2}; i <= n; i++){
+        dp[i] = dp[i-1] + 1;
+        for(int j{1}; j*j <= i; j++){
+            dp[i] = min(dp[i], dp[i-(j*j)] + 1);
+        }
     }
     
     cout << dp[n] << endl;

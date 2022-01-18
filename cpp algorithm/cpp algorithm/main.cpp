@@ -3,32 +3,23 @@
 
 using namespace std;
 
-int dp[100001], arr[100001];
+int dp[10001], arr[10001];
 
 int main(int argc, const char * argv[]) {
-    int n{}, result{};
+    int n{300};
     cin >> n;
     for (int i {1}; i <= n; i++) {
         cin >> arr[i];
     }
     
     dp[1] = arr[1];
-    result = arr[1];
+    dp[2] = dp[1] + arr[2];
     
-    for(int i{2}; i <= n; i++) {
-        if(dp[i-1] + arr[i] > arr[i]) {
-            dp[i] = dp[i-1] + arr[i];
-        } else {
-            dp[i] = arr[i];
-        }
+    for(int i{3}; i <= n; i++){
+        dp[i] = max(dp[i-2] + arr[i], dp[i-3] + arr[i-1] + arr[i]);
     }
     
-    for(int i{1}; i <= n; i++) {
-        result = result < dp[i] ? dp[i] : result;
-        
-    }
-    
-    cout << result << endl;
+    cout << dp[n] << endl;
     
     return 0;
 }

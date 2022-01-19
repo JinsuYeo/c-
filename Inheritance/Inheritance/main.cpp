@@ -14,12 +14,13 @@ public:
 };
 
 class Derived: public Base {
-    using Base::Base;
 private:
     int doubled_value;
 public:
-    Derived() : doubled_value{0} { cout << "Deriverd no-args constructor" << endl; }
-    Derived(int x) : doubled_value{x*2} { cout << "Deriverd (int) overloaded constructor" << endl; }
+    Derived()
+    : Base{}, doubled_value{0} { cout << "Deriverd no-args constructor" << endl; }
+    Derived(int x)
+    : Base(x), doubled_value{x*2} { cout << "Deriverd (int) overloaded constructor" << endl; }
     ~Derived() { cout << "Deriverd destructor" << endl; }
 };
 

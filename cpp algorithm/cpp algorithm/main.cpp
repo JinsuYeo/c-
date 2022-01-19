@@ -20,6 +20,7 @@ int main(int argc, const char * argv[]) {
         }
         cout << dp[cn] << endl;
     }
+    //18분, O(n^2)
    
     return 0;
 }

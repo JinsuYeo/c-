@@ -3,23 +3,23 @@
 
 using namespace std;
 
-int dp[31];
+long dp[101];
 
 int main(int argc, const char * argv[]) {
-    int n{};
+    int n{}, cn{};
     cin >> n;
-   
-    dp[0] = 1;
-    dp[1] = 0;
-    dp[2] = 3;
-    for(int i{3}; i <= n; i++) {
-        dp[i] = dp[i-2]*3;
-        for (int j{4}; j <= i; j+=2) {
-            dp[i] += dp[i-j]*2;
-        }
-    }
-
-    cout << dp[n] << endl;
     
+    dp[1] = 1;
+    dp[2] = 1;
+    dp[3] = 1;
+    
+    for(int i{}; i < n; i++) {
+        cin >> cn;
+        for(int j{4}; j <= cn; j++) {
+            dp[j] = dp[j-2] + dp[j-3];
+        }
+        cout << dp[cn] << endl;
+    }
+   
     return 0;
 }

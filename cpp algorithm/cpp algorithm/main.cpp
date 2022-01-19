@@ -1,26 +1,29 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
-long dp[101];
+long long dp[201][201];
 
 int main(int argc, const char * argv[]) {
-    int n{}, cn{};
-    cin >> n;
+    int k{}, n{};
+    cin >> n >> k;
     
-    dp[1] = 1;
-    dp[2] = 1;
-    dp[3] = 1;
-    
-    for(int i{}; i < n; i++) {
-        cin >> cn;
-        for(int j{4}; j <= cn; j++) {
-            dp[j] = dp[j-2] + dp[j-3];
-        }
-        cout << dp[cn] << endl;
+    for(int i{}; i <= n; i++) {
+        dp[1][i] = 1;
     }
-    //18분, O(n^2)
-   
+    
+    for(int i{1}; i <= k; i++) {
+        dp[i][0] = 1;
+    }
+    
+    for(int i{2}; i <= k; i++) {
+        for(int j{1}; j <= n; j++) {
+                dp[i][j] = (dp[i-1][j] + dp[i][j-1]) % 1000000000;
+                dp[i][j] %= 1000000000;
+            }
+    }
+    
+    cout << dp[k][n] << endl;
+    
     return 0;
 }

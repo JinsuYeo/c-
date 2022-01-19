@@ -5,42 +5,43 @@
 using namespace std;
 
 class Base {
-    // Note friend of Base have access to all
-public:
-    int a{};
-    void display() { cout << a << ", " << b << ", " << c << endl;} // member method has access to all
-protected:
-    int b{};
 private:
-    int c{};
+    int value;
+public:
+    Base() : value{0} { cout << "Base no-args constructor" << endl; }
+    Base(int x) : value{x} { cout << "Base (int) overloaded constructor" << endl; }
+    ~Base() { cout << "Base destructor" << endl; }
 };
 
 class Derived: public Base {
-    // Note friends of Derived have access to only Derived has access to
-    
-    // a will be public
-    // b will be protected
-    // c will not be acceessible
+    using Base::Base;
+private:
+    int doubled_value;
 public:
-    void access_base_members(){
-        a = 100; // OK
-        b = 200; // OK
-//        c = 300; // not accessible
-    }
+    Derived() : doubled_value{0} { cout << "Deriverd no-args constructor" << endl; }
+    Derived(int x) : doubled_value{x*2} { cout << "Deriverd (int) overloaded constructor" << endl; }
+    ~Derived() { cout << "Deriverd destructor" << endl; }
 };
 
 int main(int argc, const char * argv[]) {
+//    Base b;
+//    Base b{100};
+//    Derived d;
+    Derived d{1000};
     
-    cout << "=========== Base member access from base object =============\n";
-    Base base;
-    base.a = 100;
-//    base.b = 200; // Compiler error
-//    base.c = 300; // Compiler error
+//
+//    cout << "=========== Base member access from base object =============\n";
+//    Base base;
+//    base.a = 100;
+////    base.b = 200; // Compiler error
+////    base.c = 300; // Compiler error
+//
+//
+//    cout << "=========== Derived member access from derived object =============\n";
+//    Derived d;
+//    d.a = 100;
     
     
-    cout << "=========== Derived member access from derived object =============\n";
-    Derived d;
-    d.a = 100;
     //d.b = 200; // Compiler error
     //d.c = 300; // Compiler error
     

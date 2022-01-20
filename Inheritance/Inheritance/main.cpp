@@ -51,7 +51,7 @@ public:
 
 int main(int argc, const char * argv[]) {
     cout << "\n=== Account class ===================" << endl;
-    Account a1{1000.0};
+    Account a1{};
     cout << a1 << endl;
    
     a1.deposit(500.0);

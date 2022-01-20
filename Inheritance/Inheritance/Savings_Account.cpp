@@ -20,7 +20,7 @@ Savings_Account::Savings_Account()
 }
 
 Savings_Account::Savings_Account(double balance, double int_rate)
-: Account(balance), int_rate {int_rate}{
+: Account(), int_rate {int_rate}{
 }
 
 

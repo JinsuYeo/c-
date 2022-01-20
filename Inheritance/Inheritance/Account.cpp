@@ -7,25 +7,32 @@
 #include <iostream>
 #include "Account.hpp"
 
-void Account::deposit(double amount){
+bool Account::deposit(double amount){
     std::cout << "Account deposit called with " << amount << std::endl;
-    balance += amount;
+    if(amount < 0)
+        return false;
+    else {
+        balance += amount;
+        return true;
+    }
 }
 
-void Account::withdraw(double amount){
+bool Account::withdraw(double amount){
     std::cout << "Account withdraw called with " << amount << std::endl;
-    if(balance - amount >= 0)
+    if(balance - amount >= 0){
         balance -= amount;
+        return true;
+    }
     else
+    {
         std::cout << "Insufficient funds" << std::endl;
+        return false;
+    }
+        
 }
 
-Account::Account()
-: balance(0.0), name("An Account"){
-}
-
-Account::Account(double balance)
-: balance(balance){
+Account::Account(std::string name, double balance)
+: name{name}, balance{balance} {
 }
 
 Account::~Account(){

@@ -10,6 +10,18 @@ private:
 public:
     Base() : value{0} { cout << "Base no-args constructor" << endl; }
     Base(int x) : value{x} { cout << "Base (int) overloaded constructor" << endl; }
+    Base(const Base &other)
+    : value{other.value} {
+        cout << "Base copy constructor" << endl;
+    }
+    Base &operator=(const Base &rhs) {
+        cout << "Base operator=" << endl;
+        if(this == &rhs) {
+            return *this;
+        }
+        value = rhs.value;
+        return *this;
+    }
     ~Base() { cout << "Base destructor" << endl; }
 };
 
@@ -21,14 +33,31 @@ public:
     : Base{}, doubled_value{0} { cout << "Deriverd no-args constructor" << endl; }
     Derived(int x)
     : Base(x), doubled_value{x*2} { cout << "Deriverd (int) overloaded constructor" << endl; }
+    Derived(const Derived &other)
+    : Base(other), doubled_value {other.doubled_value} {
+        cout << "Derived copy constructor" << endl;
+    }
+    Derived &operator=(const Derived &rhs) {
+        cout << "Derived operator=" << endl;
+        if(this == &rhs) {
+            return *this;
+        }
+        Base::operator=(rhs);
+        doubled_value = rhs.doubled_value;
+        return *this;
+    }
     ~Derived() { cout << "Deriverd destructor" << endl; }
 };
 
 int main(int argc, const char * argv[]) {
 //    Base b;
 //    Base b{100};
+//    Base b1 {b};
+//    b = b1;
 //    Derived d;
     Derived d{1000};
+    Derived d1 {d};
+    d = d1;
     
 //
 //    cout << "=========== Base member access from base object =============\n";

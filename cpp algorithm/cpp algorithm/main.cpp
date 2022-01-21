@@ -1,39 +1,28 @@
 #include <iostream>
-#include <cstdio>
-#include <string>
+#include <algorithm>
 
 using namespace std;
 
-long dp[5001], arr[5001];
+long dp[1001], arr[5001];
 
 int main(int argc, const char * argv[]) {
-    string n{};
+    int n{};
     cin >> n;
     
-    if(n[0] == '0') {
-        cout << 0 << endl;
-        return 0;
+    for(int i{1}; i <= n; i++) {
+        cin >> arr[i];
     }
     
-    for(int i{}; i < n.size(); i++) {
-        arr[i+1] = long(n[i] - '0');
-    }
+    dp[1] = arr[1];
     
-    dp[0] = 1;
-    dp[1] = 1;
-    
-    for(int i{2}; i <= n.size(); i++) {
-        if(arr[i] != 0) dp[i] = dp[i-1];
-        long tn = arr[i-1] * 10 + arr[i];
-        if(tn >= 10 && tn <= 26) {
-            dp[i] = (dp[i] + dp[i-2]) % 1000000;
-        } else if(arr[i] == 0 && tn > 26){
-            cout << 0 << endl;
-            return 0;
+    for(int i{2}; i <= n; i++) {
+        dp[i] = arr[i];
+        for(int j{1}; j <= i; j++) {
+            dp[i] = max(dp[i], dp[i-j] + arr[j]);
         }
     }
-        
-    cout << dp[n.size()] << endl;
+    
+    cout << dp[n] << endl;
     
     return 0;
 }

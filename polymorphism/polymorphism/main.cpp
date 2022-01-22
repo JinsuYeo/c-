@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 //class Base {
 //public:
@@ -20,63 +21,144 @@
 //    obj.say_hello();
 //}
 //
+//
+//class Account {
+//public:
+//    virtual void withdraw(double amount) {
+//        std::cout << "In Account::withdraw" << std::endl;
+//    }
+//    virtual ~Account(){ std::cout << "Account::destructor" << std::endl; }
+//};
+//
+//class Checking: public Account {
+//public:
+//    virtual void withdraw(double amount) {
+//        std::cout << "In Checking::withdraw" << std::endl;
+//    }
+//    virtual ~Checking(){ std::cout << "Checking::destructor" << std::endl; }
+//};
+//
+//class Savings: public Account {
+//public:
+//    virtual void withdraw(double amount) {
+//        std::cout << "In Savings::withdraw" << std::endl;
+//    }
+//    virtual ~Savings(){ std::cout << "Savings::destructor" << std::endl; }
+//};
+//
+//class Trust: public Account {
+//public:
+//    virtual void withdraw(double amount) {
+//        std::cout << "In Trust::withdraw" << std::endl;
+//    }
+//    virtual ~Trust(){ std::cout << "Trust::destructor" << std::endl; }
+//};
+//
+//void do_withdraw(Account &account, double amount) {
+//    account.withdraw(amount);
+//}
 
-class Account {
+class Shape {
 public:
-    virtual void withdraw(double amount) {
-        std::cout << "In Account::withdraw" << std::endl;
-    }
-    virtual ~Account(){ std::cout << "Account::destructor" << std::endl; }
+    virtual void draw() = 0;
+    virtual void rotate() = 0;
+    virtual ~Shape(){}
 };
 
-class Checking: public Account {
+class Open_Shape: public Shape {
 public:
-    virtual void withdraw(double amount) {
-        std::cout << "In Checking::withdraw" << std::endl;
-    }
-    virtual ~Checking(){ std::cout << "Checking::destructor" << std::endl; }
+    virtual ~Open_Shape(){}
 };
 
-class Savings: public Account {
+class Closed_Shape: public Shape {
 public:
-    virtual void withdraw(double amount) {
-        std::cout << "In Savings::withdraw" << std::endl;
-    }
-    virtual ~Savings(){ std::cout << "Savings::destructor" << std::endl; }
+    virtual ~Closed_Shape(){}
 };
 
-class Trust: public Account {
+class Line: public Open_Shape {
 public:
-    virtual void withdraw(double amount) {
-        std::cout << "In Trust::withdraw" << std::endl;
+    virtual void draw() override {
+        std::cout << "Drawing a line" << std::endl;
     }
-    virtual ~Trust(){ std::cout << "Trust::destructor" << std::endl; }
+    virtual void rotate() override {
+        std::cout << "Rotating a line" << std::endl;
+    }
+    virtual ~Line(){}
 };
 
-void do_withdraw(Account &account, double amount) {
-    account.withdraw(amount);
+class Circle: public Closed_Shape {
+public:
+    virtual void draw() override {
+        std::cout << "Drawing a circle" << std::endl;
+    }
+    virtual void rotate() override {
+        std::cout << "Rotating a circle" << std::endl;
+    }
+    virtual ~Circle() {}
+};
+
+class Square: public Closed_Shape {
+public:
+    virtual void draw() override {
+        std::cout << "Drawing a square" << std::endl;
+    }
+    virtual void rotate() override {
+        std::cout << "Rotating a square" << std::endl;
+    }
+    virtual ~Square() {}
+};
+
+void screen_refresh(const std::vector<Shape*> &shapes){
+    std::cout << "Refreshing" << std::endl;
+    for(const auto p: shapes)
+        p->draw();
 }
 
 int main(int argc, const char * argv[]) {
-    Account a;
-    Account &ref = a;
-    ref.withdraw(1000);
+    Circle c;
+    c.draw();
     
-    Trust t;
-    Account &ref1 = t;
-    ref1.withdraw(1000);
+    Shape *ptr = new Circle();
+    ptr->draw();
+    ptr->rotate();
+    delete ptr;
     
-    Account a1;
-    Savings a2;
-    Checking a3;
-    Trust a4;
+    Shape *s1 = new Circle();
+    Shape *s2 = new Line();
+    Shape *s3 = new Square();
     
-    do_withdraw(a1, 1000);
-    do_withdraw(a2, 2000);
-    do_withdraw(a3, 3000);
-    do_withdraw(a4, 4000);
+    std::vector<Shape*> shapes {s1, s2, s3};
+//    for(const auto p: shapes)
+//        p->draw();
+    screen_refresh(shapes);
+    
+    delete s1;
+    delete s2;
+    delete s3;
     
     
+    
+    
+    
+//    Account a;
+//    Account &ref = a;
+//    ref.withdraw(1000);
+//
+//    Trust t;
+//    Account &ref1 = t;
+//    ref1.withdraw(1000);
+//
+//    Account a1;
+//    Savings a2;
+//    Checking a3;
+//    Trust a4;
+//
+//    do_withdraw(a1, 1000);
+//    do_withdraw(a2, 2000);
+//    do_withdraw(a3, 3000);
+//    do_withdraw(a4, 4000);
+//
+//
     
 //    Base *p1 = new Base();
 //    p1->say_hello();

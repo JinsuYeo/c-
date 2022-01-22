@@ -22,28 +22,28 @@
 
 class Account {
 public:
-    void withdraw(double amount) {
+    virtual void withdraw(double amount) {
         std::cout << "In Account::withdraw" << std::endl;
     }
 };
 
 class Checking: public Account {
 public:
-    void withdraw(double amount) {
+    virtual void withdraw(double amount) {
         std::cout << "In Checking::withdraw" << std::endl;
     }
 };
 
 class Savings: public Account {
 public:
-    void withdraw(double amount) {
+    virtual void withdraw(double amount) {
         std::cout << "In Savings::withdraw" << std::endl;
     }
 };
 
 class Trust: public Account {
 public:
-    void withdraw(double amount) {
+    virtual void withdraw(double amount) {
         std::cout << "In Trust::withdraw" << std::endl;
     }
 };
@@ -73,7 +73,7 @@ int main(int argc, const char * argv[]) {
 //    Derived d;
 //    d.say_hello();
 //    greeting(d);
-//    
+//
 //    Base *ptr = new Derived();
 //    ptr->say_hello();
 //    greeting(*ptr);

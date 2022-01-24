@@ -8,30 +8,24 @@
 #include "Trust_Account.h"
 #include "Account_Util.h"
 
-using namespace std;
+class Test {
+private:
+    int data;
+public:
+    Test(): data{0} { std::cout << "Test constructor (" << data << ")" << std::endl; }
+    Test(int data): data{data} { std::cout << "Test constructor (" << data << ")" << std::endl; }
+    int get_data() const { return data; }
+    ~Test() { std::cout << "Test destructor (" << data << ")" << std::endl; }
+};
 
 int main() {
-    Checking_Account frank {"Frank", 5000};
-    cout << frank << endl;
+    Test *t1 = new Test {1000};
+    delete t1;
     
-    Account *trust = new Trust_Account("James");
-    cout << *trust << endl;
+    std::unique_ptr<Test> t2 {new Test {100}};
     
-    Account *p1 = new Checking_Account("Larry", 10000);
-    Account *p2 = new Savings_Account("Moe", 1000);
-    Account *p3 = new Trust_Account("Curly");
+    std::unique_ptr<Test> t3 = std::make_unique<Test> (1000);
     
-    std::vector<Account *> accounts {p1,p2,p3};
-    
-    display(accounts);
-    deposit(accounts, 1000);
-    withdraw(accounts, 2000);
-    
-    display(accounts);
-    
-    delete p1;
-    delete p2;
-    delete p3;
     return 0;
 }
 

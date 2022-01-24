@@ -6,7 +6,7 @@ using namespace std;
 int arr[1000000];
 
 int main(int argc, const char * argv[]) {
-    int n{}, temp{};
+    int n{}, j{}, temp{};
     scanf("%d", &n);
     
     for(int i{}; i < n; i++) {
@@ -14,12 +14,12 @@ int main(int argc, const char * argv[]) {
     }
     
     for(int i{}; i < n - 1; i++) {
-        for(int j{}; j < n - 1 - i; j++) {
-            if(arr[j] > arr[j + 1]) {
-                temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
+        j = i;
+        while (j >= 0 && arr[j] > arr[j + 1]) {
+            temp = arr[j];
+            arr[j] = arr[j+1];
+            arr[j+1] = temp;
+            j--;
         }
     }
     

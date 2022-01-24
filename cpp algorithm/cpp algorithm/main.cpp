@@ -1,25 +1,28 @@
 #include <cstdio>
-#include <algorithm>
+#include <climits>
 
 using namespace std;
 
 int arr[3];
 
 int main(int argc, const char * argv[]) {
-    int n{3}, temp{};
+    int n{3}, temp{}, min{}, index{};
     
     for(int i{}; i < n; i++) {
         scanf("%d", &arr[i]);
     }
     
     for(int i{}; i < n-1; i++) {
-        for(int j{}; j < n - 1 - i; j++) {
-            if(arr[j] > arr[j+1]) {
-                temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
+        min = INT_MAX;
+        for(int j{i}; j < n; j++) {
+            if(arr[j] < min) {
+                min = arr[j];
+                index = j;
             }
         }
+        temp = arr[i];
+        arr[i] = min;
+        arr[index] = temp;
     }
     
     for(int i{}; i < n; i++) {

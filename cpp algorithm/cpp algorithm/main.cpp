@@ -1,6 +1,6 @@
 #include <cstdio>
 
-int sorted[3];
+int sorted[1000001];
 
 void merge(int arr[], int m, int middle, int n) {
     int i = m;
@@ -43,9 +43,9 @@ void mergeSort(int arr[], int m, int n) {
 }
 
 int main(int argc, const char * argv[]) {
-    int arr[3];
-    int n{3};
-
+    int n{}, arr[1000001];
+    scanf("%d", &n);
+    
     for(int i{}; i < n; i++) {
         scanf("%d", &arr[i]);
     }

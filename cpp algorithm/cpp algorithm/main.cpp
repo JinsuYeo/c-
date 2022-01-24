@@ -5,19 +5,26 @@ using namespace std;
 
 int arr[1000000];
 
-bool compare(int a, int b) {
-    return a < b;
-}
-
 int main(int argc, const char * argv[]) {
-    int n{};
+    int n{}, min{INT_MAX}, index{}, temp{};
     scanf("%d", &n);
     
     for(int i{}; i < n; i++) {
         scanf("%d", &arr[i]);
     }
     
-    sort(&arr[0], &arr[n], compare);
+    for(int i{}; i < n - 1; i++) {
+        min = INT_MAX;
+        for(int j{i}; j < n; j++) {
+            if(min > arr[j]) {
+                min = arr[j];
+                index = j;
+            }
+        }
+        temp = arr[i];
+        arr[i] = arr[index];
+        arr[index] = temp;
+    }
 
     
     for(int i{}; i < n; i++) {

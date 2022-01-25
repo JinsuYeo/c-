@@ -1,42 +1,51 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
-#include <string>
 
 using namespace std;
 
-class Member {
-public:
-    int _age;
-    string _name;
-    int _n;
-    Member(int age, string name, int n): _age{age}, _name{name}, _n{n} {};
-};
-
-bool compare(Member a, Member b){
-    if(a._age == b._age) return a._n < b._n;
-    else return a._age < b._age;
-}
+int arr[1000000];
 
 int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
-    int n{}, t{};
-    string s;
-    vector<Member> v;
-    
+    int n{};
     cin >> n;
-    for(int i{1}; i <= n; i++) {
-        cin >> t >> s;
-        v.push_back(Member(t, s, i));
+    for(int i{}; i < n; i++) {
+        cin >> arr[i];
     }
     
-    sort(v.begin(), v.end(), compare);
+    for(int i{1}; i < n; i++) {
+        int c{i};
+        do {
+            int root = (c-1)/2;
+            if(arr[root] < arr[c]) {
+                int temp = arr[root];
+                arr[root] = arr[c];
+                arr[c] = temp;
+            }
+            c = root;
+        }
+        while(c != 0);
+    }
     
-    for(int i{}; i < n; i++) {
-        cout << v.at(i)._age << " " << v.at(i)._name << "\n";
+    for(int i{n-1}; i >= 0; i--) {
+        int temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+        int root{};
+        int c{};
+        do {
+            c = root * 2 + 1;
+            if(c < i - 1 && arr[c] < arr[c+1]) c++;
+            if(c < i && arr[root] < arr[c]) {
+                temp = arr[root];
+                arr[root] = arr[c];
+                arr[c] = temp;
+            }
+            root = c;
+        } while (c < i);
+    }
+    
+    for (int i{}; i < n; i++) {
+        cout << arr[i] << "\n";
     }
     
     return 0;

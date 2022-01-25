@@ -1,26 +1,21 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 using namespace std;
 
-class Point {
+class Member {
 public:
-    int x;
-    int y;
-    Point(): Point(0, 0){};
-    Point(int a, int b): x{a}, y{b}{};
+    int _age;
+    string _name;
+    int _n;
+    Member(int age, string name, int n): _age{age}, _name{name}, _n{n} {};
 };
 
-ostream &operator<<(ostream& os, const Point &p) {
-    os << p.x << " " << p.y;
-    return os;
-}
-
-bool compare(Point &a, Point &b) {
-    if(a.y == b.y) return a.x < b.x;
-    else return a.y < b.y;
-    
+bool compare(Member a, Member b){
+    if(a._age == b._age) return a._n < b._n;
+    else return a._age < b._age;
 }
 
 int main() {
@@ -28,22 +23,20 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n{}, x{}, y{};
+    int n{}, t{};
+    string s;
+    vector<Member> v;
+    
     cin >> n;
-    
-    vector<Point> p;
-    
-    for(int i{}; i < n; i++) {
-        cin >> x;
-        cin >> y;
-        Point point{x, y};
-        p.push_back(point);
+    for(int i{1}; i <= n; i++) {
+        cin >> t >> s;
+        v.push_back(Member(t, s, i));
     }
     
-    sort(p.begin(), p.end(), compare);
+    sort(v.begin(), v.end(), compare);
     
     for(int i{}; i < n; i++) {
-        cout << p.at(i) << "\n";
+        cout << v.at(i)._age << " " << v.at(i)._name << "\n";
     }
     
     return 0;

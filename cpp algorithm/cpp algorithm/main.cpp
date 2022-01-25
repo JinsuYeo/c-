@@ -1,59 +1,49 @@
-#include <cstdio>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 
-int sorted[1000001];
+using namespace std;
 
-void merge(int arr[], int m, int middle, int n) {
-    int i = m;
-    int j = middle + 1;
-    int k = m;
-    while (i <= middle && j <= n) {
-        if(arr[i] <= arr[j]) {
-            sorted[k] = arr[i];
-            i++;
-        } else {
-            sorted[k] = arr[j];
-            j++;
-        }
-        k++;
-    }
-    if (i > middle) {
-        for(int t{j}; t <= n; t++) {
-            sorted[k] = arr[t];
-            k++;
-        }
-    } else {
-        for(int t{i}; t <= middle; t++) {
-            sorted[k] = arr[t];
-            k++;
-        }
-    }
-    
-    for(int t = m; t <= n; t++) {
-        arr[t] = sorted[t];
-    }
+class Point {
+public:
+    int x;
+    int y;
+    Point(): Point(0, 0){};
+    Point(int a, int b): x{a}, y{b}{};
+};
+
+ostream &operator<<(ostream& os, const Point &p) {
+    os << p.x << " " << p.y;
+    return os;
 }
 
-void mergeSort(int arr[], int m, int n) {
-    if(m < n) {
-        int middle = (m + n) / 2;
-        mergeSort(arr, m, middle);
-        mergeSort(arr, middle+1, n);
-        merge(arr, m, middle, n);
-    }
+bool compare(Point &a, Point &b) {
+    if(a.x == b.x) return a.y < b.y;
+    else return a.x < b.x;
+    
 }
 
-int main(int argc, const char * argv[]) {
-    int n{}, arr[1000001];
-    scanf("%d", &n);
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int n{}, x{}, y{};
+    cin >> n;
+    
+    vector<Point> p;
     
     for(int i{}; i < n; i++) {
-        scanf("%d", &arr[i]);
+        cin >> x;
+        cin >> y;
+        Point point{x, y};
+        p.push_back(point);
     }
     
-    mergeSort(arr, 0, n-1);
+    sort(p.begin(), p.end(), compare);
     
     for(int i{}; i < n; i++) {
-        printf("%d\n", arr[i]);
+        cout << p.at(i) << "\n";
     }
     
     return 0;

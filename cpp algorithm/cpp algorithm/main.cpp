@@ -9,18 +9,17 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    string s;
+    string s1;
+    getline(cin, s1);
     
-    while(getline(cin, s)){
-        int l{}, u{}, n{}, e{};
-        for(int i{}; i < s.length(); i++){
-            if(s.at(i) >= 'a' && s.at(i) <= 'z') l++;
-            if(s.at(i) >= 'A' && s.at(i) <= 'Z') u++;
-            if(s.at(i) >= '0' && s.at(i) <= '9') n++;
-            if(s.at(i) == ' ') e++;
-        }
-        cout << l << " " << u << " " << n << " " << e << "\n";
+    for (int i{}; i < s1.length(); i++) {
+        if(s1.at(i) >= 'a' && s1.at(i) + 13 <= 'z') s1.at(i) += 13;
+        else if(s1.at(i) - 13 >= 'a' && s1.at(i) <= 'z') s1.at(i) -= 13;
+        else if(s1.at(i) >= 'A' && s1.at(i) + 13 <= 'Z') s1.at(i) += 13;
+        else if(s1.at(i) - 13 >= 'A' && s1.at(i) <= 'Z') s1.at(i) -= 13;
     }
+    
+    cout << s1 << "\n";
     
     return 0;
 }

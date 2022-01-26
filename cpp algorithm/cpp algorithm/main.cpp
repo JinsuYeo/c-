@@ -1,37 +1,49 @@
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include <string>
 
 using namespace std;
-
-long arr[100000];
-
+    
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n{}, max{1}, temp{1}, index{};
+    int n{}, t{};
+    string s;
     cin >> n;
+    
+    vector<int> v;
+    
     for(int i{}; i < n; i++) {
-        cin >> arr[i];
-    }
-    
-    sort(arr, arr+n);
-    
-    for(int i{1}; i < n; i++) {
-        if(arr[i] == arr[i-1]){
-            temp++;
-            if(max < temp) {
-                max = temp;
-                index = i;
+        cin >> s;
+        if(s == "push") {
+            cin >> t;
+            v.push_back(t);
+        }
+        if(s == "top") {
+            if(v.size()) {
+                cout << v.back() << "\n";
+            } else {
+                cout << -1 << "\n";
             }
         }
-        else {
-            temp = 1;
+        if(s == "size") cout << v.size() << "\n";
+        if(s == "pop") {
+            if(v.size() != 0) {
+                cout << v.back() << "\n";
+                v.pop_back();
+            } else {
+                cout << -1 <<"\n";
+            }
+        }
+        if(s == "empty") {
+            if(v.size()) {
+                cout << 0 << "\n";
+            } else cout << 1 << "\n";
         }
     }
-    
-    cout << arr[index] <<"\n";
     
     return 0;
 }

@@ -15,9 +15,17 @@ int main() {
     string s;
     cin >> s;
         
+    for (int i{}; i < 26; i++) {
+        arr[i] = -1;
+    }
+    
     for(int i{}; i < s.length(); i++) {
         for(int j{}; j < 26; j++) {
-            if(s.at(i) == carr[j]) arr[j]++;
+            if(s.at(i) == carr[j]) {
+                if((arr[j] != -1 && i < arr[j]) || arr[j] == -1) {
+                    arr[j] = i;
+                }
+            }
         }
     }
     

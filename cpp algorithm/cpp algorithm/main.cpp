@@ -4,35 +4,23 @@
 
 using namespace std;
 
-int arr[26];
-char carr[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
     
     string s;
-    cin >> s;
-        
-    for (int i{}; i < 26; i++) {
-        arr[i] = -1;
-    }
     
-    for(int i{}; i < s.length(); i++) {
-        for(int j{}; j < 26; j++) {
-            if(s.at(i) == carr[j]) {
-                if((arr[j] != -1 && i < arr[j]) || arr[j] == -1) {
-                    arr[j] = i;
-                }
-            }
+    while(getline(cin, s)){
+        int l{}, u{}, n{}, e{};
+        for(int i{}; i < s.length(); i++){
+            if(s.at(i) >= 'a' && s.at(i) <= 'z') l++;
+            if(s.at(i) >= 'A' && s.at(i) <= 'Z') u++;
+            if(s.at(i) >= '0' && s.at(i) <= '9') n++;
+            if(s.at(i) == ' ') e++;
         }
+        cout << l << " " << u << " " << n << " " << e << "\n";
     }
     
-    for(int i{}; i < 26; i++) {
-        cout << arr[i] << " ";
-    }
-    cout << "\n";
-   
     return 0;
 }

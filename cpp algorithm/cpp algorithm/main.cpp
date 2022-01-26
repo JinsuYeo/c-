@@ -1,11 +1,9 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>
-#include <string>
 
 using namespace std;
 
-int arr[10001];
+int arr[5000000];
 
 int main() {
     ios::sync_with_stdio(false);
@@ -13,20 +11,16 @@ int main() {
     cout.tie(NULL);
     
     int n{}, t{};
-    cin >> n;
+    cin >> n >> t;
     
     for (int i{}; i < n; i++) {
-        cin >> t;
-        arr[t]++;
+        cin >> arr[i];
     }
     
-    for (int i{1}; i <= 10000; i++) {
-        if(arr[i]){
-            for (int j{}; j < arr[i]; j++) {
-                cout << i << "\n";
-            }
-        }
-    }
+    sort(arr, arr+n);
+    
+    cout << arr[t-1] << "\n";
+    
    
     return 0;
 }

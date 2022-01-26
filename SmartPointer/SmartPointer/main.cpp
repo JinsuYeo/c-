@@ -10,43 +10,63 @@
 
 using namespace std;
 
-class B;
-
-class A{
-    std::shared_ptr<B> b_ptr;
-public:
-    void set_B(std::shared_ptr<B> &b){
-        b_ptr = b;
-    }
-    A() { cout << "A Constructor" << endl; }
-    ~A() { cout << "A Destructor" << endl; }
-};
-
-class B {
-    std::weak_ptr<A> a_ptr;
-public:
-    void set_A(std::shared_ptr<A> &a) {
-        a_ptr = a;
-    }
-    B() { cout << "B Constructor" << endl; }
-    ~B() { cout << "B Destructor" << endl; }
-};
-
-//class Test {
-//private:
-//    int data;
+//class B;
+//
+//class A{
+//    std::shared_ptr<B> b_ptr;
 //public:
-//    Test(): data{0} { std::cout << "Test constructor (" << data << ")" << std::endl; }
-//    Test(int data): data{data} { std::cout << "Test constructor (" << data << ")" << std::endl; }
-//    int get_data() const { return data; }
-//    ~Test() { std::cout << "Test destructor (" << data << ")" << std::endl; }
+//    void set_B(std::shared_ptr<B> &b){
+//        b_ptr = b;
+//    }
+//    A() { cout << "A Constructor" << endl; }
+//    ~A() { cout << "A Destructor" << endl; }
+//};
+//
+//class B {
+//    std::weak_ptr<A> a_ptr;
+//public:
+//    void set_A(std::shared_ptr<A> &a) {
+//        a_ptr = a;
+//    }
+//    B() { cout << "B Constructor" << endl; }
+//    ~B() { cout << "B Destructor" << endl; }
 //};
 
+class Test {
+private:
+    int data;
+public:
+    Test(): data{0} { std::cout << "Test constructor (" << data << ")" << std::endl; }
+    Test(int data): data{data} { std::cout << "Test constructor (" << data << ")" << std::endl; }
+    int get_data() const { return data; }
+    ~Test() { std::cout << "Test destructor (" << data << ")" << std::endl; }
+};
+
+void my_deleter(Test *ptr) {
+    std::cout << "\tUsing my custom function deleter" << std::endl;
+    delete ptr;
+}
+
 int main() {
-    shared_ptr<A> a = make_shared<A>();
-    shared_ptr<B> b = make_shared<B>();
-    a->set_B(b);
-    b->set_A(a);
+    {
+        // Using a function
+        std::shared_ptr<Test> ptr1 {new Test{100}, my_deleter};
+    }
+    std::cout << "=======================" << std::endl;
+    {
+        // Using a Lambda expression
+        std::shared_ptr<Test> ptr2 {new Test(1000),
+            [] (Test *ptr) {
+                std::cout << "\tUsing my custom lambda deleter" << std::endl;
+                delete ptr;
+            }};
+    }
+    
+    
+//    shared_ptr<A> a = make_shared<A>();
+//    shared_ptr<B> b = make_shared<B>();
+//    a->set_B(b);
+//    b->set_A(a);
     
     
 //    std::shared_ptr<int> p1 {new int {100}};

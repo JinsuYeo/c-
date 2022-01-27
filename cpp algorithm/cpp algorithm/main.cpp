@@ -10,20 +10,40 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
+    int n{};
+    vector<int> v;
     string s;
-    cin >> s;
-    int count{}, result{};
     
-    for(int i{}; i < s.length(); i++) {
-        if(s.at(i) == '(' && s.at(i+1) != ')') {
-            count++;
-            result++;
-        } else if(s.at(i) == '(' && s.at(i+1) == ')') {
-            result += count;
-        } else if(s.at(i) == ')' && s.length() != 0 && s.at(i-1) != '(') count--;
+    cin >> n;
+    for(int i{}; i < n; i++) {
+        cin >> s;
+        if(s == "push") {
+            int t;
+            cin >> t;
+            v.push_back(t);
+        }
+        if(s == "pop") {
+            if(v.size()) {
+                cout << v.front() << "\n";
+                v.erase(v.begin());
+            } else cout << -1 << "\n";
+        }
+        if(s == "size") {
+            cout << v.size() << "\n";
+        }
+        if(s == "empty") {
+            if(!v.size()) cout << 1 << "\n";
+            else cout << 0 << "\n";
+        }
+        if(s == "front") {
+            if(!v.size()) cout << -1 << "\n";
+            else cout << v.front() << "\n";
+        }
+        if(s == "back") {
+            if(!v.size()) cout << -1 << "\n";
+            else cout << v.back() << "\n";
+        }
     }
-    
-    cout << result << "\n";
     
     return 0;
 }

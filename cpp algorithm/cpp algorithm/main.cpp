@@ -10,33 +10,20 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n{};
     string s;
-    cin >> n;
+    cin >> s;
+    int count{}, result{};
     
-    vector<char> stack;
-    vector<string> v;
-    
-    for(int i{}; i < n; i++) {
-        cin >> s;
-        v.push_back(s);
+    for(int i{}; i < s.length(); i++) {
+        if(s.at(i) == '(' && s.at(i+1) != ')') {
+            count++;
+            result++;
+        } else if(s.at(i) == '(' && s.at(i+1) == ')') {
+            result += count;
+        } else if(s.at(i) == ')' && s.length() != 0 && s.at(i-1) != '(') count--;
     }
     
-    for(int i{}; i < n; i++) {
-        for (int j{}; j < v.at(i).length(); j++) {
-            if(v.at(i).at(j) == '(')
-                stack.push_back(v.at(i).at(j));
-            else if(v.at(i).at(j) == ')' && stack.size() != 0 && stack.back() == '(')
-                stack.pop_back();
-            else if(v.at(i).at(j) == ')' && (stack.size() == 0 || stack.back() != '('))
-                stack.push_back(v.at(i).at(j));
-        }
-        if(stack.size()) cout << "NO" << "\n";
-        else if(!stack.size()) cout << "YES" << "\n";
-        
-        stack.clear();
-    }
-    
+    cout << result << "\n";
     
     return 0;
 }

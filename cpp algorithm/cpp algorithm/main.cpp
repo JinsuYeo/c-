@@ -7,18 +7,26 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int a{}, b{}, tb{}, ts{}, max{1}, t{1};
-    cin >> a >> b;
-    
-    ts = a < b ? a : b;
-    tb = a > b ? a : b;
-    for(int i{1}; i <= ts; i++) {
-        if((tb%i) == 0 && (ts%i) == 0 && max < i) max = i;
+    int n{}, a{}, b{}, tb{}, ts{}, t{1};
+    cin >> n;
+    for(int i{}; i < n; i++) {
+        t = 1;
+        cin >> a >> b;
+        
+        if(a == b) {
+            cout << a <<"\n";
+            continue;
+        }
+        
+        ts = a < b ? a : b;
+        tb = a > b ? a : b;
+
+        while((tb*t)%ts) {
+            t++;
+        }
+        
+        cout << tb*t << "\n";
     }
-    while((tb*t)%ts) {
-        t++;
-    }
-    cout << max << "\n" << tb*t << "\n";
     
     return 0;
 }

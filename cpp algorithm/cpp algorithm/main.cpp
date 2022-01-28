@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include <stack>
+#include <list>
 #include <string>
 
 using namespace std;
@@ -12,13 +12,10 @@ int main() {
     
     string s;
     int n{};
-    stack<char> sl;
-    stack<char> sr;
-    
     cin >> s >> n;
-    
-    for(int i{}; i < s.size(); i++)
-        sl.push(s.at(i));
+
+    list<char> l(s.begin(), s.end());
+    auto now = l.end();
     
     for(int i{}; i < n; i++) {
         char t;
@@ -26,36 +23,27 @@ int main() {
         if(t == 'P') {
             char c;
             cin >> c;
-            sl.push(c);
+            l.insert(now, c);
         }
-        if(t == 'L') {
-            if(!sl.empty()) {
-                sr.push(sl.top());
-                sl.pop();
+        if(t == 'B') {
+            if(now != l.begin()) {
+                now = l.erase(--now);
             }
         }
         if(t == 'D') {
-            if(!sr.empty()){
-                sl.push(sr.top());
-                sr.pop();
+            if(now != l.end()){
+                now++;
             }
         }
-        if(t == 'B') {
-            if(!sl.empty()) {
-                sl.pop();
+        if(t == 'L') {
+            if(now != l.begin()){
+                now--;
             }
         }
     }
     
-    while(!sl.empty()) {
-        sr.push(sl.top());
-        sl.pop();
-    }
-    
-    unsigned long t = sr.size();
-    for(int i{}; i != t; i++) {
-        cout << sr.top();
-        sr.pop();
+    for(auto c: l){
+        cout << c;
     }
         
     return 0;

@@ -7,25 +7,22 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n{}, a{}, b{}, tb{}, ts{}, t{1};
+    int n{}, a{}, b{};
     cin >> n;
     for(int i{}; i < n; i++) {
-        t = 1;
+        int gcf{}, lcm{}, t{}, at{}, bt{};
         cin >> a >> b;
-        
-        if(a == b) {
-            cout << a <<"\n";
-            continue;
+        t = a % b;
+        at = a;
+        bt = b;
+        while(t != 0) {
+            at = bt;
+            bt = t;
+            t = at % bt;
         }
-        
-        ts = a < b ? a : b;
-        tb = a > b ? a : b;
-
-        while((tb*t)%ts) {
-            t++;
-        }
-        
-        cout << tb*t << "\n";
+        gcf = bt;
+        lcm = (a*b)/gcf;
+        cout << lcm << "\n";
     }
     
     return 0;

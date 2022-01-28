@@ -1,36 +1,40 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>
+#include <queue>
 #include <string>
 
 using namespace std;
     
-bool compare(string a, string b) {
-    return a < b;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
     
-    string s;
-    vector<string> v;
+    queue<int> q;
+    int n{}, t{};
+    cin >> n >> t;
+    vector<int> v;
     
-    cin >> s;
-    string t = s;
-    for(int i{}; i < s.length(); i++) {
-        v.push_back(t);
-        if(s.size()){
-            t.erase(t.begin());
+    for (int i{1}; i <= n; i++) {
+        q.push(i);
+    }
+    
+    while(!q.empty()) {
+        for(int i{}; i < t-1; i++) {
+            int ti{};
+            ti = q.front();
+            q.pop();
+            q.push(ti);
         }
+        v.push_back(q.front());
+        q.pop();
     }
     
-    sort(v.begin(), v.end(), compare);
-    
-    for (int i{}; i < v.size(); i++) {
-        cout << v.at(i) << "\n";
+    cout << "<";
+    for(int i{}; i < n - 1; i++) {
+        cout << v.at(i) << ", ";
     }
-    
+    cout << v.back() << ">" << "\n";
+        
     return 0;
 }

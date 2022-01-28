@@ -17,15 +17,26 @@ int main() {
     cin >> n;
     for(int i{}; i < n; i++) {
         cin >> s;
-        if(s == "push") {
+        if(s == "push_front") {
+            int t;
+            cin >> t;
+            v.insert(v.begin(), t);
+        }
+        if(s == "push_back") {
             int t;
             cin >> t;
             v.push_back(t);
         }
-        if(s == "pop") {
+        if(s == "pop_front") {
             if(v.size()) {
                 cout << v.front() << "\n";
                 v.erase(v.begin());
+            } else cout << -1 << "\n";
+        }
+        if(s == "pop_back") {
+            if(v.size()) {
+                cout << v.back() << "\n";
+                v.pop_back();
             } else cout << -1 << "\n";
         }
         if(s == "size") {

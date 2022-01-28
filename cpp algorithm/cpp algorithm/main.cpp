@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include <queue>
+#include <stack>
 #include <string>
 
 using namespace std;
@@ -10,31 +10,53 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    queue<int> q;
-    int n{}, t{};
-    cin >> n >> t;
-    vector<int> v;
+    string s;
+    int n{};
+    stack<char> sl;
+    stack<char> sr;
     
-    for (int i{1}; i <= n; i++) {
-        q.push(i);
-    }
+    cin >> s >> n;
     
-    while(!q.empty()) {
-        for(int i{}; i < t-1; i++) {
-            int ti{};
-            ti = q.front();
-            q.pop();
-            q.push(ti);
+    for(int i{}; i < s.size(); i++)
+        sl.push(s.at(i));
+    
+    for(int i{}; i < n; i++) {
+        char t;
+        cin >> t;
+        if(t == 'P') {
+            char c;
+            cin >> c;
+            sl.push(c);
         }
-        v.push_back(q.front());
-        q.pop();
+        if(t == 'L') {
+            if(!sl.empty()) {
+                sr.push(sl.top());
+                sl.pop();
+            }
+        }
+        if(t == 'D') {
+            if(!sr.empty()){
+                sl.push(sr.top());
+                sr.pop();
+            }
+        }
+        if(t == 'B') {
+            if(!sl.empty()) {
+                sl.pop();
+            }
+        }
     }
     
-    cout << "<";
-    for(int i{}; i < n - 1; i++) {
-        cout << v.at(i) << ", ";
+    while(!sl.empty()) {
+        sr.push(sl.top());
+        sl.pop();
     }
-    cout << v.back() << ">" << "\n";
+    
+    unsigned long t = sr.size();
+    for(int i{}; i != t; i++) {
+        cout << sr.top();
+        sr.pop();
+    }
         
     return 0;
 }

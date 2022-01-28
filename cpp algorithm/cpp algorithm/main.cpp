@@ -1,7 +1,4 @@
 #include <iostream>
-#include <algorithm>
-#include <list>
-#include <string>
 
 using namespace std;
     
@@ -10,41 +7,18 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    string s;
-    int n{};
-    cin >> s >> n;
-
-    list<char> l(s.begin(), s.end());
-    auto now = l.end();
+    int a{}, b{}, tb{}, ts{}, max{1}, t{1};
+    cin >> a >> b;
     
-    for(int i{}; i < n; i++) {
-        char t;
-        cin >> t;
-        if(t == 'P') {
-            char c;
-            cin >> c;
-            l.insert(now, c);
-        }
-        if(t == 'B') {
-            if(now != l.begin()) {
-                now = l.erase(--now);
-            }
-        }
-        if(t == 'D') {
-            if(now != l.end()){
-                now++;
-            }
-        }
-        if(t == 'L') {
-            if(now != l.begin()){
-                now--;
-            }
-        }
+    ts = a < b ? a : b;
+    tb = a > b ? a : b;
+    for(int i{1}; i <= ts; i++) {
+        if((tb%i) == 0 && (ts%i) == 0 && max < i) max = i;
     }
+    while((tb*t)%ts) {
+        t++;
+    }
+    cout << max << "\n" << tb*t << "\n";
     
-    for(auto c: l){
-        cout << c;
-    }
-        
     return 0;
 }

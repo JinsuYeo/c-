@@ -1,29 +1,27 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
     
+long long gcd(long long a, long long b) {
+    long long t = a % b;
+    while(t != 0) {
+        a = b;
+        b = t;
+        t = a % b;
+    }
+    return b;
+}
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n{}, a{}, b{};
-    cin >> n;
-    for(int i{}; i < n; i++) {
-        int gcf{}, lcm{}, t{}, at{}, bt{};
-        cin >> a >> b;
-        t = a % b;
-        at = a;
-        bt = b;
-        while(t != 0) {
-            at = bt;
-            bt = t;
-            t = at % bt;
-        }
-        gcf = bt;
-        lcm = (a*b)/gcf;
-        cout << lcm << "\n";
-    }
+    long long a{}, b{};
+    cin >> a >> b;
+    
+    cout << string(gcd(a, b), '1') << "\n";
     
     return 0;
 }

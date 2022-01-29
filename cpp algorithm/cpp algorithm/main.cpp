@@ -12,18 +12,23 @@ int main() {
     
     string s;
     vector<int> v;
-    int sum{};
 
     cin >> s;
     
     reverse(s.begin(), s.end());
 
-    for(int i{}; i*3 < s.length(); i++) {
-        sum = s.at(i*3)-'0';
-        if(i*3+1 < s.length()) sum += (s.at(i*3+1)-'0')*2;
-        if(i*3+2 < s.length()) sum += + (s.at(i*3+2) -'0')*4;
-        v.push_back(sum);
-        sum = 0;
+    for(int i{}; i < s.length(); i++) {
+        int n = s.at(i) - '0';
+        while(n/2) {
+            v.push_back(n%2);
+            n /= 2;
+        }
+        v.push_back(n);
+        if(i != s.length()-1) {
+            while (v.size() < (i+1)*3) {
+                v.push_back(0);
+            }
+        }
     }
     
     for(int i{(int)v.size()-1}; i >= 0; i--) {

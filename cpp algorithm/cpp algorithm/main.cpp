@@ -11,22 +11,25 @@ int main() {
     cout.tie(NULL);
     
     string s;
-    vector<char> v;
-    int n{}, m{1};
+    vector<int> v;
     int sum{};
 
-    cin >> s >> n;
+    cin >> s;
     
-    for(int i{(int)s.length()-1}; i >= 0; i--){
-        if(s.at(i) < 'A') {
-            sum += m*(int(s.at(i)-'0'));
-        } else {
-            sum += m*(int(s.at(i)-'A'+10));
-        }
-        m *= n;
+    reverse(s.begin(), s.end());
+
+    for(int i{}; i*3 < s.length(); i++) {
+        sum = s.at(i*3)-'0';
+        if(i*3+1 < s.length()) sum += (s.at(i*3+1)-'0')*2;
+        if(i*3+2 < s.length()) sum += + (s.at(i*3+2) -'0')*4;
+        v.push_back(sum);
+        sum = 0;
     }
     
-    cout << sum << "\n";
+    for(int i{(int)v.size()-1}; i >= 0; i--) {
+        cout << v.at(i);
+    }
+    cout << "\n";
     
     return 0;
 }

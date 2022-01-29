@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <vector>
 #include <algorithm>
 
@@ -9,27 +10,23 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int a{}, b{};
-    cin >> a >> b;
+    string s;
+    vector<char> v;
+    int n{}, m{1};
+    int sum{};
+
+    cin >> s >> n;
     
-    vector<int> v;
-    
-    while(a/b) {
-        v.push_back(a%b);
-        a /= b;
-    }
-    v.push_back(a%b);
-    
-    reverse(v.begin(), v.end());
-    
-    for(int i{}; i < v.size(); i++) {
-        if(v.at(i) < 10) {
-            cout << v.at(i);
+    for(int i{(int)s.length()-1}; i >= 0; i--){
+        if(s.at(i) < 'A') {
+            sum += m*(int(s.at(i)-'0'));
         } else {
-            cout << char(v.at(i)+'A'-10);
+            sum += m*(int(s.at(i)-'A'+10));
         }
+        m *= n;
     }
-    cout << "\n";
+    
+    cout << sum << "\n";
     
     return 0;
 }

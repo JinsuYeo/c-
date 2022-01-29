@@ -1,42 +1,35 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
    
-int arr[101];
-
-int gcd(int a, int b) {
-    int t = a % b;
-    while(t != 0) {
-        a = b;
-        b = t;
-        t = a % b;
-    }
-    return b;
-}
-
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n{};
-    cin >> n;
-    for(int i{}; i < n; i++) {
-        int t{};
-        long long sum{};
-        cin >> t;
-        for(int j{1}; j <= t; j++) {
-            cin >> arr[j];
-        }
-        for(int j{1}; j <= t - 1; j++) {
-            for(int k{j+1}; k <= t; k++) {
-                sum += gcd(arr[j], arr[k]);
-            }
-        }
-        cout << sum << "\n";
-    }
+    int a{}, b{};
+    cin >> a >> b;
     
+    vector<int> v;
+    
+    while(a/b) {
+        v.push_back(a%b);
+        a /= b;
+    }
+    v.push_back(a%b);
+    
+    reverse(v.begin(), v.end());
+    
+    for(int i{}; i < v.size(); i++) {
+        if(v.at(i) < 10) {
+            cout << v.at(i);
+        } else {
+            cout << char(v.at(i)+'A'-10);
+        }
+    }
+    cout << "\n";
     
     return 0;
 }

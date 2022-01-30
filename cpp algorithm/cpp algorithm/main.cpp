@@ -1,8 +1,6 @@
 #include <iostream>
-#include <algorithm>
-#include <cmath>
-#include <vector>
 
+int arr[100];
 
 using namespace std;
    
@@ -11,31 +9,33 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int a{}, b{}, n{}, sum{};
-    vector<int> v;
-    vector<int> result;
-    cin >> a >> b >> n;
+    int n{}, count{};
+    bool flag{};
+    cin >> n;
+    
     for(int i{}; i < n; i++) {
         int t{};
         cin >> t;
-        v.push_back(t);
+        arr[i] = t;
     }
-    reverse(v.begin(), v.end());
     
     for(int i{}; i < n; i++) {
-        sum += v.at(i) * pow(a, i);
+        if(arr[i] == 2) {
+            count++;
+            continue;
+        } else if(arr[i] == 1) continue;
+        for(int j{2}; j < arr[i]; j++) {
+            if(arr[i]%j == 0){
+                flag = 1;
+                break;
+            }
+        }
+        if(!flag) count++;
+        flag = 0;
     }
     
-    while(sum != 0) {
-        result.push_back(sum%b);
-        sum /= b;
-    }
-    
-    reverse(result.begin(), result.end());
-    for(auto r: result) {
-            cout << r << " ";
-    }
-    cout << "\n";
+    cout << count << "\n";
+   
     
     return 0;
 }

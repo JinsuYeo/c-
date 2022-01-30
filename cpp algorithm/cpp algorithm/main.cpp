@@ -1,7 +1,8 @@
 #include <iostream>
+#include <algorithm>
 #include <string>
 #include <vector>
-#include <algorithm>
+
 
 using namespace std;
    
@@ -10,31 +11,32 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    string s;
+    long long n{};
+    cin >> n;
     vector<int> v;
-
-    cin >> s;
     
-    reverse(s.begin(), s.end());
+    if(n == 0) {
+        cout << "0\n";
+        return 0;
+    }
 
-    for(int i{}; i < s.length(); i++) {
-        int n = s.at(i) - '0';
-        while(n/2) {
-            v.push_back(n%2);
-            n /= 2;
-        }
-        v.push_back(n);
-        if(i != s.length()-1) {
-            while (v.size() < (i+1)*3) {
-                v.push_back(0);
-            }
+    while (n != 0) {
+        if(n%-2 != 0) {
+            v.push_back(1);
+            n = (n-1)/-2;
+        } else {
+            v.push_back(0);
+            n /= -2;
         }
     }
     
-    for(int i{(int)v.size()-1}; i >= 0; i--) {
-        cout << v.at(i);
+    reverse(v.begin(), v.end());
+    
+    for(int &i: v) {
+        cout << i;
     }
     cout << "\n";
+    
     
     return 0;
 }

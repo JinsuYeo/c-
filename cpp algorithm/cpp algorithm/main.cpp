@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include <string>
+#include <cmath>
 #include <vector>
 
 
@@ -11,32 +11,31 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    long long n{};
-    cin >> n;
+    int a{}, b{}, n{}, sum{};
     vector<int> v;
-    
-    if(n == 0) {
-        cout << "0\n";
-        return 0;
+    vector<int> result;
+    cin >> a >> b >> n;
+    for(int i{}; i < n; i++) {
+        int t{};
+        cin >> t;
+        v.push_back(t);
     }
-
-    while (n != 0) {
-        if(n%-2 != 0) {
-            v.push_back(1);
-            n = (n-1)/-2;
-        } else {
-            v.push_back(0);
-            n /= -2;
-        }
-    }
-    
     reverse(v.begin(), v.end());
     
-    for(int &i: v) {
-        cout << i;
+    for(int i{}; i < n; i++) {
+        sum += v.at(i) * pow(a, i);
+    }
+    
+    while(sum != 0) {
+        result.push_back(sum%b);
+        sum /= b;
+    }
+    
+    reverse(result.begin(), result.end());
+    for(auto r: result) {
+            cout << r << " ";
     }
     cout << "\n";
-    
     
     return 0;
 }

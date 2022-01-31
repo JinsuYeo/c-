@@ -2,6 +2,8 @@
 
 using namespace std;
 
+long long arr[13];
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
@@ -10,14 +12,12 @@ int main() {
     int n{};
     cin >> n;
     
-    for(int i{2}; i <= n; i++) {
-        if(n%i == 0){
-            cout << i << "\n";
-            n /= i;
-            i = 1;
-        }
+    arr[0] = 1;
+    for (int i{1};  i <= n; i++) {
+        arr[i] = i*arr[i-1];
     }
     
+    cout << arr[n] <<"\n";
     
     return 0;
 }

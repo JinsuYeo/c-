@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include <algorithm>
 
 using namespace std;
@@ -9,18 +8,18 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
   
-    int n{}, count{};
-    cin >> n;
+    int n{}, m{}, fcount{}, tcount{}, count{};
+    cin >> n >> m;
     
-    for(int i{1}; i <= n; i++) {
-        int t = i;
-        while(t){
-            if(t%5 == 0) {
-                count++;
-                t /= 5;
-            } else break;
-        }
-    }
+    for(long long i{5}; i <= n; i*=5) fcount += n/i;
+    for(long long i{5}; i <= m; i*=5) fcount -= m/i;
+    for(long long i{5}; i <= n-m; i*=5) fcount -= (n-m)/i;
+    
+    for(long long i{2}; i <= n; i*=2) tcount += n/i;
+    for(long long i{2}; i <= m; i*=2) tcount -= m/i;
+    for(long long i{2}; i <= n-m; i*=2) tcount -= (n-m)/i;
+    
+    count = tcount < fcount ? tcount : fcount;
     
     cout << count << "\n";
     

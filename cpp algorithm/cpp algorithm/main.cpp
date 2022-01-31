@@ -1,41 +1,29 @@
 #include <iostream>
 
-int arr[100];
-
 using namespace std;
-   
+
+int arr[1000001];
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
+  
+    int a{}, b{};
+    cin >> a >> b;
     
-    int n{}, count{};
-    bool flag{};
-    cin >> n;
+    arr[0] = 1;
+    arr[1] = 1;
     
-    for(int i{}; i < n; i++) {
-        int t{};
-        cin >> t;
-        arr[i] = t;
-    }
-    
-    for(int i{}; i < n; i++) {
-        if(arr[i] == 2) {
-            count++;
-            continue;
-        } else if(arr[i] == 1) continue;
-        for(int j{2}; j < arr[i]; j++) {
-            if(arr[i]%j == 0){
-                flag = 1;
-                break;
-            }
+    for(int i{2}; i <= b; i++) {
+        for(int j{i*2}; j <= b; j += i) {
+            if(arr[j] == 0) arr[j] = 1;
         }
-        if(!flag) count++;
-        flag = 0;
     }
     
-    cout << count << "\n";
-   
+    for(int i{a}; i <= b; i++) {
+        if(arr[i] == 0) cout << i << "\n";
+    }
     
     return 0;
 }

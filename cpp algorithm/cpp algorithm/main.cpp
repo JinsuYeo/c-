@@ -8,15 +8,18 @@ using namespace std;
 int dc[1001];
 int bc[1001];
 int v;
+int matrix[1001][1001];
+
 vector<int> arr[1001];
 
 void dfs(int x) {
     if(dc[x]) return;
     dc[x] = true;
     cout << x << " ";
-    for(int i{}; i < arr[x].size(); i++) {
-        int y = arr[x][i];
-        dfs(y);
+    for(int i{1}; i <= v; i++) {
+        if(matrix[x][i] && !dc[i]) {
+            dfs(i);
+        }
     }
 }
 
@@ -29,11 +32,10 @@ void bfs(int start) {
         int x = q.front();
         q.pop();
         cout << x << " ";
-        for (int i{}; i < arr[x].size(); i++) {
-            int y = arr[x][i];
-            if(!bc[y]) {
-                bc[y] = true;
-                q.push(y);
+        for (int i{1}; i <= v; i++) {
+            if(matrix[x][i] && !bc[i]) {
+                bc[i] = true;
+                q.push(i);
             }
         }
     }
@@ -50,10 +52,8 @@ int main() {
     for(int i{}; i < e; i++) {
         int x, y;
         cin >> x >> y;
-        arr[x].push_back(y);
-        arr[y].push_back(x);
-        sort(arr[x].begin(), arr[x].end());
-        sort(arr[y].begin(), arr[y].end());
+        matrix[x][y] = 1;
+        matrix[y][x] = 1;
     }
     
     dfs(s);

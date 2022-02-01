@@ -1,31 +1,42 @@
 #include <iostream>
 #include <algorithm>
+#include <vector>
+#include <queue>
 
 using namespace std;
 
-int seg[2000000];
+int dc[1001];
+int bc[1001];
+int v;
+vector<int> arr[1001];
 
-int init(int node, int start, int end) {
-    if(start == end) return seg[node] = 1;
-    int mid = (start + end) / 2;
-    return seg[node] = init(node * 2, start, mid) + init(node*2 + 1, mid + 1, end);
-}
-
-int update(int node, int start, int end, int order) {
-    seg[node]--;
-    if(start == end) return 0;
-    else {
-        int mid = (start + end) / 2;
-        if(order <= mid) return update(2 * node, start, mid, order);
-        else return update(2 * node + 1, mid + 1, end, order);
+void dfs(int x) {
+    if(dc[x]) return;
+    dc[x] = true;
+    cout << x << " ";
+    for(int i{}; i < arr[x].size(); i++) {
+        int y = arr[x][i];
+        dfs(y);
     }
 }
 
-int query(int node, int start, int end, int order) {
-    if (start == end) return start;
-    int mid = (start + end) / 2;
-    if(order <= seg[2 * node]) return query(2 * node, start, mid, order);
-    else return query(2 * node + 1, mid + 1, end, order - seg[2 * node]);
+void bfs(int start) {
+    queue<int> q;
+    q.push(start);
+    bc[start] = true;
+    
+    while (!q.empty()) {
+        int x = q.front();
+        q.pop();
+        cout << x << " ";
+        for (int i{}; i < arr[x].size(); i++) {
+            int y = arr[x][i];
+            if(!bc[y]) {
+                bc[y] = true;
+                q.push(y);
+            }
+        }
+    }
 }
 
 int main() {
@@ -33,30 +44,21 @@ int main() {
     cin.tie(NULL);
     cout.tie(NULL);
     
-    int n{}, k{};
-    cin >> n >> k;
+    int s{}, e{};
     
-    init(1, 1, n);
-    
-    int index = 1;
-    
-    cout << "<";
-    
-    for(int i{}; i < n; i++) {
-        int size = n - i;
-        index += k - 1;
-        
-        if(index%size == 0) index = size;
-        else if(index > size) index %= size;
-        
-        int num = query(1, 1, n, index);
-        
-        update(1, 1, n, num);
-        
-        if (i == n-1) cout << num << ">";
-        else cout << num << ", ";
+    cin >> v >> e >> s;
+    for(int i{}; i < e; i++) {
+        int x, y;
+        cin >> x >> y;
+        arr[x].push_back(y);
+        arr[y].push_back(x);
+        sort(arr[x].begin(), arr[x].end());
+        sort(arr[y].begin(), arr[y].end());
     }
     
+    dfs(s);
+    cout << "\n";
+    bfs(s);
     
     return 0;
 }

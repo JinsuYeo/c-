@@ -2,26 +2,58 @@
 #include <string>
 #include <vector>
 
-// 템플릿 클래스는 일반적으로 cpp 파일 없이 헤더파일에 완전히 포함됨.
-// -> blueprint이기 때문에 컴파일러가 컴파일 x, 컴파일러가 템플릿 클래스 사용해서 특정 버전의 클래스를 만들고 그것을 컴파일 함.
-// cpp 파일에 넣게되면 문제 발생 가능.
-template <typename T>
-class Item {
-private:
-    std::string name;
-    T value;
+template <typename T, int N>
+class Array {
+    int size {N};
+    T values[N];
+    
+    friend std::ostream &operator<<(std::ostream &os, const Array<T, N> &arr) {
+        os << "[ ";
+        for(const auto &val: arr.values)
+            os << val << " ";
+        os << "]" << std::endl;
+        return os;
+    }
 public:
-    Item(std::string name, T value): name{name}, value{value}
-    {}
-    std::string get_name() const {return name;}
-    T get_value() const {return value;}
+    Array() = default;
+    Array(T init_val) {
+        for(auto &item: values)
+            item = init_val;
+    }
+    void fill(T val) {
+        for(auto &item: values)
+            item = val;
+    }
+    int get_size(){
+        return size;
+    }
+    
+    T &operator[](int index) {
+        return values[index];
+    }
 };
 
-template <typename T1, typename T2>
-struct My_pair{
-    T1 first;
-    T2 second;
-};
+
+//// 템플릿 클래스는 일반적으로 cpp 파일 없이 헤더파일에 완전히 포함됨.
+//// -> blueprint이기 때문에 컴파일러가 컴파일 x, 컴파일러가 템플릿 클래스 사용해서 특정 버전의 클래스를 만들고 그것을 컴파일 함.
+//// cpp 파일에 넣게되면 문제 발생 가능.
+//template <typename T>
+//class Item {
+//private:
+//    std::string name;
+//    T value;
+//public:
+//    Item(std::string name, T value): name{name}, value{value}
+//    {}
+//    std::string get_name() const {return name;}
+//    T get_value() const {return value;}
+//};
+//
+//template <typename T1, typename T2>
+//struct My_pair{
+//    T1 first;
+//    T2 second;
+//};
 
 
 //template <typename T>
@@ -55,35 +87,65 @@ struct My_pair{
 //}
 
 int main(int argc, const char * argv[]) {
-    Item<int> item1 {"Frank", 100};
-    std::cout << item1.get_name() << " " << item1.get_value() << std::endl;
+    Array<int, 5> nums;
+    std::cout << "The size of nums is: " << nums.get_size() << std::endl;
+    std::cout << nums << std::endl;
     
-    Item<std::string> item2 {"Frank", "Professor"};
-    std::cout << item2.get_name() << " " << item2.get_value() << std::endl;
+    nums.fill(0);
+    std::cout << "The size of nums is: " << nums.get_size() << std::endl;
+    std::cout << nums << std::endl;
     
-    Item<Item<std::string>> item3 {"Frank", {"C++", "Professor"}};
-    std::cout << item3.get_name() << " "
-              << item3.get_value().get_name() << " "
-              << item3.get_value().get_value() << std::endl;
+    nums.fill(10);
+    std::cout << nums << std::endl;
     
-    std::cout << "\n";
+    nums[0] = 1000;
+    nums[3] = 2000;
+    std::cout << nums << std::endl;
+
+    Array<int, 100> nums2 {1};
+    std::cout << "The size of nums2 is: " << nums2.get_size() << std::endl;
+    std::cout << nums2 << std::endl;
     
-    std::vector<Item<double>> vec {};
-    vec.push_back(Item<double> {"Larry", 100.0});
-    vec.push_back(Item<double> {"Moe", 200.0});
-    vec.push_back(Item<double> {"Curly", 300.0});
+    Array<std::string, 10> strings(std::string{"Frank"});
+    std::cout << "The size of strings is: " << strings.get_size() << std::endl;
+    std::cout << strings << std::endl;
     
-    for(const auto &item: vec) {
-        std::cout << item.get_name() << " " << item.get_value() << std::endl;
-    }
+    strings[0] = std::string{"Larry"};
+    std::cout << strings << std::endl;
+
+    strings.fill("X");
+    std::cout << strings << std::endl;
     
-    std::cout << "\n";
     
-    My_pair<std::string, int> p1 {"Frank", 100};
-    My_pair<int, double> p2 {124, 13.6};
-    
-    std::cout << p1.first << ", " << p1.second << std::endl;
-    std::cout << p2.first << ", " << p2.second << std::endl;
+//    Item<int> item1 {"Frank", 100};
+//    std::cout << item1.get_name() << " " << item1.get_value() << std::endl;
+//
+//    Item<std::string> item2 {"Frank", "Professor"};
+//    std::cout << item2.get_name() << " " << item2.get_value() << std::endl;
+//
+//    Item<Item<std::string>> item3 {"Frank", {"C++", "Professor"}};
+//    std::cout << item3.get_name() << " "
+//              << item3.get_value().get_name() << " "
+//              << item3.get_value().get_value() << std::endl;
+//
+//    std::cout << "\n";
+//
+//    std::vector<Item<double>> vec {};
+//    vec.push_back(Item<double> {"Larry", 100.0});
+//    vec.push_back(Item<double> {"Moe", 200.0});
+//    vec.push_back(Item<double> {"Curly", 300.0});
+//
+//    for(const auto &item: vec) {
+//        std::cout << item.get_name() << " " << item.get_value() << std::endl;
+//    }
+//
+//    std::cout << "\n";
+//
+//    My_pair<std::string, int> p1 {"Frank", 100};
+//    My_pair<int, double> p2 {124, 13.6};
+//
+//    std::cout << p1.first << ", " << p1.second << std::endl;
+//    std::cout << p2.first << ", " << p2.second << std::endl;
     
 //    int x{100};
 //    int y{200};

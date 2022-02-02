@@ -53,3 +53,32 @@ STL은 일반적으로 사용되는 컨테이너 모음임. 세가지 주요 구
     
     - 범위 기반 for loop도 뒤에서 iterator 기반 루프로 변환되어서 사용됨.   
     ex) for(auto it = vec.begin(); it != vec.end(); i++) { cout << *it << " "; }   
+
+
+## STL Algorithm
+ - STL Algorithm은 iterator가 제공하는(or iterator에 의해 제공되는) 컨테이너 element 들의 시퀀스에서 작동함.   
+ 
+ - 매우 많은 알고리즘과 그 변형들이 있음. cppreference.com과 같은 온라인에서 자세한 정보 얻을 수 있음.   
+ 
+ - STL의 많은 알고리즘들은 사용하기 위해 프로그래머가 추가 정보를 제공해야함.    
+ -> 3가지 방법으로 제공 가능.   
+1. Functor(function object).   
+2. Function pointer.    
+3. Lamda expression(C++11).
+    모던 c++에서는 람다를 사용하는 추세임.
+    
+ - #include <algorithm> 로 헤더파일 포함해주어야 함.
+ 
+ - 컨테이너들은 각기 다른 타입의 알고리즘을 지원함.   
+ -> 알고리즘은 iterator에 의존하기 때문에, iterator가 특정 컨테이너에 사용할 수 있는 알고리즘 타입을 결정함.   
++ 모든 알고리즘은 iterator가 인자로 들어옴. 인자로 들어오는 iterator가 컨테이너에서 얻어지는 시퀀스를 결정함.
+
+- iterator invalidation   
+iterator는 컨테이너의 요소를 가리킴.   
+-> 처리되는 동안 이터레이터가 무효화 될 수 있음.   
+ex) vector를 반복하는 도중에 clear()로 벡터 지워버린다면? iterator는 벡터가 지워진 것 모르기 때문에 반복이 계속됨(벡터의 끝에 도달할 때 까지).
+그러나 이것은 더 이상 유효하지 않음.
+
+
+
+

@@ -1,177 +1,119 @@
 #include <iostream>
-#include <string>
 #include <vector>
+#include <set>
+#include <map>
+#include <list>
+#include <string>
 
-template <typename T, int N>
-class Array {
-    int size {N};
-    T values[N];
+void display(const std::vector<int> &vec)  {
+    std::cout << "[ ";
+    for(auto const &i: vec) std::cout << i << " ";
+    std::cout << "]" << std::endl;
+}
+
+void test1() {
+    std::cout << "\n=========================" << std::endl;
+    std::vector<int> nums1 {1, 2, 3, 4, 5};
+    auto it = nums1.begin(); // point to 1
+    std::cout << *it << std::endl;
     
-    friend std::ostream &operator<<(std::ostream &os, const Array<T, N> &arr) {
-        os << "[ ";
-        for(const auto &val: arr.values)
-            os << val << " ";
-        os << "]" << std::endl;
-        return os;
+    it++;                   // point to 2
+    std::cout << *it << std::endl;
+    
+    it += 2;                // point to 4
+    std::cout << *it << std::endl;
+
+    it -= 2;                // point to 2
+    std::cout << *it << std::endl;
+
+    it = nums1.end() - 1;    // point to 5
+    std::cout << *it << std::endl;
+}
+
+void test2() {
+    std::cout << "\n=========================" << std::endl;
+    
+    std::vector<int> nums1 {1, 2, 3, 4, 5};
+    
+    std::vector<int>::iterator it = nums1.begin();
+    while (it != nums1.end()) {
+        std::cout << *it << std::endl;
+        it++;
     }
-public:
-    Array() = default;
-    Array(T init_val) {
-        for(auto &item: values)
-            item = init_val;
-    }
-    void fill(T val) {
-        for(auto &item: values)
-            item = val;
-    }
-    int get_size(){
-        return size;
+    
+    it = nums1.begin();
+    while (it != nums1.end()) {
+        *it = 0;
+        it++;
     }
     
-    T &operator[](int index) {
-        return values[index];
+    display(nums1);
+}
+
+void test3() {
+    std::cout << "\n=========================" << std::endl;
+    
+    std::vector<int> nums1 {1, 2, 3, 4, 5};
+    
+    std::vector<int>::const_iterator it1 = nums1.begin();
+    // auto it1 = nums1.cbegin();
+    
+    while (it1 != nums1.end()) {
+        std::cout << *it1 << std::endl;
+        it1++;
     }
-};
-
-
-//// 템플릿 클래스는 일반적으로 cpp 파일 없이 헤더파일에 완전히 포함됨.
-//// -> blueprint이기 때문에 컴파일러가 컴파일 x, 컴파일러가 템플릿 클래스 사용해서 특정 버전의 클래스를 만들고 그것을 컴파일 함.
-//// cpp 파일에 넣게되면 문제 발생 가능.
-//template <typename T>
-//class Item {
-//private:
-//    std::string name;
-//    T value;
-//public:
-//    Item(std::string name, T value): name{name}, value{value}
-//    {}
-//    std::string get_name() const {return name;}
-//    T get_value() const {return value;}
-//};
-//
-//template <typename T1, typename T2>
-//struct My_pair{
-//    T1 first;
-//    T2 second;
-//};
-
-
-//template <typename T>
-//T min(T a, T b) {
-//    return (a < b) ? a : b;
-//}
-//
-//template <typename T1, typename T2>
-//void func(T1 a, T2 b){
-//    std::cout << a << " " << b << std::endl;
-//}
-//
-//struct Person {
-//    std::string name;
-//    int age;
-//    bool operator<(const Person &rhs) const {
-//        return this->age < rhs.age;
-//    }
-//};
-//
-//std::ostream &operator<<(std::ostream &os, const Person &rhs) {
-//    os << rhs.name;
-//    return os;
-//}
-//
-//template<typename T>
-//void my_swap(T &a, T &b) {
-//    T temp = a;
-//    a = b;
-//    b = temp;
-//}
-
-int main(int argc, const char * argv[]) {
-    Array<int, 5> nums;
-    std::cout << "The size of nums is: " << nums.get_size() << std::endl;
-    std::cout << nums << std::endl;
     
-    nums.fill(0);
-    std::cout << "The size of nums is: " << nums.get_size() << std::endl;
-    std::cout << nums << std::endl;
+    it1 = nums1.begin();
+    while (it1 != nums1.end()) {
+//        *it1 = 0; // Compiler error - read only
+        it1++;
+    }
     
-    nums.fill(10);
-    std::cout << nums << std::endl;
-    
-    nums[0] = 1000;
-    nums[3] = 2000;
-    std::cout << nums << std::endl;
+    display(nums1);
+}
 
-    Array<int, 100> nums2 {1};
-    std::cout << "The size of nums2 is: " << nums2.get_size() << std::endl;
-    std::cout << nums2 << std::endl;
+void test4() {
+    std::vector<int> vec {1, 2, 3, 4};
+    auto it1 = vec.rbegin();
+    while (it1 != vec.rend()) {
+        std::cout << *it1 << std::endl;
+        it1++;
+    }
     
-    Array<std::string, 10> strings(std::string{"Frank"});
-    std::cout << "The size of strings is: " << strings.get_size() << std::endl;
-    std::cout << strings << std::endl;
+    std::list<std::string> name {"Larry", "Moe", "Curly"};
+    auto it2 = name.crbegin();
+    std::cout << *it2 << std::endl;
+    it2++;
+    std::cout << *it2 << std::endl;
     
-    strings[0] = std::string{"Larry"};
-    std::cout << strings << std::endl;
+    std::map<std::string, std::string> favorite {
+        {"Frank", "C++"},
+        {"Bill", "Java"},
+        {"James", "Haskell"}
+    };
+    auto it3 = favorite.begin();
+    while (it3 != favorite.end()) {
+        std::cout << it3->first << ": " << it3->second << std::endl;
+        it3++;
+    }
+}
 
-    strings.fill("X");
-    std::cout << strings << std::endl;
+void test5() {
+    std::vector<int> vec {1, 2, 3, 4, 5 ,6 ,7, 8, 9, 10};
+    auto start = vec.begin() + 2;
+    auto finish = vec.end() - 3;
     
+    while(start != finish) {
+        std::cout << *start << std::endl;
+        start++;
+    }
+}
+int main(){
+    test1();
+    test2();
+    test3();
+    test4();
+    test5();
     
-//    Item<int> item1 {"Frank", 100};
-//    std::cout << item1.get_name() << " " << item1.get_value() << std::endl;
-//
-//    Item<std::string> item2 {"Frank", "Professor"};
-//    std::cout << item2.get_name() << " " << item2.get_value() << std::endl;
-//
-//    Item<Item<std::string>> item3 {"Frank", {"C++", "Professor"}};
-//    std::cout << item3.get_name() << " "
-//              << item3.get_value().get_name() << " "
-//              << item3.get_value().get_value() << std::endl;
-//
-//    std::cout << "\n";
-//
-//    std::vector<Item<double>> vec {};
-//    vec.push_back(Item<double> {"Larry", 100.0});
-//    vec.push_back(Item<double> {"Moe", 200.0});
-//    vec.push_back(Item<double> {"Curly", 300.0});
-//
-//    for(const auto &item: vec) {
-//        std::cout << item.get_name() << " " << item.get_value() << std::endl;
-//    }
-//
-//    std::cout << "\n";
-//
-//    My_pair<std::string, int> p1 {"Frank", 100};
-//    My_pair<int, double> p2 {124, 13.6};
-//
-//    std::cout << p1.first << ", " << p1.second << std::endl;
-//    std::cout << p2.first << ", " << p2.second << std::endl;
-    
-//    int x{100};
-//    int y{200};
-//    std::cout << x << ", " << y << std::endl;
-//    my_swap(x, y);
-//    std::cout << x << ", " << y << std::endl;
-//
-//    Person p1 {"Curly", 50};
-//    Person p2 {"Moe", 30};
-//
-//    Person p3 = min(p1, p2);
-//    std::cout << p3.name << " is younger" << std::endl;
-//
-//    std::cout << min<int>(2, 3) << std::endl;
-//    std::cout << min(2, 3) << std::endl;
-//    std::cout << min('A', 'B') << std::endl;
-//    std::cout << min(12.5, 9.2) << std::endl;
-//    std::cout << min(5+2*2, 7+40) << std::endl; // 매크로 사용과 다른 부분, 전처리기가 아닌 컴파일러가 처리. c++ 문법을 이해함.
-//
-//    func<int, int>(10, 20);
-//    func(10, 20);
-//    func<char, double>('A', 12.4);
-//    func('A', 12.4);
-//    func(1000, "Testing");
-//    func(2000, std::string("Frank"));
-//    func(p1, p2);
-
     return 0;
 }

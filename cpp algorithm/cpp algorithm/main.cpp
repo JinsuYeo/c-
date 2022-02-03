@@ -5,42 +5,32 @@
 
 using namespace std;
 
-char color[20001];
-int v, e, n;
-char cur;
-string bi {"YES"};
-vector<int> arr[20001];
+char visited[1001];
+int v, e, n, c;
+int p[1001];
+vector<int> arr[1001];
 
 void clear() {
-    for(int i{0}; i <= 20000; i++) {
-        color[i] = 0;
+    for(int i{0}; i < 1001; i++) {
+        visited[i] = 0;
         arr[i].clear();
+        c = 0;
     }
-    bi = "YES";
 }
 
-void dfs(int start, char col) {
-    if(color[start] != 0)
+void dfs(int start) {
+    if(visited[start] != 0)
         return;
     
-    color[start] = col;
-    
-    if (col == 'r') {
-        col = 'b';
-    } else {
-        col = 'r';
-    }
+    visited[start] = true;
     
     for(int i{}; i < arr[start].size(); i++) {
         int x = arr[start][i];
-        if(color[x] != 0 && color[x] == color[start]){
-            bi = "NO";
-            break;
-        } else if(color[x] == 0){
-            dfs(x, col);
-        }
+        if(!visited[x])
+            dfs(x);
     }
 }
+
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -51,20 +41,22 @@ int main() {
     cin >> n;
     
     for(int i{}; i < n; i++) {
-        cin >> v >> e;
-        for(int j{}; j < e; j++) {
-            int x, y;
-            cin >> x >> y;
-            arr[x].push_back(y);
-            arr[y].push_back(x);
+        cin >> v;
+        e = v;
+        for(int j{1}; j <= e; j++) {
+            cin >> p[j];
+        }
+        for(int j{1}; p[j] != 0; j++) {
+            arr[j].push_back(p[j]);
+            arr[p[j]].push_back(j);
         }
         for(int j{1}; j <= v; j++) {
-            if(!color[j] && !arr[j].empty()){
-                dfs(j, 'r');
+            if(!visited[j]){
+                dfs(j);
+                c++;
             }
-                
         }
-        cout << bi << "\n";
+        cout << c << "\n";
         clear();
     }
     

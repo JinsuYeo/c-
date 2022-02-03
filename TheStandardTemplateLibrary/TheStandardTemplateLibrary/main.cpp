@@ -1,130 +1,146 @@
-// Section 20
-// Algorithms
 #include <iostream>
-#include <vector>
-#include <list>
+#include <array>
 #include <algorithm>
-#include <cctype>
+#include <numeric>  // for more algorithms like accumulate
 
-class Person {
-    std::string name;
-    int age;
-public:
-    Person() = default;
-    Person(std::string name, int age)
-        : name{name}, age{age}  {}
-    bool operator<(const Person &rhs) const {
-        return this->age < rhs.age;
-    }
-    bool operator==(const Person &rhs) const {
-        return (this->name == rhs.name && this->age == rhs.age);
-    }
-};
+// Display the array -- note the size MUST be included
+// when passing a std::array to a function
+void display(const std::array<int, 5> &arr) {
+    std::cout << "[ ";
+    for (const auto &i: arr)
+        std::cout << i << " ";
+    std::cout <<  "]"<< std::endl;
+}
 
-// Find an element in a container
-void find_test() {
-    std::cout << "\n========================" << std::endl;
-
-    std::vector<int> vec {1,2,3,4,5};
+void test1() {
+    std::cout << "\nTest1 =========================" << std::endl;
+    std::array<int, 5> arr1 {1,2,3,4,5};     // double {{ }} if C++ 11
+    std::array<int, 5> arr2;
     
-    auto loc = std::find(std::begin(vec), std::end(vec), 1);
-    
-    if (loc != std::end(vec))
-        std::cout << "Found the number: " << *loc <<  std::endl;
-    else
-        std::cout << "Couldn't find the number" << std::endl;
+    display(arr1);
+    display(arr2);          // Elements are not initialized (contain 'garbage')
         
-    std::list<Person> players {
-        {"Larry", 18},
-        {"Moe", 20},
-        {"Curly", 21}
-    };
+    arr2  = {10,20,30,40,50};
+
+    display(arr1);
+    display(arr2);
     
-    auto loc1 = std::find(players.begin(), players.end(), Person{"Moe", 20});
-    if (loc1 != players.end())
-        std::cout << "Found  Moe" << std::endl;
+    std::cout << "Size of arr1 is: " << arr1.size() << std::endl;       //5
+    std::cout << "Size of arr2 is: " << arr2.size() << std::endl;       //5
+    
+    arr1[0] = 1000;
+    arr1.at(1) = 2000;
+    display(arr1);
+
+    std::cout << "Front of arr2: " << arr2.front() << std::endl;        // 10
+    std::cout << "Back of arr2: " << arr2.back() << std::endl;          // 50
+}
+ 
+void test2() {
+    std::cout << "\nTest2 =========================" << std::endl;
+    std::array<int, 5> arr1 {1,2,3,4,5};     // double {{ }} is C++ 11
+    std::array<int, 5> arr2 {10,20,30,40,50};
+    
+    display(arr1);
+    display(arr2);
+    
+    arr1.fill(0);
+    
+    display(arr1);
+    display(arr2);
+    
+    arr1.swap(arr2);
+    
+    display(arr1);
+    display(arr2);
+}
+
+void test3() {
+    std::cout << "\nTest3 =========================" << std::endl;
+
+    std::array<int, 5> arr1 {1,2,3,4,5};     // double {{ }} is C++ 11
+
+    int *ptr = arr1.data();
+    std::cout << ptr << std::endl;
+    *ptr = 10000;
+    
+    display(arr1);
+}
+
+void test4() {
+    std::cout << "\nTest4 =========================" << std::endl;
+
+    std::array<int, 5> arr1 {2,1,4,5,3};     // double {{ }} is C++ 11
+    display(arr1);
+    
+    std::sort(arr1.begin(), arr1.end());
+    display(arr1);
+}
+
+void test5() {
+    std::cout << "\nTest5 =========================" << std::endl;
+
+    std::array<int, 5> arr1 {2,1,4,5,3};     // double {{ }} is C++ 11
+
+    std::array<int,5>::iterator min_num = std::min_element(arr1.begin(), arr1.end());
+    auto max_num = std::max_element(arr1.begin(), arr1.end());
+    std::cout << "min: " << *min_num << " , max: " << *max_num << std::endl;
+}
+
+void test6() {
+    std::cout << "\nTest6 =========================" << std::endl;
+
+    std::array<int, 5> arr1 {2,1,3,3,5};     // double {{ }} is C++ 11
+
+    auto adjacent = std::adjacent_find(arr1.begin(), arr1.end());
+    if (adjacent != arr1.end())
+        std::cout << "Adjacent element found with value: " << *adjacent << std::endl;
     else
-        std::cout << "Moe not found" << std::endl;
+        std::cout << "No adjacent elements found" << std::endl;
 }
 
-// Count the number of elements in a container
-void count_test() {
-    std::cout << "\n========================" << std::endl;
+void test7() {
+    std::cout << "\nTest7 =========================" << std::endl;
 
-     std::vector<int> vec {1,2,3,4,5,1,2,1};
-     
-     long num = std::count(vec.begin(), vec.end(), 1);
-     std::cout << num << " occurrences found" << std::endl;
+       //accumulate is from #include <numeric>
+    std::array<int, 5> arr1 {1,2,3,4,5};     // double {{ }} is C++ 11
+
+    int sum = std::accumulate(arr1.begin(), arr1.end(), 0);
+    std::cout << "Sum of the elements in arr1 is: " << sum << std::endl;
 }
 
-// Count the number of occurences of an element in a container
-// based on a predicate using a lambda expression
-
-void count_if_test() {
-    std::cout << "\n========================" << std::endl;
-
-    // count only if the element is even
-    std::vector<int> vec {1,2,3,4,5,1,2,1,100};
-    long num = std::count_if(vec.begin(), vec.end(), [](int x) { return x %2 == 0; });
-    std::cout << num << " even numbers found" << std::endl;
+void test8() {
+    std::cout << "\nTest8 =========================" << std::endl;
+    std::array<int, 10> arr1 {1,2,3,1,2,3,3,3,3,3};
     
-    num = std::count_if(vec.begin(), vec.end(), [](int x) { return x %2 != 0; });
-    std::cout << num << " odd numbers found" << std::endl;
+    long count = std::count(arr1.begin(), arr1.end(), 3);
+    std::cout << "Found 3 : " << count << " times" << std::endl;
+}
+
+void test9() {
+    std::cout << "\nTest9 =========================" << std::endl;
+    std::array<int, 10> arr1 {1, 2, 3, 50, 60, 70, 80, 200, 300 ,400};
+    // find how many numbers are between 10 and 200 ->  50,60,70,80
     
-    // how can we determine how many elements in vec are >= 5?
-    num = std::count_if(vec.begin(), vec.end(), [](int x) { return x>=5;   });
-    std::cout << num << "  numbers are >= 5" << std::endl;
-
+    long count = std::count_if(arr1.begin(), arr1.end(),
+                                            [](int x) { return x>10 && x<200; });
+                                            
+    std::cout << "Found  " << count << " matches" << std::endl;
 }
 
-// Replace occurrences of elements in a container
-void replace_test() {
-    std::cout << "\n========================" << std::endl;
 
-     std::vector<int> vec {1,2,3,4,5,1,2,1};
-     for (auto i: vec) {
-         std::cout << i << " ";
-     }
-     std::cout << std::endl;
-     
-    std::replace(vec.begin(), vec.end(), 1, 100);
-    for (auto i: vec) {
-         std::cout << i << " ";
-     }
-    std::cout << std::endl;
-}
+int main()  {
 
-void all_of_test() {
-    std::vector<int> vec1 {1,3,5,7,9,1,3,13,19,5};
-    if (std::all_of(vec1.begin(), vec1.end(), [](int x) { return x > 10; }))
-        std::cout << "All the elements are > 10" << std::endl;
-    else
-        std::cout << "Not all the elements are > 10" << std::endl;
+    test1();
+    test2();
+    test3();
+    test4();
+    test5();
+    test6();
+    test7();
+    test8();
+    test9();
     
-    if (std::all_of(vec1.begin(), vec1.end(), [](int x) { return x < 20; }))
-        std::cout << "All the elements are < 20" << std::endl;
-    else
-        std::cout << "Not all the elements are < 20" << std::endl;
-}
-
-// Transform elements in a container - string in this example
-void string_transform_test() {
-    std::cout << "\n========================" << std::endl;
-
-    std::string str1 {"This is a test"};
-    std::cout << "Before transform: " << str1 << std::endl;
-    std::transform(str1.begin(), str1.end(), str1.begin(), ::toupper);
-    std::cout << "After transform: " << str1 << std::endl;
-}
-
-int main() {
-    find_test();
-    count_test();
-    count_if_test();
-    replace_test();
-    all_of_test();
-    string_transform_test();
-
     return 0;
 }
 

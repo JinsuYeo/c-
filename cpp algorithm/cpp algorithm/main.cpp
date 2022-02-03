@@ -1,65 +1,39 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <queue>
+#include <string>
+#include <cmath>
 
 using namespace std;
 
-char visited[1001];
-int v, e, n, c;
-int p[1001];
-vector<int> arr[1001];
-
-void clear() {
-    for(int i{0}; i < 1001; i++) {
-        visited[i] = 0;
-        arr[i].clear();
-        c = 0;
-    }
-}
-
-void dfs(int start) {
-    if(visited[start] != 0)
-        return;
-    
-    visited[start] = true;
-    
-    for(int i{}; i < arr[start].size(); i++) {
-        int x = arr[start][i];
-        if(!visited[x])
-            dfs(x);
-    }
-}
-
+vector<int> d;
+int a, p;
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL);
     
-    clear();
-    cin >> n;
+    cin >> a >> p;
     
-    for(int i{}; i < n; i++) {
-        cin >> v;
-        e = v;
-        for(int j{1}; j <= e; j++) {
-            cin >> p[j];
+    d.push_back(a);
+    while(1) {
+        bool flag = false;
+        string s = to_string(d.back());
+        int sum{};
+        for(int i{}; i < s.length(); i++) {
+            int t = s.at(i) - '0';
+            sum += pow(t, p);
         }
-        for(int j{1}; p[j] != 0; j++) {
-            arr[j].push_back(p[j]);
-            arr[p[j]].push_back(j);
-        }
-        for(int j{1}; j <= v; j++) {
-            if(!visited[j]){
-                dfs(j);
-                c++;
+        for(int i{}; i < d.size(); i++) {
+            if(d.at(i) == sum) {
+                cout << i << "\n";
+                flag = true;
             }
         }
-        cout << c << "\n";
-        clear();
+        d.push_back(sum);
+        if(flag) break;
     }
-    
     
     return 0;
 }

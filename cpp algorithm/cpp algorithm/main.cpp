@@ -1,60 +1,48 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <array>
+#include <cstdio>
 
 using namespace std;
 
-int c, n, counter, start;
-array<int, 100001> visited;
-array<int, 100001> g;
-array<int, 100001> done;
+int n, c;
+int arr[26][26];
+bool visited[26][26];
+vector<int> cv;
 
-void clear(){
-    for(int i{1}; i <= n; i++) {
-        visited[i] = 0;
-        done[i] = 0;
-        g[i] = 0;
-        counter = 0;
-    }
-}
-
-void dfs(int x){
-    visited[x] = 1;
-    
-    int y = g[x];
-    
-    if(!visited[y]) dfs(y);
-    else if (!done[y]) {
-        for(int i{y}; i != x; i = g[i])
-            counter++;
-        counter++;
-    }
-    
-    done[x] = 1;
+void dfs(int i, int j){
+    visited[i][j] = 1;
+    c++;
+    if(j > 1 && arr[i][j-1] == 1 && !visited[i][j-1]) dfs(i, j-1);
+    if(j < n && arr[i][j+1] == 1 && !visited[i][j+1]) dfs(i, j+1);
+    if(i > 1 && arr[i-1][j] == 1 && !visited[i-1][j]) dfs(i-1, j);
+    if(i < n && arr[i+1][j] == 1 && !visited[i+1][j]) dfs(i+1, j);
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
-    cin >> c;
-    for(int i{1}; i <= c; i++) {
-        cin >> n;
-        counter = 0;
+    cin >> n;
+    for(int i{1}; i <= n; i++) {
         for(int j{1}; j <= n; j++) {
-            cin >> g[j];
+            scanf("%1d", &arr[i][j]);
         }
-        
-        for(int j{1}; j <= n; j++) {
-            if(!visited[j])
-                dfs(j);
-        }
-        cout << n - counter << "\n";
-        clear();
     }
     
+    for(int i{1}; i <= n; i++) {
+        for(int j{1}; j <= n; j++) {
+            if(!visited[i][j] && arr[i][j] == 1) {
+                dfs(i, j);
+                cv.push_back(c);
+                c = 0;
+            }
+        }
+    }
+    
+    sort(cv.begin(), cv.end());
+    
+    cout << cv.size() << "\n";
+    for(int i{}; i < cv.size(); i++) {
+        cout << cv.at(i) << "\n";
+    }
    
     return 0;
 }

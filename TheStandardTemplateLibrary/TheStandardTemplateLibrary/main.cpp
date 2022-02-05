@@ -1,7 +1,5 @@
 #include <iostream>
-#include <list>
-#include <algorithm>
-#include <iterator> // for std::advance
+#include <set>
 
 class Person {
     friend std::ostream &operator<<(std::ostream &os, const Person &p);
@@ -24,9 +22,8 @@ std::ostream &operator<<(std::ostream &os, const Person &p) {
     return os;
 }
 
-
 template <typename T>
-void display(const std::list<T> &l) {
+void display(const std::set<T> &l) {
     std::cout << "[ ";
     for (const auto &elem: l) {
         std::cout << elem << " ";
@@ -35,130 +32,88 @@ void display(const std::list<T> &l) {
 }
 
 void test1() {
+    // Sets
     std::cout << "\nTest1 =========================" << std::endl;
+    std::set<int> s1 {1, 4, 3, 5, 2};
+    display(s1);
+    
+    s1 = {1,2,3,1,1,2,2,3,3,4,5};
+    display(s1);
+    
+    s1.insert(0);
+    s1.insert(10);
+    
+    display(s1);
+    
+    if (s1.count(10))
+        std::cout << "10 is in the set" << std::endl;
+    else
+        std::cout << "10 is NOT in the set" << std::endl;
 
-    std::list<int> l1 {1,2,3,4,5};
-    display(l1);
+    auto it = s1.find(5);
+    if (it != s1.end())
+        std::cout << "Found: " << *it << std::endl;
+        
+    s1.clear();
     
-    std::list<std::string> l2;
-    l2.push_back("Back");
-    l2.push_front("Front");
-    display(l2);
-    
-    std::list<int> l3;
-    l3 = {1,2,3,4,5,6,7,8,9,10};
-    display(l3);
-    
-    std::list<int> l4 (10, 100);
-    display(l4);
+    display(s1);
 }
 
 void test2() {
     std::cout << "\nTest2 =========================" << std::endl;
+    std::set<Person> stooges {
+        {"Larry", 1},
+        {"Moe", 2},
+        {"Curly", 3}
+    };
+    display(stooges);           // Note the order of display!  operator<
 
-    std::list<int> l {1,2,3,4,5,6,7,8,9,10};
-    display(l);
-    std::cout << "Size: " << l.size() << std::endl;
+    stooges.emplace("James", 50);
+    display(stooges);
+
+    stooges.emplace("Frank", 50); // NO -- 50 already exists
+    display(stooges);
     
-    std::cout << "Front : " << l.front() << std::endl;
-    std::cout << "Back  : " << l.back() << std::endl;
+    auto it = stooges.find(Person{"Moe", 2});
+    if (it != stooges.end())
+        stooges.erase(it);
     
-    l.clear();
-    display(l);
-    std::cout << "Size: " << l.size() << std::endl;
+    display(stooges);
+    
+    it = stooges.find(Person("XXXX", 50));      // Will remove James!!!!
+                                                                     // uses operator<
+    if (it != stooges.end())
+        stooges.erase(it);
+    display(stooges);
 }
 
 void test3() {
     std::cout << "\nTest3 =========================" << std::endl;
+    
+    std::set<std::string> s {"A", "B", "C"};
+    display(s);
+    
+    auto result = s.insert("D");
+    display(s);
+    
+    std::cout << std::boolalpha;
+    std::cout << "first: " <<  *(result.first)<< std::endl;
+    std::cout  << "second: " << result.second << std::endl;
+    
+    std::cout << std::endl;
 
-    std::list<int> l {1,2,3,4,5,6,7,8,9,10};
-    display(l);
+    result = s.insert("A");
+    display(s);
     
-    l.resize(5);
-    display(l);
-    
-    l.resize(10);
-    display(l);
-    
-    std::list<Person> persons;
-    persons.resize(5);             // uses the Person default constructor
-    display(persons);
-    
+    std::cout << std::boolalpha;
+    std::cout << "first: " <<  *(result.first)<< std::endl;
+    std::cout  << "second: " << result.second << std::endl;
 }
-void test4() {
-    std::cout << "\nTest4 =========================" << std::endl;
-
-    std::list<int> l {1,2,3,4,5,6,7,8,9,10};
-    display(l);
-    auto it = std::find(l.begin(), l.end(), 5);
-    if (it != l.end()) {
-        l.insert(it, 100);
-    }
-    display(l);
-    
-    std::list<int> l2 {1000,2000,3000};
-    l.insert(it, l2.begin(), l2.end());
-    display(l);
-    
-    std::advance(it, -4);       // point to the 100
-    std::cout << *it << std::endl;
-    
-    l.erase(it);                    // remove the 100 - iterator becomes invalid
-    display(l);
-    
-}
-
-void test5() {
-    std::cout << "\nTest5 =========================" << std::endl;
-
-    std::list<Person>  stooges {
-        {"Larry", 18},
-        {"Moe", 25},
-        {"Curly", 17}
-    };
-    
-    display(stooges);
-    std::string name;
-    int age{};
-    std::cout << "\nEnter the name of the next stooge: ";
-    getline(std::cin, name);
-    std::cout << "Enter their age: ";
-    std::cin >> age;
-    
-    stooges.emplace_back(name, age);
-    display(stooges);
-    
-    // Insert Frank before Moe
-    auto it = std::find(stooges.begin(), stooges.end(), Person{"Moe", 25});
-    if (it != stooges.end())
-        stooges.emplace(it, "Frank", 18);
-    display(stooges);
-}
-
-void test6() {
-    std::cout << "\nTest6 =========================" << std::endl;
-    
-    std::list<Person>  stooges {
-        {"Larry", 18},
-        {"Moe", 25},
-        {"Curly", 17}
-    };
-    
-    display(stooges);
-    stooges.sort();
-    display(stooges);
-}
-
 
 int main() {
-    
     test1();
     test2();
     test3();
-    test4();
-    test5();
-    test6();
-    std::cout << std::endl;
     return 0;
 }
 

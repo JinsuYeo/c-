@@ -1,58 +1,64 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
-#include <cstring>
+#include <queue>
+#include <utility>
 
 using namespace std;
 
-int n, c;
-int arr[51][51];
-bool visited[51][51];
-vector<int> cv;
+int n, m, c, nc;
+int arr[1001][1001];
+int visited[1001][1001];
+queue<pair<int, int>> q;
 
-void dfs(int i, int j){
-    visited[i][j] = 1;
-    
-    if(j > 1 && arr[i][j-1] == 1 && !visited[i][j-1]) dfs(i, j-1);
-    if(j < n && arr[i][j+1] == 1 && !visited[i][j+1]) dfs(i, j+1);
-    if(i > 1 && arr[i-1][j] == 1 && !visited[i-1][j]) dfs(i-1, j);
-    if(i < n && arr[i+1][j] == 1 && !visited[i+1][j]) dfs(i+1, j);
-    if(i > 1 && j > 1 && arr[i-1][j-1] == 1 && !visited[i-1][j-1]) dfs(i-1, j-1);
-    if(i > 1 && j < n && arr[i-1][j+1] == 1 && !visited[i-1][j+1]) dfs(i-1, j+1);
-    if(i < n && j > 1 && arr[i+1][j-1] == 1 && !visited[i+1][j-1]) dfs(i+1, j-1);
-    if(i < n && j < n && arr[i+1][j+1] == 1 && !visited[i+1][j+1]) dfs(i+1, j+1);
-}
+int checki[4] = {0, 0, -1, 1};
+int checkj[4] = {-1, 1, 0, 0};
 
-int main() {
-    n = 51;
-    c = 0;
-    
-    int x, y;
-    cin >> x >> y;
-    while (!(x == 0 && y == 0)) {
-        for(int i{1}; i <= y; i++) {
-            for(int j{1}; j <= x; j++) {
-                cin >> arr[i][j];
-            }
-        }
-        
-        for(int i{1}; i <= y; i++) {
-            for(int j{1}; j <= x; j++) {
-                if(!visited[i][j] && arr[i][j] == 1) {
-                    c++;
-                    dfs(i, j);
+void bfs(){
+    long s = q.size();
+    while(s) {
+        int x, y;
+        x = q.front().first;
+        y = q.front().second;
+        q.pop();
+        s--;
+        for(int i{}; i < 4; i++) {
+            int ci = x + checki[i];
+            int cj = y + checkj[i];
+            
+            if(ci >= 1 && ci <= n && cj >= 1 && cj <= m) {
+                if(arr[ci][cj] == 0) {
+                    q.push(pair<int, int> {ci, cj});
+                    arr[ci][cj] = 1;
+                    nc--;
                 }
             }
         }
-    
-        cout << c << "\n";
-        
-        c = 0;
-        memset(visited, false, sizeof(visited));
-        memset(arr, false, sizeof(arr));
-        
-        cin >> x >> y;
     }
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    cin >> m >> n;
+    
+    for(int i{1}; i <= n; i++) {
+        for (int j{1}; j <= m; j++) {
+            cin >> arr[i][j];
+            if(arr[i][j] == 1) q.push(pair<int, int>{i, j});
+            if(arr[i][j] == 0) nc++;
+        }
+    }
+    
+    while(!q.empty()){
+        c++;
+        bfs();
+    }
+    c--;
+    
+    if(!nc) cout << c <<"\n";
+    else cout << -1 << "\n";
     
     return 0;
 }

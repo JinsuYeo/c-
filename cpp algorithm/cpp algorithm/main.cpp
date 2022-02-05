@@ -2,18 +2,19 @@
 #include <vector>
 #include <queue>
 #include <utility>
+#include <cstdio>
 
 using namespace std;
 
-int n, m, c, nc;
-int arr[1001][1001];
-int visited[1001][1001];
+int n, m, c, result;
+int arr[101][101];
+int visited[101][101];
 queue<pair<int, int>> q;
 
 int checki[4] = {0, 0, -1, 1};
 int checkj[4] = {-1, 1, 0, 0};
 
-void bfs(){
+bool bfs(){
     long s = q.size();
     while(s) {
         int x, y;
@@ -25,40 +26,41 @@ void bfs(){
             int ci = x + checki[i];
             int cj = y + checkj[i];
             
-            if(ci >= 1 && ci <= n && cj >= 1 && cj <= m) {
-                if(arr[ci][cj] == 0) {
+            if(ci >= 1 && ci <= n && cj >= 1 && cj <= m && !visited[ci][cj]) {
+                if(ci == n && cj == m) {
+                    c++;
+                    return true;
+                }
+                if(arr[ci][cj] == 1) {
                     q.push(pair<int, int> {ci, cj});
-                    arr[ci][cj] = 1;
-                    nc--;
+                    visited[ci][cj] = 1;
                 }
             }
         }
     }
+    return false;
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
-    cin >> m >> n;
+    cin >> n >> m;
     
     for(int i{1}; i <= n; i++) {
         for (int j{1}; j <= m; j++) {
-            cin >> arr[i][j];
-            if(arr[i][j] == 1) q.push(pair<int, int>{i, j});
-            if(arr[i][j] == 0) nc++;
+            scanf("%1d", &arr[i][j]);
         }
     }
     
+    q.push(pair<int, int>{1, 1});
+    visited[1][1] = 1;
+
     while(!q.empty()){
+        int end {};
         c++;
-        bfs();
+        end = bfs();
+        if(end) break;
     }
-    c--;
     
-    if(!nc) cout << c <<"\n";
-    else cout << -1 << "\n";
-    
+    cout << c <<"\n";
+     
     return 0;
 }

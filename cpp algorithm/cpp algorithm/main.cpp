@@ -2,65 +2,99 @@
 #include <vector>
 #include <queue>
 #include <utility>
-#include <cstdio>
+#include <cstring>
 
 using namespace std;
 
-int n, m, c, result;
+int n, c, result;
 int arr[101][101];
 int visited[101][101];
-queue<pair<int, int>> q;
+queue<pair<int, int>> isIsland;
+queue<pair<int, int>> isCoast;
 
 int checki[4] = {0, 0, -1, 1};
 int checkj[4] = {-1, 1, 0, 0};
 
-bool bfs(){
-    long s = q.size();
+void ibfs(){
+    long s = isIsland.size();
     while(s) {
         int x, y;
-        x = q.front().first;
-        y = q.front().second;
-        q.pop();
+        x = isIsland.front().first;
+        y = isIsland.front().second;
+        isIsland.pop();
         s--;
         for(int i{}; i < 4; i++) {
             int ci = x + checki[i];
             int cj = y + checkj[i];
             
-            if(ci >= 1 && ci <= n && cj >= 1 && cj <= m && !visited[ci][cj]) {
-                if(ci == n && cj == m) {
-                    c++;
-                    return true;
-                }
+            if(ci >= 1 && ci <= n && cj >= 1 && cj <= n && !visited[ci][cj]) {
                 if(arr[ci][cj] == 1) {
-                    q.push(pair<int, int> {ci, cj});
+                    isIsland.push(pair<int, int> {ci, cj});
                     visited[ci][cj] = 1;
+                }
+                if (arr[ci][cj] == 0) {
+                    isCoast.push(pair<int, int> {x, y});
                 }
             }
         }
     }
-    return false;
 }
 
+void cbfs(){
+    long s = isCoast.size();
+    while(s) {
+        int x, y;
+        x = isCoast.front().first;
+        y = isCoast.front().second;
+        isCoast.pop();
+        s--;
+        for(int i{}; i < 4; i++) {
+            int ci = x + checki[i];
+            int cj = y + checkj[i];
+            
+            if(ci >= 1 && ci <= n && cj >= 1 && cj <= n && !visited[ci][cj]) {
+                if(arr[ci][cj] == 0) {
+                    isCoast.push(pair<int, int> {ci, cj});
+                    visited[ci][cj] = 1;
+                }
+                if(arr[ci][cj] == 1) {
+                    if(c < result || result == 0) result = c;
+                }
+            }
+        }
+    }
+}
+
+
+
 int main() {
-    cin >> n >> m;
+    cin >> n;
     
     for(int i{1}; i <= n; i++) {
-        for (int j{1}; j <= m; j++) {
-            scanf("%1d", &arr[i][j]);
+        for (int j{1}; j <= n; j++) {
+            cin >> arr[i][j];
+        }
+    }
+
+    for (int i{1}; i <= n; i++) {
+        for (int j{1}; j <= n; j++) {
+            if(!visited[i][j] && arr[i][j] == 1) {
+                visited[i][j] = 1;
+                isIsland.push(pair<int, int>{i, j});
+                while(!isIsland.empty()){
+                    ibfs();
+                }
+                while (!isCoast.empty()) {
+                    c++;
+                    cbfs();
+                }
+                c = 0;
+                memset(visited, false, sizeof(visited));
+            }
         }
     }
     
-    q.push(pair<int, int>{1, 1});
-    visited[1][1] = 1;
-
-    while(!q.empty()){
-        int end {};
-        c++;
-        end = bfs();
-        if(end) break;
-    }
-    
-    cout << c <<"\n";
+    cout << result - 1 <<"\n";
      
     return 0;
 }

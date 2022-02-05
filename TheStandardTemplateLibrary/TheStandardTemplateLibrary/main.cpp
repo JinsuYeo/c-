@@ -1,52 +1,59 @@
 #include <iostream>
-#include <stack>
-#include <vector>
-#include <list>
+#include <queue>
 
-// This function displays a stack of
-// by repeatedly topping and popping the stack
-// Note theat the stack is passed in by value so we
-// don't affect the passed in stack.
+// This function displays a queue of
+// by repeatedly removing elements from the front
+// Note theat the queue is passed in by value so we
+// don't affect the passed in queue.
 
 template <typename T>
-void display(std::stack<T> s) {
+void display(std::queue<T> q) {
     std::cout << "[ ";
-    while (!s.empty()) {
-        T elem = s.top();
-        s.pop();
+    while (!q.empty()) {
+        T elem = q.front();
+        q.pop();
         std::cout << elem << " ";
     }
     std::cout << "]" << std::endl;
 }
 
 int main() {
-    std::stack<int> s;
-    std::stack<int, std::vector<int>> s1;
-    std::stack<int, std::list<int>> s2;
-    std::stack<int, std::deque<int>> s3;
+    std::queue<int> q;
     
     for (int i: {1,2,3,4,5})
-        s.push(i);
-    display(s);
+        q.push(i);
+    display(q);
+    std::cout << "Front: " << q.front() << std::endl;
+    std::cout << "Back:  " << q.back() << std::endl;
 
-    s.push(100);
-    display(s);
+    q.push(100);
+    display(q);
+
+    q.pop();
+    q.pop();
+    display(q);
     
-    s.pop();
-    s.pop();
-    display(s);
+    while (!q.empty())
+        q.pop();
+    display(q);
+
+    std::cout << "Size: " << q.size() << std::endl;
     
-    while (!s.empty())
-        s.pop();
-    display(s);
+    q.push(10);
+    q.push(100);
+    q.push(1000);
+    display(q);
     
-    std::cout << "Size: " << s.size() << std::endl;
+    std::cout << "Front: " << q.front() << std::endl;
+    std::cout << "Back:  " << q.back() << std::endl;
     
-    s.push(10);
-    display(s);
+    q.front() = 5;
+    q.back() = 5000;
     
-    s.top() = 100;
-    display(s);
+    display(q);
+    std::cout << "Front: " << q.front() << std::endl;
+    std::cout << "Back:  " << q.back() << std::endl;
+    
     return 0;
 }
 

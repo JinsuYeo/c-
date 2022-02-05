@@ -1,95 +1,52 @@
 #include <iostream>
-#include <map>
-#include <set>
+#include <stack>
+#include <vector>
+#include <list>
 
+// This function displays a stack of
+// by repeatedly topping and popping the stack
+// Note theat the stack is passed in by value so we
+// don't affect the passed in stack.
 
-void display(const std::map<std::string, std::set<int>> &m) {
+template <typename T>
+void display(std::stack<T> s) {
     std::cout << "[ ";
-    for (const auto &elem: m) {
-        std::cout << elem.first << ": [ " ;
-            for (const auto &set_elem : elem.second)
-                 std::cout << set_elem <<  " ";
-            std::cout << "] " ;
+    while (!s.empty()) {
+        T elem = s.top();
+        s.pop();
+        std::cout << elem << " ";
     }
-    std::cout << "]  " << std::endl;
+    std::cout << "]" << std::endl;
 }
-
-template <typename T1, typename T2>
-void display(const std::map<T1, T2> &l) {
-    std::cout << "[ ";
-    for (const auto &elem: l) {
-        std::cout << elem.first << ":" << elem.second << " ";
-    }
-    std::cout << "]  " << std::endl;
-}
-
-void test1() {
-    // Maps
-    std::cout << "\nTest1 =========================" << std::endl;
-    std::map<std::string, int> m {
-        {"Larry", 3},
-        {"Moe", 1},
-        {"Curly", 2}
-    };
-    display(m);
-    
-    m.insert( std::pair<std::string, int>("Anna", 10));
-    display(m);
-    
-    m.insert(std::make_pair("Joe", 5));
-    display(m);
-    
-    m["Frank"] = 18;
-    display(m);
-    
-    m["Frank"] += 10;
-    display(m);
-    
-    m.erase("Frank");
-    display(m);
-    
-    std::cout << "Count for Joe: " << m.count("Joe") << std::endl;
-    std::cout << "Count for Frank: " << m.count("Frank") << std::endl;
-    
-    auto it = m.find("Larry");
-    if (it != m.end())
-        std::cout << "Found: " << it->first << " : " << it->second << std::endl;
-        
-    m.clear();
-    
-    display(m);
-
-}
-
-void test2() {
-    std::cout << "\nTest2 =========================" << std::endl;
-    
-    std::map<std::string, std::set<int>> grades  {
-        {"Larry", {100, 90} },
-        {"Moe",  {94} },
-        {"Curly", {80, 90, 100} }
-    };
-    
-    display(grades);
-    
-    grades["Larry"].insert(95);                 // insert 95 into the set of grades for "Larry"
-    
-    display(grades);
-    
-    auto it = grades.find("Moe");
-    if (it != grades.end())                         // found "Moe"
-    {
-            it->second.insert(1000);            // insert 1000 into Moe's set of grades
-    }                                                         // it->first is the key, it->second is the value (set)
-    display(grades);
-}
-
-
-
 
 int main() {
-    test1();
-    test2();
+    std::stack<int> s;
+    std::stack<int, std::vector<int>> s1;
+    std::stack<int, std::list<int>> s2;
+    std::stack<int, std::deque<int>> s3;
+    
+    for (int i: {1,2,3,4,5})
+        s.push(i);
+    display(s);
+
+    s.push(100);
+    display(s);
+    
+    s.pop();
+    s.pop();
+    display(s);
+    
+    while (!s.empty())
+        s.pop();
+    display(s);
+    
+    std::cout << "Size: " << s.size() << std::endl;
+    
+    s.push(10);
+    display(s);
+    
+    s.top() = 100;
+    display(s);
     return 0;
 }
 

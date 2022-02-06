@@ -1,100 +1,65 @@
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <utility>
-#include <cstring>
 
 using namespace std;
 
-int n, c, result;
-int arr[101][101];
-int visited[101][101];
-queue<pair<int, int>> isIsland;
-queue<pair<int, int>> isCoast;
+typedef struct node *tree_node;
+typedef struct node {
+    char data;
+    char left, right;
+    tree_node left_node, right_node;
+} node;
 
-int checki[4] = {0, 0, -1, 1};
-int checkj[4] = {-1, 1, 0, 0};
+node nodes[27];
 
-void ibfs(){
-    long s = isIsland.size();
-    while(s) {
-        int x, y;
-        x = isIsland.front().first;
-        y = isIsland.front().second;
-        isIsland.pop();
-        s--;
-        for(int i{}; i < 4; i++) {
-            int ci = x + checki[i];
-            int cj = y + checkj[i];
-            
-            if(ci >= 1 && ci <= n && cj >= 1 && cj <= n && !visited[ci][cj]) {
-                if(arr[ci][cj] == 1) {
-                    isIsland.push(pair<int, int> {ci, cj});
-                    visited[ci][cj] = 1;
-                }
-                if (arr[ci][cj] == 0) {
-                    isCoast.push(pair<int, int> {x, y});
-                }
-            }
-        }
+void preorder(tree_node ptr) {
+    if(ptr) {
+        cout << ptr->data;
+        preorder(ptr->left_node);
+        preorder(ptr->right_node);
     }
 }
 
-void cbfs(){
-    long s = isCoast.size();
-    while(s) {
-        int x, y;
-        x = isCoast.front().first;
-        y = isCoast.front().second;
-        isCoast.pop();
-        s--;
-        for(int i{}; i < 4; i++) {
-            int ci = x + checki[i];
-            int cj = y + checkj[i];
-            
-            if(ci >= 1 && ci <= n && cj >= 1 && cj <= n && !visited[ci][cj]) {
-                if(arr[ci][cj] == 0) {
-                    isCoast.push(pair<int, int> {ci, cj});
-                    visited[ci][cj] = 1;
-                }
-                if(arr[ci][cj] == 1) {
-                    if(c < result || result == 0) result = c;
-                }
-            }
-        }
+void inorder(tree_node ptr) {
+    if(ptr) {
+        inorder(ptr->left_node);
+        cout << ptr->data;
+        inorder(ptr->right_node);
     }
 }
 
+void postorder(tree_node ptr) {
+    if(ptr) {
+        postorder(ptr->left_node);
+        postorder(ptr->right_node);
+        cout << ptr->data;
+    }
+}
 
-
-int main() {
+int main(){
+    int n{};
     cin >> n;
     
-    for(int i{1}; i <= n; i++) {
-        for (int j{1}; j <= n; j++) {
-            cin >> arr[i][j];
-        }
+    for (int i{1}; i <= n; i++) {
+        cin >> nodes[i].data;
+        cin >> nodes[i].left;
+        cin >> nodes[i].right;
+        nodes[i].left_node = NULL;
+        nodes[i].right_node = NULL;
     }
-
+    
     for (int i{1}; i <= n; i++) {
         for (int j{1}; j <= n; j++) {
-            if(!visited[i][j] && arr[i][j] == 1) {
-                visited[i][j] = 1;
-                isIsland.push(pair<int, int>{i, j});
-                while(!isIsland.empty()){
-                    ibfs();
-                }
-                while (!isCoast.empty()) {
-                    c++;
-                    cbfs();
-                }
-                c = 0;
-                memset(visited, false, sizeof(visited));
-            }
+            if(nodes[i].left == nodes[j].data) nodes[i].left_node = &nodes[j];
+            else if(nodes[i].right == nodes[j].data) nodes[i].right_node = &nodes[j];
+            else continue;
         }
     }
     
-    cout << result - 1 <<"\n";
-     
+    preorder(&nodes[1]);
+    cout << "\n";
+    inorder(&nodes[1]);
+    cout << "\n";
+    postorder(&nodes[1]);
+    
     return 0;
 }

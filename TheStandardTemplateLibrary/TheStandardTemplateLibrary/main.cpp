@@ -1,59 +1,76 @@
 #include <iostream>
 #include <queue>
 
-// This function displays a queue of
-// by repeatedly removing elements from the front
-// Note theat the queue is passed in by value so we
-// don't affect the passed in queue.
+class Person {
+    friend std::ostream &operator<<(std::ostream &os, const Person &p);
+    std::string name;
+    int age;
+public:
+    Person() : name{"Unknown"}, age{0} {}
+    Person(std::string name, int age)
+        : name{name}, age{age}  {}
+    bool operator<(const Person &rhs) const {
+        // return this->age < rhs.age;
+        return this->name < rhs.name;
+    }
+    bool operator==(const Person &rhs) const {
+        return (this->name == rhs.name && this->age == rhs.age);
+    }
+};
+
+std::ostream &operator<<(std::ostream &os, const Person &p) {
+    os << p.name << ":" << p.age;
+    return os;
+}
+// This displays the priority queue by
+// repeatedly topping and popping the priority queue
+// It is being passed by value so we don't modify the
+// priority queue being passed in
 
 template <typename T>
-void display(std::queue<T> q) {
+void display(std::priority_queue<T> pq)  {
     std::cout << "[ ";
-    while (!q.empty()) {
-        T elem = q.front();
-        q.pop();
+    while (!pq.empty()) {
+        T elem = pq.top();
+        pq.pop();
         std::cout << elem << " ";
     }
-    std::cout << "]" << std::endl;
+    std::cout <<  "]" << std::endl;
+}
+
+void  test1() {
+    std::cout << "\nTest1 =========================" << std::endl;
+
+    std::priority_queue<int> pq;
+    for (int i : {3,5,7,12,23,12,4,100,0, 3,5,7})
+        pq.push(i);
+        
+    std::cout << "Size: " << pq.size() << std::endl;
+    std::cout << "Top: " << pq.top() << std::endl;
+        
+    display(pq);
+    
+    pq.pop();
+    display(pq);
+}
+
+void test2() {
+    std::cout << "\nTest2 =========================" << std::endl;
+
+    std::priority_queue<Person> pq;
+    pq.push(Person{"A", 10});
+    pq.push(Person{"B", 1});
+    pq.push(Person{"C", 14});
+    pq.push(Person{"D", 18});
+    pq.push(Person{"E", 7});
+    pq.push(Person{"F", 27});
+    
+    display(pq);
 }
 
 int main() {
-    std::queue<int> q;
-    
-    for (int i: {1,2,3,4,5})
-        q.push(i);
-    display(q);
-    std::cout << "Front: " << q.front() << std::endl;
-    std::cout << "Back:  " << q.back() << std::endl;
-
-    q.push(100);
-    display(q);
-
-    q.pop();
-    q.pop();
-    display(q);
-    
-    while (!q.empty())
-        q.pop();
-    display(q);
-
-    std::cout << "Size: " << q.size() << std::endl;
-    
-    q.push(10);
-    q.push(100);
-    q.push(1000);
-    display(q);
-    
-    std::cout << "Front: " << q.front() << std::endl;
-    std::cout << "Back:  " << q.back() << std::endl;
-    
-    q.front() = 5;
-    q.back() = 5000;
-    
-    display(q);
-    std::cout << "Front: " << q.front() << std::endl;
-    std::cout << "Back:  " << q.back() << std::endl;
-    
+    test1();
+    test2();
     return 0;
 }
 

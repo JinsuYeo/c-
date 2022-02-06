@@ -1,65 +1,52 @@
 #include <iostream>
+#include <vector>
+#include <queue>
 
 using namespace std;
 
-typedef struct node *tree_node;
-typedef struct node {
-    char data;
-    char left, right;
-    tree_node left_node, right_node;
-} node;
+int n;
+int arr[100001];
+bool visited[100001];
+vector<int> vec[100001];
+queue<int> q;
 
-node nodes[27];
-
-void preorder(tree_node ptr) {
-    if(ptr) {
-        cout << ptr->data;
-        preorder(ptr->left_node);
-        preorder(ptr->right_node);
+void bfs(int start) {
+    visited[start] = 1;
+    for (int i{}; i < vec[start].size(); i++) {
+        q.push(vec[start][i]);
+        arr[vec[start][i]] = start;
     }
-}
-
-void inorder(tree_node ptr) {
-    if(ptr) {
-        inorder(ptr->left_node);
-        cout << ptr->data;
-        inorder(ptr->right_node);
-    }
-}
-
-void postorder(tree_node ptr) {
-    if(ptr) {
-        postorder(ptr->left_node);
-        postorder(ptr->right_node);
-        cout << ptr->data;
-    }
-}
-
-int main(){
-    int n{};
-    cin >> n;
-    
-    for (int i{1}; i <= n; i++) {
-        cin >> nodes[i].data;
-        cin >> nodes[i].left;
-        cin >> nodes[i].right;
-        nodes[i].left_node = NULL;
-        nodes[i].right_node = NULL;
-    }
-    
-    for (int i{1}; i <= n; i++) {
-        for (int j{1}; j <= n; j++) {
-            if(nodes[i].left == nodes[j].data) nodes[i].left_node = &nodes[j];
-            else if(nodes[i].right == nodes[j].data) nodes[i].right_node = &nodes[j];
-            else continue;
+    while (!q.empty()) {
+        int x = q.front();
+        q.pop();
+        visited[x] = 1;
+        for (int i{}; i < vec[x].size(); i++) {
+            if(!visited[vec[x][i]]){
+                q.push(vec[x][i]);
+                arr[vec[x][i]] = x;
+            }
         }
     }
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
     
-    preorder(&nodes[1]);
-    cout << "\n";
-    inorder(&nodes[1]);
-    cout << "\n";
-    postorder(&nodes[1]);
+    cin >> n;
+    for(int i{}; i < n-1; i++) {
+        int a, b;
+        cin >> a >> b;
+        vec[a].push_back(b);
+        vec[b].push_back(a);
+    }
+    
+    bfs(1);
+    
+    for (int i{2}; i <= n; i++) {
+        cout << arr[i] << "\n";
+    }
     
     return 0;
 }

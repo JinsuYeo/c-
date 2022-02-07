@@ -1,52 +1,58 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cstring>
+#include <cmath>
+#include <array>
 
 using namespace std;
 
-int t;
-int n, result;
-int arr[10001];
-bool visited[10001];
-vector<pair<int, int>> vec[10001];
-
-void dfs(int start) {
-    visited[start] = 1;
-    
-    for (int i{}; i < vec[start].size(); i++) {
-        int x = vec[start][i].first;
-        int len = vec[start][i].second;
-        if(!visited[x]) {
-            arr[x] = arr[start] + len;
-            if (arr[x] > result) {
-                result = arr[x];
-                t = x;
-            }
-            dfs(x);
-        }
-    }
-}
+int k, n;
+array<long long, 10001> arr;
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
-    cin >> n;
-    for(int i{}; i < n-1; i++) {
-        int a, b, c;
-        cin >> a >> b >> c;
-        vec[a].push_back(make_pair(b, c));
-        vec[b].push_back(make_pair(a, c));
+    cin >> k >> n;
+    for (int i{1}; i <= k; i++) {
+        cin >> arr[i];
     }
     
-
-    dfs(1);
-    memset(arr, 0, sizeof(arr));
-    memset(visited, false, sizeof(visited));
-    dfs(t);
+    long long max{}, sum{}, result{};
+    for (int i{1}; i < 32; i++) {
+        for(int j{1}; j <= k; j++) {
+            sum += (arr[j]/(pow(2, i)-1));
+        }
+        if(sum >= n && max < pow(2, i) - 1) max = pow(2, i) - 1;
+        if(sum < n) break;
+        sum = 0;
+    }
     
-    cout << result;
+    max = result;
+    
+    while (1) {
+        bool flag = false;
+        for (int i{1}; i < 32; i++) {
+            for(int j{1}; j <= k; j++) {
+                sum += (arr[j]/(max + (pow(2, i)-1)));
+            }
+            if(sum >= n) result = max + pow(2, i) - 1;
+            if(i == 1 && sum < n) {
+                flag = true;
+                break;
+            }
+            if(sum < n) break;
+            sum = 0;
+        }
+        if (flag) {
+            break;
+        }
+        sum = 0;
+        max = result;
+    }
+    
+       
+    cout << result << "\n";
     
     return 0;
 }

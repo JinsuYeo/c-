@@ -6,10 +6,10 @@
 using namespace std;
 
 int t;
-long long n, result;
-long long arr[100001];
-bool visited[100001];
-vector<pair<int, int>> vec[100001];
+int n, result;
+int arr[10001];
+bool visited[10001];
+vector<pair<int, int>> vec[10001];
 
 void dfs(int start) {
     visited[start] = 1;
@@ -34,15 +34,10 @@ int main() {
 
     cin >> n;
     for(int i{}; i < n-1; i++) {
-        int a, b{}, c;
-        cin >> a;
-        cin >> b;
-        while(b != -1) {
-            cin >> c;
-            vec[a].push_back(make_pair(b, c));
-            vec[b].push_back(make_pair(a, c));
-            cin >> b;
-        }
+        int a, b, c;
+        cin >> a >> b >> c;
+        vec[a].push_back(make_pair(b, c));
+        vec[b].push_back(make_pair(a, c));
     }
     
 

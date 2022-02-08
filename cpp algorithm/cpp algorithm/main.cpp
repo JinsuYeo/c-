@@ -5,7 +5,7 @@
 
 using namespace std;
 
-set<int> have;
+vector<int> have;
 vector<int> check;
 
 int n, m;
@@ -17,7 +17,7 @@ int main()
     for (int i{1}; i <= n; i++) {
         int t{};
         cin >> t;
-        have.insert(t);
+        have.push_back(t);
     }
     cin >> m;
     for (int i{1}; i <= m; i++) {
@@ -26,12 +26,32 @@ int main()
         check.push_back(t);
     }
     
-    for(int i{}; i < check.size(); i++) {
-        auto it = have.find(check.at(i));
-        if (it != have.end()) {
+    sort(have.begin(), have.end());
+    
+    
+    for (int i{}; i < check.size(); i++) {
+        low = 0;
+        high = n;
+        bool flag = 0;
+        while(low <= high) {
+            int t = check[i];
+            mid = (low + high) / 2;
+            if (have[mid] == t) {
+                flag = 1;
+                break;
+            }
+            if (have[mid] < t) {
+                low = mid + 1;
+            }
+            if (have[mid] > t) {
+                high = mid - 1;
+            }
+        }
+        if (flag) {
             cout << 1 << " ";
         } else cout << 0 << " ";
     }
+    
         
     return 0;
 }

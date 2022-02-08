@@ -1,37 +1,34 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <array>
 
 using namespace std;
 
-vector<int> have;
+vector<int> a;
+vector<int> b;
 
-int n, m, s;
-long long mid, high, low, result;
-
-int main()
-{
+int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> n;
-    for (int i{1}; i <= n; i++) {
+    int n, m;
+    cin >> n >> m;
+    for (int i{}; i < n; i++) {
         int t{};
         cin >> t;
-        have.push_back(t);
+        a.push_back(t);
     }
-    
-    sort(have.begin(), have.end());
-    
-    cin >> m;
-    
     for (int i{}; i < m; i++) {
         int t{};
         cin >> t;
-        cout << upper_bound(have.begin(), have.end(), t) - lower_bound(have.begin(), have.end(), t) << " ";
+        b.push_back(t);
     }
     
-        
+    copy(a.begin(), a.end(), back_inserter(b));
+    sort(b.begin(), b.end());
+    
+    for (auto e: b)
+        cout << e << " ";
+    
     return 0;
 }

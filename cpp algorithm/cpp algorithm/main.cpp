@@ -1,39 +1,37 @@
 #include<iostream>
 using namespace std;
 
-int K, N, ans;
-int line[10001];
-int  maxi = 0;
-long long mid, high, low;
+int n, m;
+long long tree[1000001];
+long long  maxi;
+long long mid, high, low, result;
 
 int main()
 {
-    cin >> K >> N;
+    cin >> n >> m;
     
-    for (int i = 0; i < K; i++)
+    for (int i{1}; i <= n; i++)
     {
-        cin >> line[i];
-        if (maxi < line[i]) maxi = line[i];
+        cin >> tree[i];
+        if (maxi < tree[i]) maxi = tree[i];
     }
     low = 1;
     high = maxi;
-    ans = 0;
 
-    while (low <= high)
-    {
+    while (low <= high) {
+        long long sum{};
         mid = (low + high) / 2;
-        int cnt = 0;
-        for (int i = 0; i < K; i++)
-            cnt += line[i] / mid;
-
-        if (cnt >= N) {
+        for (int i{1}; i <= n; i++) {
+            if(tree[i] > mid) sum += tree[i] - mid;
+            else continue;
+        }
+        if(sum >= m) {
             low = mid + 1;
-            if (ans < mid) ans = mid;
-        }
-        else {// (cnt < N)
-            high = mid - 1;
-        }
+            if(result < mid) result = mid;
+        } else high = mid - 1;
     }
     
-    cout << ans;
+    cout << result << "\n";
+    
+    return 0;
 }

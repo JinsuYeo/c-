@@ -1,34 +1,47 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
-
+#include<iostream>
+#include<cmath>
 using namespace std;
 
-vector<int> a;
-vector<int> b;
+int N;
+int paper[2188][2188];
+int ans[3];
+int check;
 
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+void solve(int x, int y, int size) {
     
-    int n, m;
-    cin >> n >> m;
-    for (int i{}; i < n; i++) {
-        int t{};
-        cin >> t;
-        a.push_back(t);
-    }
-    for (int i{}; i < m; i++) {
-        int t{};
-        cin >> t;
-        b.push_back(t);
-    }
-    
-    copy(a.begin(), a.end(), back_inserter(b));
-    sort(b.begin(), b.end());
-    
-    for (auto e: b)
-        cout << e << " ";
-    
-    return 0;
+    check = paper[x][y];
+
+    for (int i = x; i < x + size; i++)
+        for (int j = y; j < y + size; j++)
+        {
+            if (paper[i][j] != paper[x][y])
+            {
+                solve(x, y, size / 3);
+                solve(x + size * 1 / 3, y, size / 3);
+                solve(x + size * 2 / 3, y, size / 3);
+                solve(x, y + size * 1 / 3, size / 3);
+                solve(x + size * 1 / 3, y + size * 1 / 3, size / 3);
+                solve(x + size * 2 / 3, y + size * 1 / 3, size / 3);
+                solve(x, y + size * 2 / 3, size / 3);
+                solve(x + size * 1 / 3, y + size * 2 / 3, size / 3);
+                solve(x + size * 2 / 3, y + size * 2 / 3, size / 3);
+                return;
+            }
+        }
+    ans[paper[x][y] + 1]++;
+    return;
+}
+
+int main()
+{
+    cin >> N;
+
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            cin >> paper[i][j];
+
+    solve(0, 0, N);
+
+    for (int i = 0; i < 3; i++) cout << ans[i] << endl;
+
 }

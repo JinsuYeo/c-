@@ -6,42 +6,52 @@
 using namespace std;
 
 int n;
-array<array<int, 64>, 64> arr;
-string s;
+array<array<char, 6561>, 6561> arr;
 
-void check(int x, int y, int size) {
-    int num = arr[x][y];
-    for (int i{x}; i < x + size; i++) {
-        for (int j{y}; j < y + size; j++) {
-            if (arr[i][j] != num) {
-                s += "(";
-                check(x, y, size/2);
-                check(x, y + size/2, size/2);
-                check(x + size/2, y, size/2);
-                check(x + size/2, y + size/2, size/2);
-                s += ")";
-                return;
+void draw(int x, int y, int size) {
+    if (size == 3) {
+        for (int i{x}; i < x + size; i++) {
+            for (int j{y}; j < y + size; j++) {
+                if(i == x + 1 && j == y + 1) {
+                    arr[i][j] = ' ';
+                    continue;
+                }
+                arr[i][j] = '*';
             }
         }
+        return;
     }
-    s += to_string(num);
+    draw(x, y, size/3);
+    draw(x + size/3, y, size/3);
+    draw(x + size*2/3, y, size/3);
+    draw(x, y + size/3, size/3);
+    draw(x + size*2/3, y + size/3, size/3);
+    draw(x, y + size*2/3, size/3);
+    draw(x + size/3, y + size*2/3, size/3);
+    draw(x + size*2/3, y + size*2/3, size/3);
+    
 }
+
 
 int main()
 {
-    
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
     
     cin >> n;
-
-    for (int i{0}; i < n; i++) {
-        for (int j{0}; j < n; j++) {
-            scanf("%1d", &arr[i][j]);
-        }
+    
+    for (int i{}; i < n; i++) {
+        arr[i].fill(' ');
     }
     
-    check(0, 0, n);
+    draw(0, 0, n);
     
-    cout << s;
+    for (int i{}; i < n; i++) {
+        for (int j{}; j < n; j++) {
+            cout << arr[i][j];
+        }
+        cout << "\n";
+    }
     
     return 0;
 }

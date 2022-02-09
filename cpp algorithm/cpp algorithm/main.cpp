@@ -1,47 +1,32 @@
-#include<iostream>
-#include<cmath>
+#include <iostream>
+#include <vector>
+#include <utility>
+
 using namespace std;
 
-int N;
-int paper[2188][2188];
-int ans[3];
-int check;
+int n;
+vector<pair<int, int>> v;
 
-void solve(int x, int y, int size) {
-    
-    check = paper[x][y];
-
-    for (int i = x; i < x + size; i++)
-        for (int j = y; j < y + size; j++)
-        {
-            if (paper[i][j] != paper[x][y])
-            {
-                solve(x, y, size / 3);
-                solve(x + size * 1 / 3, y, size / 3);
-                solve(x + size * 2 / 3, y, size / 3);
-                solve(x, y + size * 1 / 3, size / 3);
-                solve(x + size * 1 / 3, y + size * 1 / 3, size / 3);
-                solve(x + size * 2 / 3, y + size * 1 / 3, size / 3);
-                solve(x, y + size * 2 / 3, size / 3);
-                solve(x + size * 1 / 3, y + size * 2 / 3, size / 3);
-                solve(x + size * 2 / 3, y + size * 2 / 3, size / 3);
-                return;
-            }
-        }
-    ans[paper[x][y] + 1]++;
-    return;
+void hanoi(int n, int from, int temp, int to) {
+    if (n == 1) {
+        v.push_back(make_pair(from, to));
+    } else {
+        hanoi(n-1, from, to, temp);
+        v.push_back(make_pair(from, to));
+        hanoi(n-1, temp, from, to);
+    }
 }
 
 int main()
 {
-    cin >> N;
+    cin >> n;
 
-    for (int i = 0; i < N; i++)
-        for (int j = 0; j < N; j++)
-            cin >> paper[i][j];
-
-    solve(0, 0, N);
-
-    for (int i = 0; i < 3; i++) cout << ans[i] << endl;
-
+    hanoi(n, 1, 2, 3);
+    
+    cout << v.size() << "\n";
+    for (auto e: v) {
+        cout << e.first << " " << e.second << "\n";
+    }
+    
+    return 0;
 }

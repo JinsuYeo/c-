@@ -1,58 +1,56 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
-long long n, c;
+int n;
 
-array<long long, 500001> arr;
-array<long long, 500001> sorted;
+vector<pair<int, int>> arr;
+vector<int> seg_tree;
 
-void merge(int start, int mid, int end) {
-    int i = start;
-    int j = mid + 1;
-    int k = start;
-    while (i <= mid && j <= end) {
-        if (arr[i] <= arr[j]) {
-            sorted[k++] = arr[i++];
-        } else {
-            c += mid-i+1;
-            sorted[k++] = arr[j++];
+void update(int node, int start, int end, int index){
+    if (start == end) {
+        seg_tree[node] = 1;
+        return;
         }
-    }
-    while (i <= mid) {
-        sorted[k++] = arr[i++];
-    }
-    while (j <= end) {
-        sorted[k++] = arr[j++];
-    }
-    
-    for (int i{start}; i <= end; i++) {
-        arr[i] = sorted[i];
-    }
+    int mid = (start+end)/2;
+    if(index <= mid) update(node*2, start, mid, index);
+    else update(node*2 + 1, mid + 1, end, index);
+    seg_tree[node] = seg_tree[node*2] + seg_tree[node*2+1];
 }
 
-void merge_sort(int start, int end) {
-    if (start < end) {
-        int mid = (start + end) / 2;
-        merge_sort(start, mid);
-        merge_sort(mid+1, end);
-        merge(start, mid, end);
-    }
+int cnt(int node, int start, int end, int left, int right){
+    if(left > end || right < start) return 0;
+    if(left <= start && right >= end) return seg_tree[node];
+    int mid = (start+end)/2;
+    int left_count = cnt(node*2, start, mid, left, right);
+    int right_count = cnt(node*2 + 1, mid+1, end, left, right);
+    return left_count + right_count;
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
+    long long c{};
+    
     cin >> n;
+
+    seg_tree.resize(n*4);
+    arr.push_back({-1000000001, 0});
     for (int i{1}; i <= n; i++) {
-        cin >> arr[i];
+        int t;
+        cin >> t;
+        arr.push_back({t, i});
     }
     
-    merge_sort(1, n);
-    
+    sort(arr.begin(), arr.end());
+    for (int i{1}; i <= n; i++) {
+        c += (long long)cnt(1, 1, n, arr[i].second + 1, n);
+        update(1, 1, n, arr[i].second);
+    }
     cout << c;
     
     return 0;

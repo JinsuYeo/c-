@@ -1,58 +1,64 @@
 #include <iostream>
-#include <array>
-#include <vector>
 #include <algorithm>
-
+#include <vector>
+#include <cmath>
+#include <set>
 using namespace std;
 
-int n;
+#define INF (1 << 30)
+#define X first
+#define Y second
+typedef pair<int, int> pi;
 
-vector<pair<int, int>> arr;
-vector<int> seg_tree;
+int n, x, y;
+vector<pi> v;
+set<pi> s;
 
-void update(int node, int start, int end, int index){
-    if (start == end) {
-        seg_tree[node] = 1;
-        return;
-        }
-    int mid = (start+end)/2;
-    if(index <= mid) update(node*2, start, mid, index);
-    else update(node*2 + 1, mid + 1, end, index);
-    seg_tree[node] = seg_tree[node*2] + seg_tree[node*2+1];
-}
-
-int cnt(int node, int start, int end, int left, int right){
-    if(left > end || right < start) return 0;
-    if(left <= start && right >= end) return seg_tree[node];
-    int mid = (start+end)/2;
-    int left_count = cnt(node*2, start, mid, left, right);
-    int right_count = cnt(node*2 + 1, mid+1, end, left, right);
-    return left_count + right_count;
+int dist(pi a, pi b)
+{
+    int x_dist = (a.X - b.X) * (a.X - b.X);
+    int y_dist = (a.Y - b.Y) * (a.Y - b.Y);
+    return x_dist + y_dist;
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    
-    long long c{};
-    
+
     cin >> n;
 
-    seg_tree.resize(n*4);
-    arr.push_back({-1000000001, 0});
-    for (int i{1}; i <= n; i++) {
-        int t;
-        cin >> t;
-        arr.push_back({t, i});
+    for (int i = 0; i < n; ++i)
+    {
+        cin >> x >> y;
+        v.push_back({ x,y });
     }
-    
-    sort(arr.begin(), arr.end());
-    for (int i{1}; i <= n; i++) {
-        c += (long long)cnt(1, 1, n, arr[i].second + 1, n);
-        update(1, 1, n, arr[i].second);
-    }
-    cout << c;
-    
-    return 0;
-}
 
+    // X좌표 순으로 정렬
+    sort(v.begin(), v.end());
+    s.insert({ v[0].Y, v[0].X });
+    s.insert({ v[1].Y, v[1].X });
+
+    int mini = dist(v[0], v[1]);
+    int idx = 0;
+
+    for (int i = 2; i < n; ++i)
+    {
+        while (idx < i)
+        {
+            int d = v[i].X - v[idx].X;
+            if (d * d <= mini) break;
+            else // mini보다 거리가 멀 시 후보군에서 제외
+            {
+                s.erase({ v[idx].Y, v[idx].X });
+                idx++;
+            }
+        }
+
+        // 후보군 내의 점들과의 거리 중 가장 가까운 거리로 업데이트
+        auto start = s.lower_bound({ v[i].Y - sqrt(mini), -INF });
+        auto end = s.upper_bound({ v[i].Y + sqrt(mini), INF });
+        for (auto it = start; it != end; it++)
+            mini = min(mini, dist({ it->Y, it->X }, v[i]));
+        s.insert({ v[i].Y, v[i].X });
+    }
+    
+    cout << mini << '\n';
+}

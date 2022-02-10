@@ -6,30 +6,32 @@
 using namespace std;
 
 int n;
-array<array<char, 6561>, 6561> arr;
+array<array<char, 3072*2>, 3072> arr;
 
 void draw(int x, int y, int size) {
     if (size == 3) {
-        for (int i{x}; i < x + size; i++) {
-            for (int j{y}; j < y + size; j++) {
-                if(i == x + 1 && j == y + 1) {
-                    arr[i][j] = ' ';
-                    continue;
+        for (int i{x-1}; i <= x + 1; i++) {
+            for (int j{y-2}; j <= y + 2; j++) {
+                if(i == x-1 && j == y) {
+                    arr[i][j] = '*';
                 }
-                arr[i][j] = '*';
+                if (i == x && j == y - 1) {
+                    arr[i][j] = '*';
+                }
+                if (i == x && j == y + 1) {
+                    arr[i][j] = '*';
+                }
+                if (i == x + 1 && j >= y - 2 && j <= y + 2) {
+                    arr[i][j] = '*';
+                }
             }
         }
         return;
     }
-    draw(x, y, size/3);
-    draw(x + size/3, y, size/3);
-    draw(x + size*2/3, y, size/3);
-    draw(x, y + size/3, size/3);
-    draw(x + size*2/3, y + size/3, size/3);
-    draw(x, y + size*2/3, size/3);
-    draw(x + size/3, y + size*2/3, size/3);
-    draw(x + size*2/3, y + size*2/3, size/3);
-    
+    int t = size/2;
+    draw(x - t, y, t);
+    draw(x, y - t, t);
+    draw(x, y + t, t);
 }
 
 
@@ -44,10 +46,10 @@ int main()
         arr[i].fill(' ');
     }
     
-    draw(0, 0, n);
+    draw(n-2, n-1, n);
     
     for (int i{}; i < n; i++) {
-        for (int j{}; j < n; j++) {
+        for (int j{}; j < 2*n-1; j++) {
             cout << arr[i][j];
         }
         cout << "\n";

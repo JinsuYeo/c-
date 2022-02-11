@@ -1,64 +1,96 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
-#include <cmath>
 #include <set>
+#include <algorithm>
+
 using namespace std;
 
-#define INF (1 << 30)
 #define X first
 #define Y second
-typedef pair<int, int> pi;
 
-int n, x, y;
-vector<pi> v;
-set<pi> s;
+const int MAX = 1 << 30;
 
-int dist(pi a, pi b)
-{
-    int x_dist = (a.X - b.X) * (a.X - b.X);
-    int y_dist = (a.Y - b.Y) * (a.Y - b.Y);
-    return x_dist + y_dist;
+typedef pair<int, int> pairii;
+vector<pairii> v;
+
+int dist(int low, int high){
+    int lowx = v[low].X;
+    int lowy = v[low].Y;
+    int highx = v[high].X;
+    int highy = v[high].Y;
+    
+    int distx = highx - lowx;
+    int disty = highy - lowy;
+    
+    return distx*distx + disty*disty;
+}
+
+int check(int low, int high) {
+    if (low == high) return MAX;
+    if (low + 1 >= high) return dist(low, high);
+    
+    int min = dist(low, high);
+    int mid = (low+high)/2;
+    int t{};
+    
+    if ((t = check(low, mid)) < min) {
+        min = t;
+    }
+    if ((t = check(mid+1, high)) < min) {
+        min = t;
+    }
+    
+    vector<pairii> v2;
+    int line = v[mid].X;
+    for (int i{mid}; i >= low; i--) {
+        int x = v[i].X;
+        int dis = line - x;
+        dis *= dis;
+        if (min <= dis) break;
+        else v2.push_back({v[i].Y, v[i].X});
+    }
+    for (int i{mid+1}; i <= high; i++) {
+        int x = v[i].X;
+        int dis = line - x;
+        dis *= dis;
+        if (min <= dis) break;
+        else v2.push_back({v[i].Y, v[i].X});
+    }
+    
+    int size = static_cast<int>(v2.size());
+    if (!size) return min;
+    
+    sort(v2.begin(), v2.end());
+    
+    for(int i{}; i < size; i++){
+        int ix = v2[i].Y, iy = v2[i].X;
+        for(int j{i+1}; j < size; j++){
+            int jx = v2[j].Y, jy = v2[j].X;
+            int distx = jx - ix, disty = jy - iy;
+            if(min <= disty * disty) break;
+            if(min <= distx * distx) continue;
+            
+            int dist = distx*distx + disty*disty;
+            if(dist < min)
+                min = dist;
+        }
+    }
+    
+    return min;
 }
 
 int main() {
-
+    int n;
     cin >> n;
-
-    for (int i = 0; i < n; ++i)
-    {
+    for (int i{}; i < n; i++) {
+        int x, y;
         cin >> x >> y;
-        v.push_back({ x,y });
-    }
-
-    // X좌표 순으로 정렬
-    sort(v.begin(), v.end());
-    s.insert({ v[0].Y, v[0].X });
-    s.insert({ v[1].Y, v[1].X });
-
-    int mini = dist(v[0], v[1]);
-    int idx = 0;
-
-    for (int i = 2; i < n; ++i)
-    {
-        while (idx < i)
-        {
-            int d = v[i].X - v[idx].X;
-            if (d * d <= mini) break;
-            else // mini보다 거리가 멀 시 후보군에서 제외
-            {
-                s.erase({ v[idx].Y, v[idx].X });
-                idx++;
-            }
-        }
-
-        // 후보군 내의 점들과의 거리 중 가장 가까운 거리로 업데이트
-        auto start = s.lower_bound({ v[i].Y - sqrt(mini), -INF });
-        auto end = s.upper_bound({ v[i].Y + sqrt(mini), INF });
-        for (auto it = start; it != end; it++)
-            mini = min(mini, dist({ it->Y, it->X }, v[i]));
-        s.insert({ v[i].Y, v[i].X });
+        v.push_back({x, y});
     }
     
-    cout << mini << '\n';
+    sort(v.begin(), v.end());
+    
+    cout << check(0, n-1);
+    
+    return 0;
 }

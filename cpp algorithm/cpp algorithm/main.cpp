@@ -1,37 +1,35 @@
 #include <iostream>
+#include <string>
 #include <algorithm>
 
 using namespace std;
 
-int w, m, k;
+string n, result, ts;
+
+bool compare(char a, char b){
+    return a > b;
+}
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> w >> m >> k;
-    if (w/2 <= m) {
-        int t = w/2;
-        k -= w%2;
-        m -= t;
-        k -= m;
-        
-        while (k > 0) {
-            t--;
-            k -= 3;
-        }
-        cout << t;
+    cin >> n;
+    ts = n;
+    sort(ts.begin(), ts.end(), compare);
+    
+    if (ts.at(ts.length()-1) != '0') {
+        cout << -1;
     } else {
-        int t = m;
-        w -= t*2;
-        k -= w;
-        
-        while (k > 0) {
-            t--;
-            k -= 3;
+        long long ll{};
+        for (int i{}; i < ts.length(); i++) {
+            ll += static_cast<long long>(ts.at(i));
         }
-        cout << t;
+        if(ll%3 == 0) cout << ts;
+        else cout << -1;
     }
+    
+
     
     return 0;
 }

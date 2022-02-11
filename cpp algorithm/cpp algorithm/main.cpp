@@ -1,35 +1,32 @@
 #include <iostream>
-#include <string>
 #include <algorithm>
 
 using namespace std;
 
-string n, result, ts;
-
-bool compare(char a, char b){
-    return a > b;
-}
+int n, m, c;
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> n;
-    ts = n;
-    sort(ts.begin(), ts.end(), compare);
+    cin >> n >> m;
+    // n이 세로, m이 가로
     
-    if (ts.at(ts.length()-1) != '0') {
-        cout << -1;
-    } else {
-        long long ll{};
-        for (int i{}; i < ts.length(); i++) {
-            ll += static_cast<long long>(ts.at(i));
-        }
-        if(ll%3 == 0) cout << ts;
-        else cout << -1;
+    if (n <= 1) {
+        c = 1;
+    } else if(n == 2 && m >= 7) {
+        c = 4;
+    } else if(n == 2 && m < 7) {
+        c = (m-1)/2 + 1;
+    } else if(n >= 3 && m >= 7) {
+        c = m - 2;
+    } else if(n >= 3 && m < 7) {
+        if (m >= 4) {
+            c = 4;
+        } else c = m;
     }
-    
-
+   
+    cout << c;
     
     return 0;
 }

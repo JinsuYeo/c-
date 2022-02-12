@@ -1,40 +1,32 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#define END first
-#define START second
 
 using namespace std;
+vector<int> v;
 
-typedef pair<int, int> pi;
-vector<pi> v;
-
-int n, c;
+int n;
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
+    int sum{};
+    
     cin >> n;
     for (int i{}; i < n ; i++) {
-        int a, b;
-        cin >> a >> b;
-        v.push_back({b, a});
+        int t;
+        cin >> t;
+        v.push_back(t);
     }
     
     sort(v.begin(), v.end());
     
-    int cur = v.at(0).END;
-    c = 1;
-    
-    for (int i{1}; i < v.size(); i++) {
-        if (cur <= v.at(i).START) {
-            cur = v.at(i).END;
-            c++;
-        }
+    for (int i{0}; i < n; i++) {
+        sum += v[i]*(n-i);
     }
     
-    cout << c;
+    cout << sum;
     
     return 0;
 }

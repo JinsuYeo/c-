@@ -16,7 +16,7 @@ int main() {
     }
     catch (const IllegalBalanceException &ex)
     {
-        std::cerr << "Couldn't create account - negative balance" << std::endl;
+        std::cerr << ex.what() << std::endl;
     }
     std::cout << "Program completed successfully" << std::endl;
     return 0;

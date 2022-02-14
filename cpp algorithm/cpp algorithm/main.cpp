@@ -1,14 +1,34 @@
 #include <iostream>
 #include <algorithm>
-#include <array>
+#include <cmath>
 #include <vector>
 
 using namespace std;
 
-array<int, 11> arr;
 vector<int> v;
+bool visited[8];
+vector<int> sorted;
 
-int T, N;
+int T, N, result, sum;
+
+void dfs(int start) {
+    if (sorted.size() == v.size()) {
+        for (int i{1}; i < sorted.size(); i++) {
+            sum += abs(sorted.at(i-1) - sorted.at(i));
+        }
+        result = max(result, sum);
+        sum = 0;
+    }
+    for (int i{}; i < v.size(); i++) {
+        if (!visited[i]) {
+            visited[i] = true;
+            sorted.push_back(v.at(i));
+            dfs(i);
+            visited[i] = false;
+            sorted.pop_back();
+        }
+    }
+}
 
 int main(void){
     ios_base::sync_with_stdio(false);
@@ -20,17 +40,17 @@ int main(void){
         v.push_back(N);
     }
     
-    arr[1] = 1;
-    arr[2] = 2;
-    arr[3] = 4;
+    sort(v.begin(), v.end());
     
-    for(int i{4}; i < 11; i++) {
-        arr[i] = arr[i-3] + arr[i-2] + arr[i-1];
+    for (int i{}; i < v.size(); i++) {
+        visited[i] = true;
+        sorted.push_back(v[i]);
+        dfs(i);
+        sorted.pop_back();
+        visited[i] = false;
     }
     
-    for (auto e: v) {
-        cout << arr[e] << '\n';
-    }
+    cout << result << '\n';
     
     return 0;
 }

@@ -1,10 +1,14 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 double calculate_mpg(int miles, int gallons) {
     if (gallons == 0)
         throw 0;
+    if (miles < 0 || gallons < 0) {
+        throw string{"Negative value error"};
+    }
     return static_cast<double>(miles) / gallons;
 }
 
@@ -23,6 +27,8 @@ int main(int argc, const char * argv[]) {
         cout << "Result: " << miles_per_gallon << "\n";
     } catch (int &ex) {
         cerr << "Sorry. you can't divide by zero" << endl;
+    } catch(string &ex) {
+        cerr << ex << endl;
     }
     
     cout << "Bye" << endl;

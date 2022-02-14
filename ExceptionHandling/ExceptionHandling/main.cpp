@@ -1,42 +1,38 @@
 #include <iostream>
 
-void func_a();
-void func_b();
-void func_c();
+class DivideByZeroException {
+};
+class NegativeValueException {
+};
 
-void func_a() {
-    std::cout << "Starting func_a" << std::endl;
-    func_b();
-    std::cout << "Ending func_a" << std::endl;
-}
-
-void func_b() {
-    std::cout << "Starting func_b" << std::endl;
-    try {
-        func_c();
-    }
-    catch (int &ex) {
-         std::cout << "Caught error in func_b" << std::endl;
-    }
-    std::cout << "Ending func_b" << std::endl;
-}
-
-void func_c()  {
-    std::cout << "Starting func_c" << std::endl;
-    throw 100;
-    std::cout << "Ending func_c" << std::endl;
+double calculate_mpg(int miles, int gallons) {
+    if (gallons == 0)
+        throw DivideByZeroException();
+    else if (miles < 0 || gallons < 0)
+        throw NegativeValueException();
+    return static_cast<double>(miles) / gallons;
 }
 
 int main() {
+    int miles {};
+    int gallons {};
+    double miles_per_gallon {};
     
-    std::cout << "Starting main" << std::endl;
+    std::cout << "Enter the miles: ";
+    std::cin >> miles;
+    std::cout << "Enter the gallons: ";
+    std::cin >> gallons;
+    
     try {
-        func_a();
+        miles_per_gallon = calculate_mpg(miles, gallons);
+        std::cout << "Result: " << miles_per_gallon << std::endl;
+    } catch (const DivideByZeroException &ex) {
+        std::cerr << "Sorry, you can't divide by zero" << std::endl;
+    } catch (const NegativeValueException &ex) {
+        std::cerr << "Sorry, one of your parameters is negative" << std::endl;
     }
-    catch (int &ex) {
-        std::cout << "Caught error in main" << std::endl;
-    }
-    std::cout << "Finishing main" << std::endl;
+    std::cout << "Bye" << std::endl;
+
     return 0;
 }
 

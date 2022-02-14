@@ -1,37 +1,42 @@
 #include <iostream>
-#include <string>
 
-using namespace std;
+void func_a();
+void func_b();
+void func_c();
 
-double calculate_mpg(int miles, int gallons) {
-    if (gallons == 0)
-        throw 0;
-    if (miles < 0 || gallons < 0) {
-        throw string{"Negative value error"};
-    }
-    return static_cast<double>(miles) / gallons;
+void func_a() {
+    std::cout << "Starting func_a" << std::endl;
+    func_b();
+    std::cout << "Ending func_a" << std::endl;
 }
 
-int main(int argc, const char * argv[]) {
-    int miles{};
-    int gallons{};
-    double miles_per_gallon{};
-    
-    cout << "Enter the miles: ";
-    cin >> miles;
-    cout << "Enter the gallons: ";
-    cin >> gallons;
-    
+void func_b() {
+    std::cout << "Starting func_b" << std::endl;
     try {
-        miles_per_gallon = calculate_mpg(miles, gallons);
-        cout << "Result: " << miles_per_gallon << "\n";
-    } catch (int &ex) {
-        cerr << "Sorry. you can't divide by zero" << endl;
-    } catch(string &ex) {
-        cerr << ex << endl;
+        func_c();
     }
+    catch (int &ex) {
+         std::cout << "Caught error in func_b" << std::endl;
+    }
+    std::cout << "Ending func_b" << std::endl;
+}
+
+void func_c()  {
+    std::cout << "Starting func_c" << std::endl;
+    throw 100;
+    std::cout << "Ending func_c" << std::endl;
+}
+
+int main() {
     
-    cout << "Bye" << endl;
-    
+    std::cout << "Starting main" << std::endl;
+    try {
+        func_a();
+    }
+    catch (int &ex) {
+        std::cout << "Caught error in main" << std::endl;
+    }
+    std::cout << "Finishing main" << std::endl;
     return 0;
 }
+

@@ -1,31 +1,33 @@
 #include <iostream>
 #include <algorithm>
-#include <cmath>
+#include <array>
 #include <vector>
 
 using namespace std;
 
 vector<int> v;
-bool visited[8];
-vector<int> sorted;
+bool visited[11];
+array<array<int, 11>, 11> arr;
 
-int T, N, result, sum;
+int N, result{1 << 30}, min_v{}, des;
 
-void dfs(int start) {
-    if (sorted.size() == v.size()) {
-        for (int i{1}; i < sorted.size(); i++) {
-            sum += abs(sorted.at(i-1) - sorted.at(i));
+void dfs(int start, int cost, int n) {
+    visited[start] = true;
+    min_v += cost;
+    if (n == N) {
+        if (arr[start][des] != 0) {
+            result = min(result, min_v + arr[start][des]);
         }
-        result = max(result, sum);
-        sum = 0;
+        return;
     }
-    for (int i{}; i < v.size(); i++) {
+    
+    for (int i{}; i < N; i++) {
+        if(!arr[start][i]) continue;
+            
         if (!visited[i]) {
-            visited[i] = true;
-            sorted.push_back(v.at(i));
-            dfs(i);
+            dfs(i, arr[start][i], n+1);
             visited[i] = false;
-            sorted.pop_back();
+            min_v -= arr[start][i];
         }
     }
 }
@@ -34,19 +36,16 @@ int main(void){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> T;
-    for (int i{}; i < T; i++) {
-        cin >> N;
-        v.push_back(N);
+    cin >> N;
+    for (int i{}; i < N; i++) {
+        for (int j{}; j < N; j++) {
+            cin >> arr[i][j];
+        }
     }
     
-    sort(v.begin(), v.end());
-    
-    for (int i{}; i < v.size(); i++) {
-        visited[i] = true;
-        sorted.push_back(v[i]);
-        dfs(i);
-        sorted.pop_back();
+    for (int i{}; i < N; i++) {
+        des = i;
+        dfs(i, 0, 1);
         visited[i] = false;
     }
     

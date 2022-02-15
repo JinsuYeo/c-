@@ -1,54 +1,99 @@
 #include <iostream>
 #include <algorithm>
 #include <array>
-#include <vector>
+#include <cstdio>
 
 using namespace std;
 
-vector<int> v;
-bool visited[11];
-array<array<int, 11>, 11> arr;
+int N, M;
+long long result;
+array<array<int, 51>, 51> rect;
 
-int N, result{1 << 30}, min_v{}, des;
-
-void dfs(int start, int cost, int n) {
-    visited[start] = true;
-    min_v += cost;
-    if (n == N) {
-        if (arr[start][des] != 0) {
-            result = min(result, min_v + arr[start][des]);
+int rect_sum(int nstart, int mstart, int nend, int mend) {
+    int sum{};
+    for (int i{nstart}; i <= nend; i++) {
+        for (int j{mstart}; j <= mend; j++) {
+            sum += rect[i][j];
         }
-        return;
     }
     
-    for (int i{}; i < N; i++) {
-        if(!arr[start][i]) continue;
-            
-        if (!visited[i]) {
-            dfs(i, arr[start][i], n+1);
-            visited[i] = false;
-            min_v -= arr[start][i];
-        }
-    }
+    return sum;
 }
 
-int main(void){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    
-    cin >> N;
-    for (int i{}; i < N; i++) {
-        for (int j{}; j < N; j++) {
-            cin >> arr[i][j];
+int main(void) {
+    cin >> N >> M;
+    for(int i {}; i < N; i++) {
+        for (int j{}; j < M; j++) {
+            scanf("%1d", &rect[i][j]);
         }
     }
     
-    for (int i{}; i < N; i++) {
-        des = i;
-        dfs(i, 0, 1);
-        visited[i] = false;
+    for(int i{}; i < N-2; i++) {
+        for (int j{i+1}; j < N-1; j++) {
+            long long pd{1};
+            pd *= rect_sum(0, 0, i, M-1);
+            pd *= rect_sum(i+1, 0, j, M-1);
+            pd *= rect_sum(j+1, 0, N-1, M-1);
+            
+            result = max(result, pd);
+        }
     }
     
+    for (int i{}; i < M-2; i++) {
+        for (int j{i+1}; j < M-1; j++) {
+            long long pd{1};
+            pd *= rect_sum(0, 0, N-1, i);
+            pd *= rect_sum(0, i+1, N-1, j);
+            pd *= rect_sum(0, j+1, N-1, M-1);
+            
+            result = max(result, pd);
+        }
+    }
+    
+    for (int i{}; i < M-1; i++) {
+        for (int j{}; j < N-1; j++) {
+            long long pd{1};
+            pd *= rect_sum(0, 0, N-1, i);
+            pd *= rect_sum(0, i+1, j, M-1);
+            pd *= rect_sum(j+1, i+1, N-1, M-1);
+            
+            result = max(result, pd);
+        }
+    }
+       
+    for (int i{M-1}; i >= 0; i--) {
+        for (int j{}; j < N-1; j++) {
+            long long pd{1};
+            pd *= rect_sum(0, 0, j, i);
+            pd *= rect_sum(j+1, 0, N-1, i);
+            pd *= rect_sum(0, i+1, N-1, M-1);
+            
+            result = max(result, pd);
+        }
+    }
+    
+    for (int i{}; i < N-1; i++) {
+        for (int j{}; j < M-1; j++) {
+            long long pd{1};
+            pd *= rect_sum(0, 0, i, M-1);
+            pd *= rect_sum(i+1, 0, N-1, j);
+            pd *= rect_sum(i+1, j+1, N-1, M-1);
+            
+            result = max(result, pd);
+        }
+    }
+    
+    for (int i{N-1}; i >= 0; i--) {
+        for (int j{}; j < M-1; j++) {
+            long long pd{1};
+            pd *= rect_sum(0, 0, i, j);
+            pd *= rect_sum(0, j+1, i, M-1);
+            pd *= rect_sum(i+1, 0, N-1, M-1);
+            
+            result = max(result, pd);
+        }
+    }
+
     cout << result << '\n';
     
     return 0;

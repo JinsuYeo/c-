@@ -1,145 +1,91 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
-#include <queue>
-#include <array>
-#include <set>
+#include <cstring>
 #include <vector>
 
 using namespace std;
 
-int A, B, C;
+int N, M, K;
 
-typedef array<pair<int, int>, 3>  pi;
-queue<pi> q;
-set<pi> visited;
+typedef struct{
+    int x;
+    int y;
+} Dir;
+Dir dir[4] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
 
-void bfs(){
-    while (!q.empty()) {
-        pi cur = q.front();
-        pair<int, int> a = cur.at(0);
-        pair<int, int> b = cur.at(1);
-        pair<int, int> c = cur.at(2);
-        int pa = a.first - a.second;
-        int pb = b.first - b.second;
-        int pc = c.first - c.second;
-        q.pop();
-        
-        if (pa && c.second && c.second >= pa) {
-            pi next = {make_pair(A, A), b, make_pair(C, c.second-pa)};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
+string arr[100];
+string target;
+int visited[100][100][80];
+
+int C;
+
+int dfs(int &y, int &x, int c){
+    int &result = visited[y][x][c]; // c는 target과 비교할 문자의 위치 의미함. ex) 1일 때는 target[1]과 비교. visited[y][x][c]는 만들고 있는 영단어의 c번째 위치가(index가 c일 때), arr의 (x, y)를 지나감을 의미. + 참조로 사용하지 않으면 시간초과 발생.
+    
+    if (result != -1) {
+        return result; // 이미 경로를 방문했다면 0 or 1이 들어있을 테니 리턴 -> 길이가 같으면서 경로가 겹치는 문자열 존재할 수 없음. 따라서 이미 방문 했다면 visited[y][x][c]에는 0이 들어있을 것임.
+    }
+    
+    if (c == target.length()) {
+        return 1; // 방문하지 않았고, target과 같다면(반복문안의 조건문에서 target과 한글자씩 비교하며 같을 때만 dfs()해주고 있으므로 길이가 target과 같다면 target과 같음을 의미함). 따라서 1개 찾았음을 표시.
+    }
+    
+    result = 0;
+    
+    for (int i{}; i < 4; i++) {
+        int tempy = y;
+        int tempx = x;
+        for (int j{}; j < K; j++) { // 현재 좌표 기준으로 상 하 좌 우로 k번째 칸까지 비교.
+            int nexty = tempy + dir[i].y;
+            int nextx = tempx + dir[i].x;
+            
+            if (nexty < 0 || nexty >= N || nextx < 0 || nextx > M) {
+                break;
             }
-        }
-        if (pa && c.second && c.second <= pa) {
-            pi next = {make_pair(A, a.second + c.second), b, make_pair(C, 0)};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
+            
+            if (arr[nexty][nextx] == target[c]) {
+                result += dfs(nexty, nextx, c+1);
             }
-        }
-        if (pb && c.second && c.second >= pb) {
-            pi next = {a, make_pair(B, B), make_pair(C, c.second-pb)};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        if (pb && c.second && c.second <= pb) {
-            pi next = {a, make_pair(B, b.second + c.second), make_pair(C, 0)};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        
-        if (pa && b.second && b.second >= pa) {
-            pi next = {make_pair(A, A),  make_pair(B, b.second-pa), c};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        if (pa && b.second && b.second <= pa) {
-            pi next = {make_pair(A, a.second + b.second),  make_pair(B, 0), c};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        if (pc && b.second && b.second >= pc) {
-            pi next = {a, make_pair(B, b.second-pc), make_pair(C, C)};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        if (pc && b.second && b.second <= pc) {
-            pi next = {a, make_pair(B, 0), make_pair(C, c.second + b.second)};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        
-        if (pb && a.second && a.second >= pb) {
-            pi next = {make_pair(A, a.second-pb), make_pair(B, B), c};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        if (pb && a.second && a.second <= pb) {
-            pi next = {make_pair(A, 0), make_pair(B, b.second + a.second), c};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        if (pc && a.second && a.second >= pc) {
-            pi next = {make_pair(A, a.second-pc), b, make_pair(C, C)};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
-        }
-        if (pc && a.second && a.second <= pc) {
-            pi next = {make_pair(A, 0), b, make_pair(C, c.second + a.second)};
-            if (!visited.count(next)) {
-                q.push(next);
-                visited.insert(next);
-            }
+            
+            tempy = nexty;
+            tempx = nextx;
         }
     }
+    
+    return result;
 }
+
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> A >> B >> C;
-    pi start = {make_pair(A, 0), make_pair(B, 0), make_pair(C, C)};
+    cin >> N >> M >> K;
+    for (int i{}; i < N; i++) {
+        cin >> arr[i];
+    }
+    cin >> target;
     
-    q.push(start);
-    visited.insert(start);
+    vector<pair<int, int>> start;
     
-    bfs();
-    vector<int> v;
-    
-    auto it = visited.begin();
-    while (it != visited.end()) {
-        if (it->at(0).second == 0) {
-            v.push_back(it->at(2).second);
+    for (int i{}; i < N; i++) {
+        for (int j{}; j < M; j++) {
+            if (arr[i][j] == target[0]) {
+                start.push_back({i, j}); // arr에서 target의 첫번째 문자와 같은 문자의 좌표 찾아 start벡터에 넣어줌.
+            }
         }
-        it++;
-    }
-        
-    sort(v.begin(), v.end());
-    for (auto e: v) {
-        cout << e << " ";
     }
     
+    memset(visited, -1, sizeof(visited));
+    
+    for (int i{}; i < start.size(); i++) {
+        int y = start[i].first;
+        int x = start[i].second;
+        C += dfs(y, x, 1);
+    }
+    
+    cout << C << '\n';
     
     return 0;
 }

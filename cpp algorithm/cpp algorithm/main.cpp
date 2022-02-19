@@ -1,53 +1,52 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
-#include <queue>
 #include <vector>
 
 using namespace std;
 
-const int MAX {1000001};
-
-int F, S, G, U, D;
-
-queue<pair<int, int>> q;
-bool visited[MAX];
-
-int bfs(int start){
-    q.push(make_pair(start, 0));
-    visited[start] = true;
-    
-    while (!q.empty()) {
-        int cur = q.front().first;
-        int count = q.front().second;
-        q.pop();
-        
-        if (cur == G) {
-            return count;
-        }
-        
-        if (cur + U <= F && !visited[cur+U]) {
-            q.push(make_pair(cur+U, count+1));
-            visited[cur+U] = true;
-        }
-        if (cur - D >= 1 && !visited[cur-D]) {
-            q.push(make_pair(cur-D, count+1));
-            visited[cur-D] = true;
-        }
+int L, C;
+string s;
+vector<char> v;
+bool isVowel[16];
+void dfs(int size, int index, int vowel, int consonant){
+    if (size == L && vowel >= 1 && consonant >= 2) {
+        cout << s << '\n';
+        return;
     }
     
-    return -1;
+    for (int i{index}; i < C; i++) {
+        s += v[i];
+        if(isVowel[i]) {
+            dfs(size+1, i+1, vowel+1, consonant);
+        } else {
+            dfs(size+1, i+1, vowel, consonant+1);
+        }
+        s.pop_back();
+    }
 }
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> F >> S >> G >> U >> D;
+    cin >> L >> C;
+    for (int i{}; i < C; i++) {
+        char t;
+        cin >> t;
+        v.push_back(t);
+    }
     
-    int result = bfs(S);
-    if (result != -1) cout << result << '\n';
-    else cout << "use the stairs\n";
+    sort(v.begin(), v.end());
     
+    for (int i{}; i < C; i++) {
+        int t = v[i];
+        if (t == 'a' || t == 'e' || t == 'i' || t == 'o' || t == 'u') {
+            isVowel[i] = true;
+        }
+    }
+    
+    dfs(0, 0, 0, 0);
+
     return 0;
 }

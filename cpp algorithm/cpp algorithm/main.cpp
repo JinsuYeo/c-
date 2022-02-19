@@ -1,28 +1,48 @@
 #include <iostream>
 #include <algorithm>
-#include <string>
 #include <vector>
 
 using namespace std;
 
-int L, C;
-string s;
-vector<char> v;
-bool isVowel[16];
-void dfs(int size, int index, int vowel, int consonant){
-    if (size == L && vowel >= 1 && consonant >= 2) {
-        cout << s << '\n';
-        return;
+int arr[9][9];
+bool row[9][10];
+bool col[9][10];
+bool small[9][10];
+
+int change(int x, int y){
+    return (y/3)*3 + x/3;
+}
+
+void dfs(int c){
+    int y{c/9};
+    int x{c%9};
+    
+    if (c == 81) {
+        for (int i{}; i < 9; i++) {
+            for (int j{}; j < 9; j++) {
+                cout << arr[i][j] << " ";
+            }
+            cout << '\n';
+        }
+        exit(0);
     }
     
-    for (int i{index}; i < C; i++) {
-        s += v[i];
-        if(isVowel[i]) {
-            dfs(size+1, i+1, vowel+1, consonant);
-        } else {
-            dfs(size+1, i+1, vowel, consonant+1);
+    if (arr[y][x]) {
+        dfs(c+1);
+    } else {
+        for (int k{1}; k <= 9; k++) {
+            if(!row[y][k] && !col[x][k] && !small[change(x, y)][k]){
+                arr[y][x] = k;
+                row[y][k] = true;
+                col[x][k] = true;
+                small[change(x, y)][k] = true;
+                dfs(c+1);
+                arr[y][x] = 0;
+                row[y][k] = false;
+                col[x][k] = false;
+                small[change(x, y)][k] = false;
+            }
         }
-        s.pop_back();
     }
 }
 
@@ -30,23 +50,18 @@ int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> L >> C;
-    for (int i{}; i < C; i++) {
-        char t;
-        cin >> t;
-        v.push_back(t);
-    }
-    
-    sort(v.begin(), v.end());
-    
-    for (int i{}; i < C; i++) {
-        int t = v[i];
-        if (t == 'a' || t == 'e' || t == 'i' || t == 'o' || t == 'u') {
-            isVowel[i] = true;
+    for (int i{}; i < 9; i++) {
+        for (int j{}; j < 9; j++) {
+            cin >> arr[i][j];
+            if (arr[i][j]) {
+                row[i][arr[i][j]] = true;
+                col[j][arr[i][j]] = true;
+                small[change(j, i)][arr[i][j]] = true;
+            }
         }
     }
     
-    dfs(0, 0, 0, 0);
+    dfs(0);
 
     return 0;
 }

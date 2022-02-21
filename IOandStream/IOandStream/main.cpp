@@ -2,32 +2,43 @@
 #include <iomanip>
 
 int main(int argc, const char * argv[]) {
-    std::cout << "noboolalpha - default(10 == 10): " << (10 == 10) << std::endl;
-    std::cout << "noboolalpha - default(10 == 20): " << (10 == 20) << std::endl;
+    int num{255};
     
-    // Set to true/false formatting
-    std::cout << std::boolalpha; // change to true/false
-    std::cout << "boolalpha (10 == 10): " << (10 == 10) << std::endl;
-    std::cout << "boolalpha (10 == 20): " << (10 == 20) << std::endl;
+    // Displaying using different bases
+    std::cout << "\n----------------------------" << std::endl;
+    std::cout << std::dec << num << std::endl;
+    std::cout << std::hex << num << std::endl;
+    std::cout << std::oct << num << std::endl;
     
-    // setting still stays for future boolean insertions
-    std::cout << "boolalpha (10 == 10): " << (10 == 10) << std::endl;
-    std::cout << "boolalpha (10 == 20): " << (10 == 20) << std::endl;
+    // Displaying showing the base prefix for hex and oct
+    std::cout << "\n----------------------------" << std::endl;
+    std::cout << std::showbase;
+    std::cout << std::dec << num << std::endl;
+    std::cout << std::hex << num << std::endl;
+    std::cout << std::oct << num << std::endl;
+
+    // Displaying the hex value in uppercase
+    std::cout << "\n----------------------------" << std::endl;
+    std::cout << std::showbase << std::uppercase;
+    std::cout << std::hex << num << std::endl;
+
+    // Displaying the + sign in front of positive base 10 numbers
+    std::cout << "\n----------------------------" << std::endl;
+    std::cout << std::showpos;
+    std::cout << std::dec << num << std::endl;
+    std::cout << std::hex << num << std::endl;
+    std::cout << std::oct << num << std::endl;
     
-    // Toggle to 0/1
-    std::cout << std::noboolalpha;
-    std::cout << "noboolalpha (10 == 10): " << (10 == 10) << std::endl;
-    std::cout << "noboolalpha (10 == 20): " << (10 == 20) << std::endl;
+    // setting using the set method
+    std::cout.setf(std::ios::showbase);
+    std::cout.setf(std::ios::showpos);
+    std::cout.setf(std::ios::uppercase);
     
-    // Set back to true/false using setf method
-    std::cout.setf(std::ios::boolalpha);
-    std::cout << "boolalpha (10 == 10): " << (10 == 10) << std::endl;
-    std::cout << "boolalpha (10 == 20): " << (10 == 20) << std::endl;
-    
-    // resets to default which is 0/1
-    std::cout << std::resetiosflags(std::ios::boolalpha);
-    std::cout << "Default(10 == 10): " << (10 == 10) << std::endl;
-    std::cout << "Default(10 == 20): " << (10 == 20) << std::endl;
+    // resetting to defaults
+    std::cout << std::resetiosflags(std::ios::basefield);
+    std::cout << std::resetiosflags(std::ios::showbase);
+    std::cout << std::resetiosflags(std::ios::showpos);
+    std::cout << std::resetiosflags(std::ios::uppercase);
     
     return 0;
 }

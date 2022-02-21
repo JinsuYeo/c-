@@ -4,42 +4,36 @@
 
 using namespace std;
 
-int K;
-vector<int> S;
-vector<int> result;
+int N, S;
+vector<int> v;
+int cnt;
 
-
-void dfs(int idx, int size){
-    if (size == 6) {
-        for (int i{}; i < 6; i++) {
-            cout << result.at(i) << " ";
-        }
-        cout << '\n';
-        return;
+void dfs(int idx, int cur){
+    if (cur == S && idx > -1) {
+        cnt++;
     }
     
-    for (int i{idx}; i < K; i++) {
-        result.push_back(S.at(i));
-        dfs(i+1, size+1);
-        result.pop_back();
+    for (int i{idx+1}; i < N; i++) {
+        int next = cur + v.at(i);
+        dfs(i, next);
     }
+    return;
 }
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    while (cin >> K) {
-        for (int i{}; i < K; i++) {
-            int t{};
-            cin >> t;
-            S.push_back(t);
-        }
-        dfs(0, 0);
-        cout << '\n';
-        S.clear();
-        result.clear();
+    cin >> N >> S;
+    for (int i{}; i < N; i++) {
+        int t{};
+        cin >> t;
+        v.push_back(t);
     }
 
+    dfs(-1, 0);
+    
+    cout << cnt << '\n';
+    
     return 0;
 }

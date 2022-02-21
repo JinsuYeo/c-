@@ -4,27 +4,26 @@
 
 using namespace std;
 
-int N, M;
+int N;
+int S;
 vector<int> v;
-int cnt;
+int result{1 << 30};
 
-void dfs(int idx, int cur){
-    if (cur == M && idx > -1) {
-        cnt++;
-    }
-    
-    if (idx + 1 >= N || cur > M) {
-        return;
-    }
-    
-    if (idx == -1) {
-        for (int i{idx+1}; i < N; i++) {
-            int next = cur + v.at(i);
-            dfs(i, next);
+void dfs(int low, int high, int sum){
+    while (low <= high && high < N) {
+        if (sum < S) {
+            sum += v[++high];
+        } else if(sum == S) {
+            result = min(result, high - low + 1);
+            sum += v[++high];
+        } else if(sum > S) {
+            result = min(result, high - low + 1);
+            sum -= v[low++];
+//            if (low > high && low < N) {
+//                high = low;
+//                sum = v[low];
+//            }
         }
-    } else {
-        int next = cur + v.at(idx+1);
-        dfs(idx+1, next);
     }
     
     return;
@@ -34,16 +33,17 @@ int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> N >> M;
+    cin >> N >> S;
     for (int i{}; i < N; i++) {
         int t{};
         cin >> t;
         v.push_back(t);
     }
 
-    dfs(-1, 0);
+    dfs(0, 0, v[0]);
     
-    cout << cnt << '\n';
+    if(result == 1 << 30) cout << 0 << '\n';
+    else cout << result << '\n';
     
     return 0;
 }

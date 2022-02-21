@@ -1,37 +1,27 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <string>
-#include <map>
 
 using namespace std;
 
-int R, C;
-string s;
-bool visited[27];
-int result;
+int K;
+vector<int> S;
+vector<int> result;
 
-typedef struct {
-    int y;
-    int x;
-} DIR;
-DIR dir[4] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-void dfs(int &&idx, int &&cnt){
-    int y{idx/C};
-    int x{idx%C};
-    
-    if (cnt > result) result = cnt;
-    
-    for (int i{}; i < 4; i++) {
-        int nexty = y + dir[i].y;
-        int nextx = x + dir[i].x;
-        if (nextx < 0 || nextx >= C || nexty < 0 || nexty >= R) continue;
-        if (!visited[s[nexty*C + nextx]-'A']) {
-            visited[s[nexty*C + nextx]-'A'] = true;
-            dfs(nexty*C + nextx, cnt+1);
-            visited[s[nexty*C + nextx]-'A'] = false;
+void dfs(int idx, int size){
+    if (size == 6) {
+        for (int i{}; i < 6; i++) {
+            cout << result.at(i) << " ";
         }
+        cout << '\n';
+        return;
+    }
+    
+    for (int i{idx}; i < K; i++) {
+        result.push_back(S.at(i));
+        dfs(i+1, size+1);
+        result.pop_back();
     }
 }
 
@@ -39,17 +29,17 @@ int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> R >> C;
-    for (int i{}; i < R; i++) {
-        string t;
-        cin >> t;
-        s += t;
+    while (cin >> K) {
+        for (int i{}; i < K; i++) {
+            int t{};
+            cin >> t;
+            S.push_back(t);
+        }
+        dfs(0, 0);
+        cout << '\n';
+        S.clear();
+        result.clear();
     }
-    
-    visited[s[0]-'A'] = true;
-    dfs(0, 1);
-    
-    cout << result << '\n';
 
     return 0;
 }

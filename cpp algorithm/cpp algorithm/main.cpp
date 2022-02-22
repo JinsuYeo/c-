@@ -1,49 +1,60 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <cstring>
 
 using namespace std;
 
-int N;
-int S;
-vector<int> v;
-int result{1 << 30};
+const int MAX{4000001};
 
-void dfs(int low, int high, int sum){
-    while (low <= high && high < N) {
-        if (sum < S) {
-            sum += v[++high];
-        } else if(sum == S) {
-            result = min(result, high - low + 1);
-            sum += v[++high];
-        } else if(sum > S) {
-            result = min(result, high - low + 1);
-            sum -= v[low++];
-//            if (low > high && low < N) {
-//                high = low;
-//                sum = v[low];
-//            }
+int N, result;
+bool num[MAX];
+vector<int> prime;
+
+void tp(){
+    int low{}, high{};
+    int n = (int)prime.size();
+    int sum{2};
+    
+    while (low <= high && high < n) {
+        if (sum < N) {
+            sum += prime[++high];
+        } else if(sum == N) {
+            result++;
+            sum += prime[++high];
+        } else if(sum > N) {
+            sum -= prime[low++];
+            if (low > high) {
+                high = low;
+            }
         }
     }
-    
-    return;
 }
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    
-    cin >> N >> S;
-    for (int i{}; i < N; i++) {
-        int t{};
-        cin >> t;
-        v.push_back(t);
-    }
+        
+    cin >> N;
 
-    dfs(0, 0, v[0]);
+    memset(num, 1, N+1);
     
-    if(result == 1 << 30) cout << 0 << '\n';
-    else cout << result << '\n';
+    num[0] = false;
+    num[1] = false;
+    for (int i{2}; i <= N; i++) {
+        if (num[i] == 0) continue;
+        for (int j{i+i}; j <= N; j+=i) {
+            num[j] = false;
+        }
+    }
+    
+    for (int i{}; i <= N; i++) {
+        if (num[i]) prime.push_back(i);
+    }
+    
+    tp();
+    
+    cout << result << '\n';
     
     return 0;
 }

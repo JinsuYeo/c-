@@ -1,60 +1,68 @@
 #include <iostream>
+#include <cstdio>
 #include <algorithm>
 #include <vector>
-#include <cstring>
+#include <queue>
 
 using namespace std;
 
-const int MAX{4000001};
+typedef struct {
+    int x;
+    int y;
+} COORD;
 
-int N, result;
-bool num[MAX];
-vector<int> prime;
+COORD dir[4] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
 
-void tp(){
-    int low{}, high{};
-    int n = (int)prime.size();
-    int sum{2};
-    
-    while (low <= high && high < n) {
-        if (sum < N) {
-            sum += prime[++high];
-        } else if(sum == N) {
-            result++;
-            sum += prime[++high];
-        } else if(sum > N) {
-            sum -= prime[low++];
-            if (low > high) {
-                high = low;
+int N, M, C{1 << 30};
+int arr[101][101];
+bool visited[101][101];
+//priority_queue<pair<int, COORD>> q;
+priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> q;
+
+void bfs(){
+    q.push(make_pair(0, make_pair(1, 1)));
+    visited[1][1] = true;
+    while (!q.empty()) {
+        int x = q.top().second.first;
+        int y = q.top().second.second;
+        int count = q.top().first;
+        q.pop();
+  
+        if (y == N && x == M) {
+            C = count;
+            return;
+        }
+        
+        for (int i{}; i < 4; i++) {
+            int nextx = x + dir[i].x;
+            int nexty = y + dir[i].y;
+            
+            if (nextx < 1 || nextx > M || nexty < 1 || nexty > N) continue;
+            if (!visited[nexty][nextx] && arr[nexty][nextx] == 0) {
+                q.push(make_pair(count, make_pair(nextx, nexty)));
+                visited[nexty][nextx] = true;
+                continue;
+            }
+            if (!visited[nexty][nextx] && arr[nexty][nextx] == 1) {
+                q.push(make_pair(count+1, make_pair(nextx, nexty)));
+                visited[nexty][nextx] = true;
             }
         }
     }
 }
 
 int main(void) {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-        
-    cin >> N;
+    cin >> M >> N;
 
-    memset(num, 1, N+1);
-    
-    num[0] = false;
-    num[1] = false;
-    for (int i{2}; i <= N; i++) {
-        if (num[i] == 0) continue;
-        for (int j{i+i}; j <= N; j+=i) {
-            num[j] = false;
+    for (int i{1}; i <= N; i++) {
+        for (int j{1}; j <= M; j++) {
+            scanf("%1d", &arr[i][j]);
         }
     }
     
-    for (int i{}; i <= N; i++) {
-        if (num[i]) prime.push_back(i);
-    }
+    bfs();
     
-    tp();
-    
-    cout << result << '\n';
+    cout << C << '\n';
     
     return 0;
 }

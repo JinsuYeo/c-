@@ -2,43 +2,60 @@
 #include <iomanip>
 
 int main(int argc, const char * argv[]) {
-    int num{255};
+    double num1{123456789.987654321};
+    double num2{1234.5678};
+    double num3{1234.0};
     
-    // Displaying using different bases
-    std::cout << "\n----------------------------" << std::endl;
-    std::cout << std::dec << num << std::endl;
-    std::cout << std::hex << num << std::endl;
-    std::cout << std::oct << num << std::endl;
+    // Using default settings
+    std::cout << num1 << std::endl;
+    std::cout << num2 << std::endl;
+    std::cout << num3 << std::endl;
     
-    // Displaying showing the base prefix for hex and oct
-    std::cout << "\n----------------------------" << std::endl;
-    std::cout << std::showbase;
-    std::cout << std::dec << num << std::endl;
-    std::cout << std::hex << num << std::endl;
-    std::cout << std::oct << num << std::endl;
-
-    // Displaying the hex value in uppercase
-    std::cout << "\n----------------------------" << std::endl;
-    std::cout << std::showbase << std::uppercase;
-    std::cout << std::hex << num << std::endl;
-
-    // Displaying the + sign in front of positive base 10 numbers
-    std::cout << "\n----------------------------" << std::endl;
-    std::cout << std::showpos;
-    std::cout << std::dec << num << std::endl;
-    std::cout << std::hex << num << std::endl;
-    std::cout << std::oct << num << std::endl;
+    // Note how since we can't display in precision 2 scientific notation is used
+    std::cout << std::setprecision(2);
+    std::cout << num1 << std::endl;
+    std::cout << num2 << std::endl;
+    std::cout << num3 << std::endl;
     
-    // setting using the set method
-    std::cout.setf(std::ios::showbase);
-    std::cout.setf(std::ios::showpos);
-    std::cout.setf(std::ios::uppercase);
+    // Using precision 3 and fixed
+    std::cout << std::setprecision(3) << std::fixed;
+    std::cout << num1 << std::endl;
+    std::cout << num2 << std::endl;
+    std::cout << num3 << std::endl;
     
-    // resetting to defaults
-    std::cout << std::resetiosflags(std::ios::basefield);
-    std::cout << std::resetiosflags(std::ios::showbase);
+    // Using precision 3, fixed and scientific notation
+    std::cout << std::setprecision(3) << std::scientific;
+    std::cout << num1 << std::endl;
+    std::cout << num2 << std::endl;
+    std::cout << num3 << std::endl;
+    
+    // Same but display capital 'E' in scientific
+    std::cout << std::setprecision(3) << std::scientific << std::uppercase;
+    std::cout << num1 << std::endl;
+    std::cout << num2 << std::endl;
+    std::cout << num3 << std::endl;
+    
+    // Show '+' symbol for positive numbers
+    std::cout << std::setprecision(3) << std::fixed << std::showpos;
+    std::cout << num1 << std::endl;
+    std::cout << num2 << std::endl;
+    std::cout << num3 << std::endl;
+    
+    // Back to defaults
+    std::cout.unsetf(std::ios::scientific | std::ios::fixed);
     std::cout << std::resetiosflags(std::ios::showpos);
-    std::cout << std::resetiosflags(std::ios::uppercase);
+    
+    // Show trailing zeroes up to precision 10
+    
+    std::cout << std::setprecision(10) << std::showpoint;
+    std::cout << num1 << std::endl;
+    std::cout << num2 << std::endl;
+    std::cout << num3 << std::endl;
+    
+    // Back to defaults
+    std::cout << std::setprecision(6);
+    std::cout << std::resetiosflags(std::ios::showpos);
+    std::cout << std::resetiosflags(std::ios::showpoint);
     
     return 0;
 }

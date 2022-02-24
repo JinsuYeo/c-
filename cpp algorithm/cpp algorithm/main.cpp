@@ -1,68 +1,111 @@
-#include <iostream>
-#include <cstdio>
-#include <algorithm>
-#include <vector>
-#include <queue>
-
+#include<iostream>
+#include<string>
+#include<queue>
+ 
+#define endl "\n"
+#define MAX 100
 using namespace std;
-
-typedef struct {
-    int x;
-    int y;
-} COORD;
-
-COORD dir[4] = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-
-int N, M, C{1 << 30};
-int arr[101][101];
-bool visited[101][101];
-//priority_queue<pair<int, COORD>> q;
-priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> q;
-
-void bfs(){
-    q.push(make_pair(0, make_pair(1, 1)));
-    visited[1][1] = true;
-    while (!q.empty()) {
-        int x = q.top().second.first;
-        int y = q.top().second.second;
-        int count = q.top().first;
-        q.pop();
-  
-        if (y == N && x == M) {
-            C = count;
-            return;
+ 
+int N, M, Answer;
+int MAP[MAX][MAX];
+int Dist[MAX][MAX];
+bool Visit[MAX][MAX];
+ 
+int dx[] = { 0, 0, 1, -1 };
+int dy[] = { 1, -1, 0, 0 };
+ 
+void Input()
+{
+    Answer = 987654321;
+    cin >> N >> M;
+    for (int i = 0; i < M; i++)
+    {
+        string Inp;
+        cin >> Inp;
+        for (int j = 0; j < Inp.length(); j++)
+        {
+            MAP[i][j] = Inp[j] - '0';
+            Dist[i][j] = 987654321;
         }
-        
-        for (int i{}; i < 4; i++) {
-            int nextx = x + dir[i].x;
-            int nexty = y + dir[i].y;
+    }
+}
+ 
+void Print()
+{
+    cout << "#############################" << endl;
+    for (int i = 0; i < M; i++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            cout << Dist[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << "#############################" << endl;
+ 
+}
+ 
+void BFS(int a, int b)
+{
+    queue<pair<int, int>> Q;
+    Q.push(make_pair(a, b));
+    Dist[a][b] = 0;
+ 
+    while (Q.empty() == 0)
+    {
+        //Print();
+        int x = Q.front().first;
+        int y = Q.front().second;
+        Q.pop();
             
-            if (nextx < 1 || nextx > M || nexty < 1 || nexty > N) continue;
-            if (!visited[nexty][nextx] && arr[nexty][nextx] == 0) {
-                q.push(make_pair(count, make_pair(nextx, nexty)));
-                visited[nexty][nextx] = true;
-                continue;
+        for (int i = 0; i < 4; i++)
+        {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+                
+            if (nx < 0 || ny < 0 || nx >= M || ny >= N) continue;
+            
+            if (MAP[nx][ny] == 1)
+            {
+                if (Dist[nx][ny] > Dist[x][y] + 1)
+                {
+                    Dist[nx][ny] = Dist[x][y] + 1;
+                    Q.push(make_pair(nx, ny));
+                }
             }
-            if (!visited[nexty][nextx] && arr[nexty][nextx] == 1) {
-                q.push(make_pair(count+1, make_pair(nextx, nexty)));
-                visited[nexty][nextx] = true;
+            else if (MAP[nx][ny] == 0)
+            {
+                if (Dist[nx][ny] > Dist[x][y])
+                {
+                    Dist[nx][ny] = Dist[x][y];
+                    Q.push(make_pair(nx, ny));
+                }
             }
         }
     }
 }
-
-int main(void) {
-    cin >> M >> N;
-
-    for (int i{1}; i <= N; i++) {
-        for (int j{1}; j <= M; j++) {
-            scanf("%1d", &arr[i][j]);
-        }
-    }
-    
-    bfs();
-    
-    cout << C << '\n';
-    
+ 
+void Solution()
+{
+    BFS(0, 0);
+    cout << Dist[M-1][N-1] << endl;
+}
+ 
+void Solve()
+{
+    Input();
+    Solution();
+}
+ 
+int main(void)
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+ 
+    //freopen("Input.txt", "r", stdin);
+    Solve();
+ 
     return 0;
 }
+

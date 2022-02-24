@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include <string>
 
 int main(void) {
@@ -14,10 +15,13 @@ int main(void) {
         std::exit(1);
     }
     
-    in_file >> line >> num >> total;
-    std::cout << line << std::endl;
-    std::cout << num << std::endl;
-    std::cout << total << std::endl;
+    while(in_file >> line >> num >> total) {
+        std::cout << std::setw(10) << std::left << line
+                  << std::setw(10) << num
+                  << std::setw(10) << total
+                  << std::endl;
+    }
+    
     in_file.close();
     
     return 0;

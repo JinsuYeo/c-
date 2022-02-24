@@ -6,8 +6,18 @@
 int main(void) {
     std::fstream in_file;
     std::string line;
-    int num;
-    double total;
+    char c;
+    in_file.open("./text.txt");
+    if (!in_file) {
+        std::cerr << "Problem opening file" << std::endl;
+        std::exit(1);
+    }
+        
+    while(in_file.get(c)) {
+        std::cout << c;
+    }
+    
+    in_file.close();
     
     in_file.open("./text.txt");
     if (!in_file) {
@@ -15,10 +25,8 @@ int main(void) {
         std::exit(1);
     }
     
-    while(in_file >> line >> num >> total) {
+    while(std::getline(in_file, line)) {
         std::cout << std::setw(10) << std::left << line
-                  << std::setw(10) << num
-                  << std::setw(10) << total
                   << std::endl;
     }
     

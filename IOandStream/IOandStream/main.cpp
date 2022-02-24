@@ -1,21 +1,47 @@
 #include <iostream>
-#include <fstream>
+#include <sstream>
 #include <iomanip>
 #include <string>
+#include <limits>
 
 int main(void) {
-    std::ofstream out_file {"./output.txt", std::ios::app};
+    int num{};
+    double total{};
+    std::string name{};
     
-    if (!out_file) {
-        std::cerr << "Error creating file" << std::endl;
-        exit(1);
-    }
-    std::string line;
-    std::cout << "Enter something to write to the file: ";
-    std::getline(std::cin, line);
-    out_file << line << std::endl;
+    std::string info{"Moe 100 1234.5"};
+    std::stringstream iss{info};
     
-    out_file.close();
+    iss >> name >> num >> total;
+    std::cout << std::setw(10) << std::left << name
+    << std::setw(5) << num << std::setw(10) << total << std::endl;
+    
+    std::ostringstream oss{};
+    oss << std::setw(10) << std::left << name
+    << std::setw(5) << num << std::setw(10) << total << std::endl;
+    std::cout << oss.str() << std::endl;
+    
+    // Data validation
+    
+    int value{};
+    std::string entry{};
+    bool done{false};
+    
+    do {
+        std::cout << "Please enter an integer: ";
+        std::cin >> entry;
+        std::istringstream validator {entry};
+        if (validator >> value) done = true;
+        else std::cout << "Sorry, that's not an integer" << std::endl;
+        
+//        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    } while(!done);
+    
+    std::cout << "You entered the integer: " << value << std::endl;
+    
+    std::cout << std::endl;
+    
+    
     
     return 0;
 }

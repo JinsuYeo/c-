@@ -25,8 +25,8 @@
 - ifstream: 파일에서 높은 수준의 입력 작업을 제공. 따라서 file에서 읽기 위해 객체를 ifstream 객체로 선언할 수 있음.
 - ofstream: 파일에서 높은 수준의 출력 작업 제공.
 - fstream: 파일 기반 stream에서 높은 수준의 IO를 제공. ifstream과 ofstream에서 다중 상속 이용해 파생됨. 파일 입출력 동시에 수행해야 하는 경우 사용됨.
-- stringstream: 메모리 기반 string에 대한 높은 수준의 작업 제공.  
-  cin, cout과 삽입, 추출 연산자로 입출력 할 수 있는 것처럼, cin, cout과 삽입, 추출 연산자와 메모리 기반 문자열를 함께 사용하여 입출력 할 수 있게해줌.
+- stringstream: 메모리 내 string 객체에 대한 높은 수준의 작업 제공.  
+  cin, cout과 삽입, 추출 연산자로 입출력 할 수 있는 것처럼, cin, cout과 삽입, 추출 연산자와 메모리 내 문자열 객체를 함께 사용하여 입출력 할 수 있게해줌.
 
 ## Global stream objects
 

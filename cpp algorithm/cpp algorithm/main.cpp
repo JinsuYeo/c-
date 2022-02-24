@@ -1,111 +1,73 @@
-#include<iostream>
-#include<string>
-#include<queue>
- 
-#define endl "\n"
-#define MAX 100
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
- 
-int N, M, Answer;
-int MAP[MAX][MAX];
-int Dist[MAX][MAX];
-bool Visit[MAX][MAX];
- 
-int dx[] = { 0, 0, 1, -1 };
-int dy[] = { 1, -1, 0, 0 };
- 
-void Input()
-{
-    Answer = 987654321;
-    cin >> N >> M;
-    for (int i = 0; i < M; i++)
-    {
-        string Inp;
-        cin >> Inp;
-        for (int j = 0; j < Inp.length(); j++)
-        {
-            MAP[i][j] = Inp[j] - '0';
-            Dist[i][j] = 987654321;
-        }
-    }
-}
- 
-void Print()
-{
-    cout << "#############################" << endl;
-    for (int i = 0; i < M; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
-            cout << Dist[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << "#############################" << endl;
- 
-}
- 
-void BFS(int a, int b)
-{
-    queue<pair<int, int>> Q;
-    Q.push(make_pair(a, b));
-    Dist[a][b] = 0;
- 
-    while (Q.empty() == 0)
-    {
-        //Print();
-        int x = Q.front().first;
-        int y = Q.front().second;
-        Q.pop();
-            
-        for (int i = 0; i < 4; i++)
-        {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-                
-            if (nx < 0 || ny < 0 || nx >= M || ny >= N) continue;
-            
-            if (MAP[nx][ny] == 1)
-            {
-                if (Dist[nx][ny] > Dist[x][y] + 1)
-                {
-                    Dist[nx][ny] = Dist[x][y] + 1;
-                    Q.push(make_pair(nx, ny));
-                }
-            }
-            else if (MAP[nx][ny] == 0)
-            {
-                if (Dist[nx][ny] > Dist[x][y])
-                {
-                    Dist[nx][ny] = Dist[x][y];
-                    Q.push(make_pair(nx, ny));
-                }
-            }
-        }
-    }
-}
- 
-void Solution()
-{
-    BFS(0, 0);
-    cout << Dist[M-1][N-1] << endl;
-}
- 
-void Solve()
-{
-    Input();
-    Solution();
-}
- 
-int main(void)
-{
-    ios::sync_with_stdio(false);
+
+int N, S;
+
+int main(void) {
+    ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cout.tie(NULL);
- 
-    //freopen("Input.txt", "r", stdin);
-    Solve();
- 
+    
+    cin >> N >> S;
+    vector<int> v(N);
+    for (int i{}; i < N; i++) {
+        cin >> v[i];
+    }
+    
+    int half {N/2};
+    
+    vector<int> first(1 << (N-half));
+    for (int i{}; i < 1 << (N-half); i++) {
+        for (int j{}; j < (N-half); j++) {
+            if (i & (1 << j)) {
+                first[i] += v[j];
+            }
+        }
+    }
+    
+    vector<int> second(1 << half);
+    for (int i{}; i < 1 << half; i++) {
+        for (int j{}; j < half; j++) {
+            if (i & (1 << j)) {
+                second[i] += v[j+(N-half)];
+            }
+        }
+    }
+    
+    sort(first.begin(), first.end());
+    sort(second.begin(), second.end(), greater<int>());
+    
+    int i1{}, i2{};
+    long long result{};
+    while (i1 < 1 << (N-half) && i2 < 1 << half) {
+        int sum = first[i1] + second[i2];
+        if (sum == S) {
+            long long cnt1 = 1, cnt2 = 1;
+            i1++;
+            i2++;
+            while (i1 < 1 << (N-half) && first[i1] == first[i1 - 1]) {
+                i1++;
+                cnt1++;
+            }
+            while (i2 < 1 << half && second[i2] == second[i2 - 1]) {
+                i2++;
+                cnt2++;
+            }
+            result += cnt1 * cnt2;
+        } else if(sum < S) {
+            i1++;
+        } else if(sum > S) {
+            i2++;
+        }
+    }
+    
+    if (S == 0) {
+        result--;
+    }
+    
+    cout << result << "\n";
+    
     return 0;
 }
-

@@ -4,70 +4,46 @@
 
 using namespace std;
 
-int N, S;
+const int MAX = 4000;
+
+int N;
+long long result;
+long long arr[4][MAX];
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> N >> S;
-    vector<int> v(N);
+    cin >> N;
     for (int i{}; i < N; i++) {
-        cin >> v[i];
-    }
-    
-    int half {N/2};
-    
-    vector<int> first(1 << (N-half));
-    for (int i{}; i < 1 << (N-half); i++) {
-        for (int j{}; j < (N-half); j++) {
-            if (i & (1 << j)) {
-                first[i] += v[j];
-            }
+        for (int j{}; j < 4; j++) {
+            cin >> arr[j][i];
         }
     }
     
-    vector<int> second(1 << half);
-    for (int i{}; i < 1 << half; i++) {
-        for (int j{}; j < half; j++) {
-            if (i & (1 << j)) {
-                second[i] += v[j+(N-half)];
-            }
+    vector<long long> v;
+    for (int i{}; i < N; i++) {
+        for(int j{}; j < N; j++) {
+            v.push_back(arr[2][i] + arr[3][j]);
         }
     }
     
-    sort(first.begin(), first.end());
-    sort(second.begin(), second.end(), greater<int>());
+    sort(v.begin(), v.end());
     
-    int i1{}, i2{};
-    long long result{};
-    while (i1 < 1 << (N-half) && i2 < 1 << half) {
-        int sum = first[i1] + second[i2];
-        if (sum == S) {
-            long long cnt1 = 1, cnt2 = 1;
-            i1++;
-            i2++;
-            while (i1 < 1 << (N-half) && first[i1] == first[i1 - 1]) {
-                i1++;
-                cnt1++;
+    for (int i{}; i < N; i++) {
+        for (int j{}; j < N; j++) {
+            long long num = arr[0][i] + arr[1][j];
+            long long low = lower_bound(v.begin(), v.end(), -num) - v.begin();
+            long long high = upper_bound(v.begin(), v.end(), -num) - v.begin();
+            
+            if (-num == v[low]) {
+                result += high-low;
             }
-            while (i2 < 1 << half && second[i2] == second[i2 - 1]) {
-                i2++;
-                cnt2++;
-            }
-            result += cnt1 * cnt2;
-        } else if(sum < S) {
-            i1++;
-        } else if(sum > S) {
-            i2++;
         }
-    }
-    
-    if (S == 0) {
-        result--;
     }
     
     cout << result << "\n";
+    
     
     return 0;
 }

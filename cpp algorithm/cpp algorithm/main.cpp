@@ -4,46 +4,76 @@
 
 using namespace std;
 
-const int MAX = 4000;
-
-int N;
-long long result;
-long long arr[4][MAX];
+int S, N, M;
+int result;
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> N;
+    cin >> S >> M >> N;
+    vector<int> A(M), B(N);
+    for (int i{}; i < M; i++) {
+        cin >> A[i];
+    }
     for (int i{}; i < N; i++) {
-        for (int j{}; j < 4; j++) {
-            cin >> arr[j][i];
+        cin >> B[i];
+    }
+    
+    vector<int> v1(1, 0), v2(1, 0);
+    int low{}, high{};
+    int sum{};
+    while (low < A.size()) {
+        sum += A[high++];
+        if (sum <= S)
+            v1.push_back(sum);
+        else {
+            low++;
+            high = low;
+            sum = 0;
+        }
+        
+        if (high == A.size()) high = 0;
+        if ((!low && !high) || high+1 == low) {
+            low++;
+            high = low;
+            sum = 0;
         }
     }
     
-    vector<long long> v;
-    for (int i{}; i < N; i++) {
-        for(int j{}; j < N; j++) {
-            v.push_back(arr[2][i] + arr[3][j]);
+    low = 0;
+    high = 0;
+    sum = 0;
+    while (low < B.size()) {
+        sum += B[high++];
+        if (sum <= S)
+            v2.push_back(sum);
+        else {
+            low++;
+            high = low;
+            sum = 0;
+        }
+        
+        if (high == B.size()) high = 0;
+        if ((!low && !high) || high+1 == low) {
+            low++;
+            high = low;
+            sum = 0;
         }
     }
     
-    sort(v.begin(), v.end());
+    sort(v1.begin(), v1.end());
+    sort(v2.begin(), v2.end());
     
-    for (int i{}; i < N; i++) {
-        for (int j{}; j < N; j++) {
-            long long num = arr[0][i] + arr[1][j];
-            long long low = lower_bound(v.begin(), v.end(), -num) - v.begin();
-            long long high = upper_bound(v.begin(), v.end(), -num) - v.begin();
-            
-            if (-num == v[low]) {
-                result += high-low;
-            }
-        }
+    for (int i{}; i < v1.size(); i++) {
+        int num = S - v1[i];
+        int low =  static_cast<int>(lower_bound(v2.begin(), v2.end(), num) - v2.begin());
+        int high = static_cast<int>(upper_bound(v2.begin(), v2.end(), num) - v2.begin());
+        
+        if(num == v2[low]) result += high - low;
     }
     
     cout << result << "\n";
-    
     
     return 0;
 }

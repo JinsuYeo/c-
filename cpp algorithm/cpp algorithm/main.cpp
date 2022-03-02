@@ -1,30 +1,44 @@
 #include <iostream>
 #include <string>
-#include <sstream>
+#include <stack>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
 
 int N;
 string s;
+stack<int> st;
+vector<int> v;
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
     cin >> N;
-    cin.ignore(1);
+
     for (int i{}; i < N; i++) {
-        string t;
-        getline(cin, s);
-        stringstream ss{s};
-        while(ss >> t){
-            reverse(t.begin(), t.end());
-            cout << t << " ";
+        int t{};
+        cin >> t;
+        v.push_back(t);
+    }
+
+    int i{ 1 };
+    for (int j{}; j < v.size(); j++) {
+        while (st.top() != v[j]) {
+            st.push(i);
+            s += "+";
+            i++;
         }
-            
-        cout << endl;
+        if (v[j] == st.top())
+        {
+            st.pop();
+            s += "-";
+        }
     }
     
+    for (auto c : s) 
+        cout << c << "\n";
+
     return 0;
 }

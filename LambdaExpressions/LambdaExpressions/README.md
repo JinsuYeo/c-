@@ -70,4 +70,10 @@ ex)
 [=, &x] 처럼.default 캡처와 동시에 변수 캡처(default 캡처와 다른 방식, 같다면 컴파일 안됨) 사용 가능.  
 -> default 캡처가 먼저 배치되어야 함.
 
+## 람다는 보통 STL의 predicate or operator로 많이 사용됨.   
+- predicate는 몇 개의 인자를 받고, boolean을 return하는 함수를 말함.   
+- operator는 몇 개의 인자 받아 그 인자들에 어떤 연산을 적용하는 함수를 말함.   
+
+
+
 

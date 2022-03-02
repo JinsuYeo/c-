@@ -1,44 +1,53 @@
 #include <iostream>
 #include <string>
-#include <stack>
-#include <vector>
 #include <algorithm>
 
 using namespace std;
 
-int N;
 string s;
-stack<int> st;
-vector<int> v;
+string result;
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> N;
+    getline(cin, s);
 
-    for (int i{}; i < N; i++) {
-        int t{};
-        cin >> t;
-        v.push_back(t);
+    bool flag{false};
+    string target;
+    for (int i{}; i < s.length(); i++) {
+        if (s[i] == '<') {
+            flag = true;
+            if (target.length()) {
+                reverse(target.begin(), target.end());
+                result += target;
+                target.clear();
+            }
+            result += "<";
+            continue;
+        }
+        if (s[i] == '>') {
+            flag = false;
+            result += ">";
+            continue;
+        }
+        
+        if (flag) {
+            result += s[i];
+        } else if(!flag && s[i] == ' ') {
+            reverse(target.begin(), target.end());
+            result += target + " ";
+            target.clear();
+        }
+        else {
+            target += s[i];
+        }
     }
+    reverse(target.begin(), target.end());
+    result += target;
 
-    int i{ 1 };
-    for (int j{}; j < v.size(); j++) {
-        while (st.top() != v[j]) {
-            st.push(i);
-            s += "+";
-            i++;
-        }
-        if (v[j] == st.top())
-        {
-            st.pop();
-            s += "-";
-        }
-    }
+
+    cout << result << '\n';
     
-    for (auto c : s) 
-        cout << c << "\n";
-
     return 0;
 }

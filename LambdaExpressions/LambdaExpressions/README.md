@@ -45,12 +45,12 @@ ex 2) auto l = [] () { std::cout << "Hi"; };
  -> 내부적으로는   
  class CompilerGenerated {   
 private:    
-    int y;   
+   int y;   
 public:   
-    CompilerGenerated(int y): y{y} {};   
-    void operator() (int x) const {   
-        std::cout << x + y;   
-    }   
+   CompilerGenerated(int y): y{y} {};   
+   void operator() (int x) const {   
+      std::cout << x + y;   
+   }   
 };   
  처럼 컴파일러에 의해 함수 객체화 되어 사용됨.   
 -> 캡처된 변수를 멤버 변수로 사용, 매개변수로 캡처된 변수 받아 멤버로 초기화하는 생성자 사용하여 인스턴스화됨. 멤버는 수정 불가(캡처된 값은 const로 캡처됨).   

@@ -1,53 +1,38 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <stack>
 #include <algorithm>
 
-using namespace std;
+int N;
 
-string s;
-string result;
+using namespace std;
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    getline(cin, s);
-
-    bool flag{false};
-    string target;
-    for (int i{}; i < s.length(); i++) {
-        if (s[i] == '<') {
-            flag = true;
-            if (target.length()) {
-                reverse(target.begin(), target.end());
-                result += target;
-                target.clear();
-            }
-            result += "<";
-            continue;
-        }
-        if (s[i] == '>') {
-            flag = false;
-            result += ">";
-            continue;
-        }
-        
-        if (flag) {
-            result += s[i];
-        } else if(!flag && s[i] == ' ') {
-            reverse(target.begin(), target.end());
-            result += target + " ";
-            target.clear();
-        }
-        else {
-            target += s[i];
-        }
+    cin >> N;
+    vector<int> v(N);
+    vector<int> result(N);
+    stack<int> s;
+    
+    for (int i{}; i < N; i++) {
+        cin >> v[i];
     }
-    reverse(target.begin(), target.end());
-    result += target;
-
-
-    cout << result << '\n';
+    
+    for (int i{}; i < v.size(); i++) {
+        while (!s.empty() && v[s.top()] < v[i]) {
+            result[s.top()] = v[i];
+            s.pop();
+        }
+        s.push(i);
+    }
+    
+    for_each(result.begin(), result.end(), [](int x){
+        if (x == 0) {
+            cout << -1 << " ";
+        } else cout << x << " ";
+    });
     
     return 0;
 }

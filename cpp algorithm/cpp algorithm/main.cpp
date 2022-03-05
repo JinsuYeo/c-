@@ -13,15 +13,19 @@ int main(void) {
     
     cin >> N;
     vector<int> v(N);
+    vector<int> temp(1000001);
     vector<int> result(N);
     stack<int> s;
     
     for (int i{}; i < N; i++) {
-        cin >> v[i];
+        int t{};
+        cin >> t;
+        v[i] = t;
+        temp[t]++;
     }
     
     for (int i{}; i < v.size(); i++) {
-        while (!s.empty() && v[s.top()] < v[i]) {
+        while (!s.empty() && temp[v[s.top()]] < temp[v[i]]) {
             result[s.top()] = v[i];
             s.pop();
         }

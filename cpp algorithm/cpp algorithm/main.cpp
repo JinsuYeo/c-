@@ -1,42 +1,75 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <stack>
 #include <algorithm>
-
-int N;
+#include <iomanip>
 
 using namespace std;
+
+int N;
+string S;
+stack<double> st;
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
     cin >> N;
-    vector<int> v(N);
-    vector<int> temp(1000001);
-    vector<int> result(N);
-    stack<int> s;
+    cin >> S;
     
+    vector<double> temp(S.length());
+
+    char c{'A'};
     for (int i{}; i < N; i++) {
-        int t{};
+        double t{};
         cin >> t;
-        v[i] = t;
-        temp[t]++;
-    }
-    
-    for (int i{}; i < v.size(); i++) {
-        while (!s.empty() && temp[v[s.top()]] < temp[v[i]]) {
-            result[s.top()] = v[i];
-            s.pop();
+        for (int j{}; j < S.length(); j++) {
+            if(S[j] == c) {
+                temp[j] = t;
+            }
         }
-        s.push(i);
+        c++;
     }
     
-    for_each(result.begin(), result.end(), [](int x){
-        if (x == 0) {
-            cout << -1 << " ";
-        } else cout << x << " ";
-    });
+    for (int i{}; i < S.length(); i++) {
+        if(S[i] >= 'A' && S[i] <= 'Z') {
+            st.push(temp[i]);
+        } else {
+            if (S[i] == '+') {
+                double calc = st.top();
+                st.pop();
+                calc += st.top();
+                st.pop();
+                st.push(calc);
+            }
+            if (S[i] == '-') {
+                double calc = st.top();
+                st.pop();
+                calc = st.top() - calc;
+                st.pop();
+                st.push(calc);
+            }
+            if (S[i] == '/') {
+                double calc = st.top();
+                st.pop();
+                calc = st.top()/calc;
+                st.pop();
+                st.push(calc);
+            }
+            if (S[i] == '*') {
+                double calc = st.top();
+                st.pop();
+                calc *= st.top();
+                st.pop();
+                st.push(calc);
+            }
+        }
+    }
+    
+    cout << fixed << setprecision(2);
+    
+    cout << st.top() << "\n";
     
     return 0;
 }

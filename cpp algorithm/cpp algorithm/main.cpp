@@ -7,69 +7,58 @@
 
 using namespace std;
 
-int N;
-string S;
-stack<double> st;
+string S, result;
+stack<char> st;
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> N;
     cin >> S;
     
-    vector<double> temp(S.length());
-
-    char c{'A'};
-    for (int i{}; i < N; i++) {
-        double t{};
-        cin >> t;
-        for (int j{}; j < S.length(); j++) {
-            if(S[j] == c) {
-                temp[j] = t;
-            }
-        }
-        c++;
-    }
-    
     for (int i{}; i < S.length(); i++) {
-        if(S[i] >= 'A' && S[i] <= 'Z') {
-            st.push(temp[i]);
+        if (S[i] >= 'A' && S[i] <= 'Z') {
+            result += S[i];
         } else {
-            if (S[i] == '+') {
-                double calc = st.top();
-                st.pop();
-                calc += st.top();
-                st.pop();
-                st.push(calc);
-            }
-            if (S[i] == '-') {
-                double calc = st.top();
-                st.pop();
-                calc = st.top() - calc;
-                st.pop();
-                st.push(calc);
-            }
-            if (S[i] == '/') {
-                double calc = st.top();
-                st.pop();
-                calc = st.top()/calc;
-                st.pop();
-                st.push(calc);
-            }
-            if (S[i] == '*') {
-                double calc = st.top();
-                st.pop();
-                calc *= st.top();
-                st.pop();
-                st.push(calc);
+            switch (S[i]) {
+                case '(':
+                    st.push('(');
+                    break;
+                case '*':
+                case '/':
+                    while (!st.empty() && (st.top() == '*' || st.top() == '/')) {
+                        result += st.top();
+                        st.pop();
+                    }
+                    st.push(S[i]);
+                    break;
+                case '-':
+                case '+':
+                    while (!st.empty() && st.top() != '(') {
+                        result += st.top();
+                        st.pop();
+                    }
+                    st.push(S[i]);
+                    break;
+                case ')':
+                    while (!st.empty() && st.top() != '(') {
+                        result += st.top();
+                        st.pop();
+                    }
+                    st.pop();
+                    break;
+                default:
+                    break;
             }
         }
     }
     
-    cout << fixed << setprecision(2);
+    while (!st.empty()) {
+        result += st.top();
+        st.pop();
+    }
     
-    cout << st.top() << "\n";
+    cout << result << "\n";
     
     return 0;
 }

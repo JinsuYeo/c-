@@ -1,61 +1,46 @@
 #include <iostream>
 #include <vector>
-#include <string>
-#include <stack>
 #include <algorithm>
-#include <iomanip>
 
 using namespace std;
 
-string S, result;
-stack<char> st;
+int N, S, result{1 << 30};
+
+int gcd(int a, int b) {
+    int c{};
+    while (b) {
+        c = a % b;
+        a = b;
+        b = c;
+    }
+    
+    return a;
+}
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> S;
+    cin >> N >> S;
+    vector<int> A(N);
+
+    for (int i{}; i < N; i++)
+        cin >> A[i];
+    A.push_back(S);
     
-    for (int i{}; i < S.length(); i++) {
-        if (S[i] >= 'A' && S[i] <= 'Z') {
-            result += S[i];
-        } else {
-            switch (S[i]) {
-                case '(':
-                    st.push('(');
-                    break;
-                case '*':
-                case '/':
-                    while (!st.empty() && (st.top() == '*' || st.top() == '/')) {
-                        result += st.top();
-                        st.pop();
-                    }
-                    st.push(S[i]);
-                    break;
-                case '-':
-                case '+':
-                    while (!st.empty() && st.top() != '(') {
-                        result += st.top();
-                        st.pop();
-                    }
-                    st.push(S[i]);
-                    break;
-                case ')':
-                    while (!st.empty() && st.top() != '(') {
-                        result += st.top();
-                        st.pop();
-                    }
-                    st.pop();
-                    break;
-                default:
-                    break;
-            }
-        }
+    sort(A.begin(), A.end());
+    
+    vector<int> v;
+    for (int i{}; i < N; i++) {
+        int temp = A[i+1] - A[i];
+        result = min(result, temp);
+        v.push_back(temp);
     }
     
-    while (!st.empty()) {
-        result += st.top();
-        st.pop();
+    for (int i{}; i < v.size(); i++) {
+        if (result && v[i] % result) {
+            result = gcd(v[i], result);
+        }
     }
     
     cout << result << "\n";

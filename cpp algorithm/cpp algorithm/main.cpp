@@ -5,49 +5,29 @@
 
 using namespace std;
 
-const int MAX = 1000001;
+const int MAX = 1001;
 
-int T, N;
-int prime[MAX];
+int N;
+int arr[MAX];
+int dp[MAX];
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    memset(prime, 1, sizeof(prime));
-    prime[0] = 0;
-    prime[1] = 0;
-    for (int i{2}; i < MAX; i++) {
-        if(!prime[i]) continue;
-        for (int j{i+i}; j < MAX; j+=i) {
-            prime[j] = 0;
+    cin >> N;
+    for(int i{1}; i <= N; i++) {
+        cin >> arr[i];
+    }
+    
+    for(int i{1}; i <= N; i++) {
+        dp[i] = arr[i];
+        for (int j{1}; j < i; j++) {
+            dp[i] = min(dp[i], arr[j] + dp[i-j]);
         }
     }
     
-    cin >> T;
-    for (int t{}; t < T; t++) {
-        int count{};
-        cin >> N;
-        
-        vector<int> v;
-        for (int i{2}; i <= N; i++) {
-            if (prime[i]) {
-                v.push_back(i);
-            }
-        }
-        
-        for (int i{}; i < v.size(); i++) {
-            int target = N - v[i];
-            auto result = lower_bound(v.begin(), v.end(), target) - v.begin();
-            
-            if (v[result] == target) {
-                count++;
-                v[result] = N;
-            }
-        }
-        
-        cout << count << "\n";
-    }
+    cout << dp[N] << '\n';
     
     return 0;
 }

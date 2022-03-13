@@ -1,33 +1,54 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
 
-const int MAX = 100001;
-const int MOD = 1000000009;
+const int MAX = 1001;
 
-int T, N;
-int dp[MAX][4];
+int T, M, idx;
+vector<int> V;
+vector<pair<int, vector<int>>> dp(MAX);
 
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    dp[1][1] = 1;
-    dp[2][2] = 1;
-    dp[3][1] = 1;
-    dp[3][2] = 1;
-    dp[3][3] = 1;
-    for (int i{4}; i < MAX; i++) {
-        dp[i][1] = (dp[i-1][2] + dp[i-1][3]) % MOD;
-        dp[i][2] = (dp[i-2][1] + dp[i-2][3]) % MOD;
-        dp[i][3] = (dp[i-3][1] + dp[i-3][2]) % MOD;
+    cin >> T;
+    vector<int> arr(T+1);
+    for (int i{1}; i <= T; i++)
+        cin >> arr[i];
+    
+    
+    dp[1] = {1,{arr[1]}};
+    M = 1;
+    V = {arr[1]};
+    for (int i{1}; i < T+1; i++) {
+        int result{};
+        vector<int> temp;
+        for (int j{1}; j < i; j++) {
+            if (arr[i] > arr[j]) {
+                result = max(result, dp[j].first + 1);
+                if(result == dp[j].first + 1) {
+                    temp = dp[j].second;
+                    temp.push_back(arr[i]);
+                }
+            }
+        }
+        if (!result) {
+            dp[i] = {1,{arr[i]}};
+        } else {
+            dp[i] = {result, temp};
+        }
+        if(result >= M) {
+            M = result;
+            V = temp;
+        }
     }
     
-    cin >> T;
-    for(int i{}; i < T; i++){
-        cin >> N;
-        cout << ((dp[N][1] + dp[N][2]) % MOD + dp[N][3]) % MOD << '\n';
+    cout << M << '\n';
+    for (auto e: V) {
+        cout << e << " ";
     }
     
     return 0;

@@ -4,34 +4,30 @@
 
 using namespace std;
 
-int N;
+int N, result{};
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    string s{};
+    cin >> N;
+    vector<int> A(N);
+    vector<int> B(N);
     
-    cin >> s >> N;
+    for (int i{}; i < N; i++) cin >> A[i];
+    for (int i{}; i < N; i++) cin >> B[i];
     
-    string::iterator it = s.end();
+    vector<int> tempA(A.begin(), A.end());
+    sort(tempA.begin(), tempA.end(), greater<>());
+    
+    vector<int> tempB(B.begin(), B.end());
+    sort(tempB.begin(), tempB.end());
     
     for (int i{}; i < N; i++) {
-        char c{};
-        cin >> c;
-        if (c == 'P') {
-            cin >> c;
-            it = s.insert(it, c);
-            it++;
-        } else if (c == 'L') {
-            if(it != s.begin()) it--;
-        } else if(c == 'D') {
-            if(it != s.end()) it++;
-        } else if(c == 'B') {
-            if(it != s.begin()) it = s.erase(--it);
-        }
+        result += tempA[i] * tempB[i];
     }
-
-    cout << s;
+    
+    cout << result;
+    
     
     return 0;
 }

@@ -1,33 +1,34 @@
 #include <iostream>
 #include <vector>
+#include <set>
 #include <algorithm>
 
 using namespace std;
 
-int N, result{};
+struct compare{
+    bool operator() (const string& a, const string& b) const {
+        if(a.length() == b.length()) return a < b;
+        return a.length() < b.length();
+    }
+};
+
+int N;
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
     cin >> N;
-    vector<int> A(N);
-    vector<int> B(N);
     
-    for (int i{}; i < N; i++) cin >> A[i];
-    for (int i{}; i < N; i++) cin >> B[i];
-    
-    vector<int> tempA(A.begin(), A.end());
-    sort(tempA.begin(), tempA.end(), greater<>());
-    
-    vector<int> tempB(B.begin(), B.end());
-    sort(tempB.begin(), tempB.end());
-    
+    vector<string> v(N);
     for (int i{}; i < N; i++) {
-        result += tempA[i] * tempB[i];
+        cin >> v[i];
     }
+     
+    set<string, compare> s(v.begin(), v.end());
     
-    cout << result;
-    
+    for(auto str : s) {
+        cout << str << '\n';
+    }
     
     return 0;
 }

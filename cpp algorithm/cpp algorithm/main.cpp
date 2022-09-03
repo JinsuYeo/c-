@@ -1,36 +1,37 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 #include <algorithm>
 
 using namespace std;
 
-int N, M;
-unordered_map<int, int> A;
-vector<int> B;
-
+int N;
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> N;
+    string s{};
+    
+    cin >> s >> N;
+    
+    string::iterator it = s.end();
+    
     for (int i{}; i < N; i++) {
-        int t{};
-        cin >> t;
-        A.insert(make_pair(t, t));
+        char c{};
+        cin >> c;
+        if (c == 'P') {
+            cin >> c;
+            it = s.insert(it, c);
+            it++;
+        } else if (c == 'L') {
+            if(it != s.begin()) it--;
+        } else if(c == 'D') {
+            if(it != s.end()) it++;
+        } else if(c == 'B') {
+            if(it != s.begin()) it = s.erase(--it);
+        }
     }
-    
-    cin >> M;
-    for (int i{}; i < M; i++) {
-        int t{};
-        cin >> t;
-        B.push_back(t);
-    }
-    
-    for (auto b: B) {
-        if(A[b]) cout << 1 << " ";
-        else cout << 0 << " ";
-    }
+
+    cout << s;
     
     return 0;
 }

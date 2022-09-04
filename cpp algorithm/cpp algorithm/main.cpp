@@ -1,33 +1,32 @@
 #include <iostream>
 #include <vector>
-#include <set>
 #include <algorithm>
 
 using namespace std;
 
-struct compare{
-    bool operator() (const string& a, const string& b) const {
-        if(a.length() == b.length()) return a < b;
-        return a.length() < b.length();
-    }
-};
+bool compare(const pair<int, int>& a, const pair<int, int>& b) {
+    if(a.first == b.first) return a.second < b.second;
+    return a.first < b.first;
+}
 
-int N;
+int N, x, y;
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
     cin >> N;
+    vector<pair<int, int>> v(N);
     
-    vector<string> v(N);
     for (int i{}; i < N; i++) {
-        cin >> v[i];
+        cin >> x >> y;
+        pair<int, int> p = make_pair(x, y);
+        v[i] = p;
     }
-     
-    set<string, compare> s(v.begin(), v.end());
     
-    for(auto str : s) {
-        cout << str << '\n';
+    sort(v.begin(), v.end(), compare);
+    
+    for (auto el : v){
+        cout << el.first << " " << el.second << '\n';
     }
     
     return 0;

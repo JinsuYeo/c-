@@ -1,34 +1,38 @@
 #include <iostream>
-#include <vector>
+#include <stack>
 #include <algorithm>
 
 using namespace std;
 
-int N, M;
+int N;
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    
     cin >> N;
-    vector<int> v1(N);
+    
+    stack<char> st;
+    
     for (int i{}; i < N; i++) {
-        cin >> v1[i];
-    }
-    sort(v1.begin(), v1.end());
-    
-    cin >> M;
-    vector<int> v2(M);
-    for (int i{}; i < M; i++) {
-        cin >> v2[i];
-    }
-    
-    
-    for (int i{}; i < M; i++) {
-        auto low = lower_bound(v1.begin(), v1.end(), v2[i]);
-        auto high = upper_bound(v1.begin(), v1.end(), v2[i]);
+        string s;
+        cin >> s;
         
-        cout << high - low << " ";
+        for(int i{}; i < s.length(); i++){
+            char c = s[i];
+            if (c == '(' || (c == ')' && st.empty())) {
+                st.push(c);
+            } else if(c == ')' && st.top() == '(') {
+                st.pop();
+            }
+        }
+        
+        if (st.empty()) cout << "YES" << '\n';
+        else {
+            cout << "NO" << '\n';
+            while (!st.empty()) {
+                st.pop();
+            }
+        }
     }
     
     return 0;

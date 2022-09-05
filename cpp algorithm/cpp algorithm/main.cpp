@@ -1,26 +1,34 @@
 #include <iostream>
-#include <set>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
 
-int N, x, y;
+int N, M;
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    set<int, less<>> s;
     
     cin >> N;
-    
+    vector<int> v1(N);
     for (int i{}; i < N; i++) {
-        int n{};
-        cin >> n;
-        s.insert(n);
+        cin >> v1[i];
+    }
+    sort(v1.begin(), v1.end());
+    
+    cin >> M;
+    vector<int> v2(M);
+    for (int i{}; i < M; i++) {
+        cin >> v2[i];
     }
     
-    for (int el : s) {
-        cout << el << " ";
+    
+    for (int i{}; i < M; i++) {
+        auto low = lower_bound(v1.begin(), v1.end(), v2[i]);
+        auto high = upper_bound(v1.begin(), v1.end(), v2[i]);
+        
+        cout << high - low << " ";
     }
     
     return 0;

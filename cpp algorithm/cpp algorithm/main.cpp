@@ -1,34 +1,36 @@
 #include <iostream>
-#include <stack>
+#include <queue>
 #include <algorithm>
 
 using namespace std;
 
-int N, temp;
+int N, K;
+string s = "<";
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> N;
-    int j = 1;
-    stack<int> st;
-    string result{};
+    cin >> N >> K;
     
-    for (int i{}; i < N; i++) {
-        cin >> temp;
-        if (!st.empty() && st.top() > temp) {
-            cout << "NO";
-            return 0;
-        }
-        while (st.empty() || st.top() != temp) {
-            st.push(j++);
-            result += "+\n";
-        }
-        st.pop();
-        result += "-\n";
+    queue<int> q;
+    for (int i{1}; i < N+1; i++) {
+        q.push(i);
     }
     
-    cout << result;
+    while (!q.empty()) {
+        for (int i{}; i < K-1; i++) {
+            int temp = q.front();
+            q.pop();
+            q.push(temp);
+        }
+        int temp = q.front();
+        q.pop();
+        if (!q.empty()) {
+            s += to_string(temp)+ ", ";
+        } else s += to_string(temp);
+    }
+    
+    cout << s << ">";
     
     return 0;
 }

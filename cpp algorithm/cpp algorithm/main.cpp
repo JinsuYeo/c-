@@ -4,36 +4,31 @@
 
 using namespace std;
 
-int N;
+int N, temp;
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
     cin >> N;
-    
-    stack<char> st;
+    int j = 1;
+    stack<int> st;
+    string result{};
     
     for (int i{}; i < N; i++) {
-        string s;
-        cin >> s;
-        
-        for(int i{}; i < s.length(); i++){
-            char c = s[i];
-            if (c == '(' || (c == ')' && st.empty())) {
-                st.push(c);
-            } else if(c == ')' && st.top() == '(') {
-                st.pop();
-            }
+        cin >> temp;
+        if (!st.empty() && st.top() > temp) {
+            cout << "NO";
+            return 0;
         }
-        
-        if (st.empty()) cout << "YES" << '\n';
-        else {
-            cout << "NO" << '\n';
-            while (!st.empty()) {
-                st.pop();
-            }
+        while (st.empty() || st.top() != temp) {
+            st.push(j++);
+            result += "+\n";
         }
+        st.pop();
+        result += "-\n";
     }
+    
+    cout << result;
     
     return 0;
 }

@@ -1,36 +1,87 @@
 #include <iostream>
+#include <vector>
 #include <queue>
+#include <string>
 #include <algorithm>
+#include <sstream>
 
 using namespace std;
 
-int N, K;
-string s = "<";
+int T;
+int c{};
 int main(void) {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    cin >> N >> K;
+    cin >> T;
     
-    queue<int> q;
-    for (int i{1}; i < N+1; i++) {
-        q.push(i);
-    }
-    
-    while (!q.empty()) {
-        for (int i{}; i < K-1; i++) {
-            int temp = q.front();
-            q.pop();
-            q.push(temp);
+    for (int i = 0; i < T; i++) {
+        string s;
+        int n;
+        cin >> s >> n;
+        bool order = true;
+        
+        deque<int> v;
+        
+        string tstr;
+        cin >> tstr;
+        tstr.erase(0, 1);
+        tstr.erase(tstr.length() - 1, 1);
+        stringstream ss(tstr);
+        string t;
+        
+        while (getline(ss, t, ',')) {
+            v.push_back(stoi(t));
         }
-        int temp = q.front();
-        q.pop();
-        if (!q.empty()) {
-            s += to_string(temp)+ ", ";
-        } else s += to_string(temp);
+        
+        int flag = 1;
+        for(int j = 0; j < s.length(); j++) {
+
+            if(s.at(j) == 'R') {
+                order = !order;
+            }
+            if(s.at(j) == 'D') {
+                if (v.empty()) {
+                    cout << "error\n";
+                    flag = 0;
+                    break;
+                }
+                else {
+                    if (order) {
+                        v.pop_front();
+                    }
+                    if(!order){
+                        v.pop_back();
+                    }
+                    
+                }
+            }
+        }
+
+        if(flag) {
+            if(order) {
+                cout << '[';
+                for (int j = 0; j < v.size(); j++) {
+                    if(j == v.size()-1) cout << v[j];
+                    else cout << v[j] << ',';
+                }
+                cout << "]\n";
+            }
+            if(!order) {
+                cout << '[';
+                for (int j = v.size()-1; j >= 0; j--) {
+                    if(j == 0) cout << v[j];
+                    else cout << v[j] << ',';
+                }
+                cout << "]\n";
+            }
+        }
+        
+        v.clear();
     }
+
+
     
-    cout << s << ">";
-    
+
     return 0;
 }
